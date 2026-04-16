@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Opnemen Gesprek</title>
+<meta name="description" content="Neem klantgesprekken op, transcribeer live of lees transcripties in. Volledig lokaal in je browser.">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.5; padding: 20px; }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  .header { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+  .logo { width: 44px; height: 44px; background: linear-gradient(135deg, #2563eb, #1e40af); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; }
+  .header h1 { font-size: 17px; font-weight: 600; color: #0f172a; }
+  .header p { font-size: 12px; color: #64748b; margin-top: 2px; }
+
+  .card { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
+  .card-title { font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 14px; }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid .full { grid-column: 1 / -1; }
+  @media (max-width: 520px) { .form-grid { grid-template-columns: 1fr; } }
+
+  label { display: block; font-size: 12px; font-weight: 500; color: #334155; margin-bottom: 6px; }
+  label .required { color: #dc2626; }
+
+  input[type="text"], textarea { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; background: white; color: #0f172a; }
+  input[type="text"]:focus, textarea:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); }
+  textarea { resize: vertical; font-family: ui-monospace, 'SF Mono', Consolas, monospace; font-size: 13px; }
+
+  .tabs { display: flex; border-bottom: 1px solid #e2e8f0; margin: -20px -20px 20px -20px; overflow-x: auto; }
+  .tab { flex: 1; min-width: fit-content; padding: 14px 10px; background: none; border: none; border-bottom: 2px solid transparent; font-size: 12px; font-weight: 500; color: #64748b; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; white-space: nowrap; }
+  .tab:hover { background: #f8fafc; }
+  .tab.active { color: #2563eb; background: #eff6ff; border-bottom-color: #2563eb; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .perm-banner { border-radius: 10px; padding: 14px 16px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 12px; font-size: 13px; }
+  .perm-banner.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
+  .perm-banner.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+  .perm-banner.error { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
+  .perm-banner .content { flex: 1; }
+  .perm-banner .title { font-weight: 600; margin-bottom: 4px; }
+
+  .record-area { text-align: center; padding: 24px 0; }
+  .mic-circle { width: 90px; height: 90px; margin: 0 auto 20px; border-radius: 50%; background: #f1f5f9; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+  .mic-circle.recording { background: #fee2e2; box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.15); animation: pulse 1.5s infinite; }
+  .mic-circle.listening { background: #dcfce7; box-shadow: 0 0 0 8px rgba(22, 163, 74, 0.15); animation: pulse-green 1.5s infinite; }
+  .mic-circle.listening .mic-icon { color: #16a34a; }
+  .mic-circle.ready { background: #dcfce7; }
+  .mic-circle.ready .mic-icon { color: #16a34a; }
+  .mic-circle.denied { background: #fee2e2; }
+  .mic-circle.denied .mic-icon { color: #dc2626; }
+
+  @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 8px rgba(220, 38, 38, 0.15); } 50% { box-shadow: 0 0 0 14px rgba(220, 38, 38, 0.05); } }
+  @keyframes pulse-green { 0%, 100% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0.15); } 50% { box-shadow: 0 0 0 14px rgba(22, 163, 74, 0.05); } }
+
+  .mic-icon { width: 36px; height: 36px; color: #94a3b8; }
+  .mic-circle.recording .mic-icon { color: #dc2626; }
+
+  .timer { font-size: 28px; font-weight: 600; font-family: ui-monospace, 'SF Mono', Consolas, monospace; color: #0f172a; margin-bottom: 20px; }
+  .btn-row { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+
+  button { padding: 10px 20px; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 8px; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: #2563eb; color: white; }
+  .btn-primary:hover:not(:disabled) { background: #1d4ed8; }
+  .btn-danger { background: #dc2626; color: white; }
+  .btn-danger:hover:not(:disabled) { background: #b91c1c; }
+  .btn-success { background: #16a34a; color: white; }
+  .btn-success:hover:not(:disabled) { background: #15803d; }
+  .btn-dark { background: #0f172a; color: white; }
+  .btn-dark:hover:not(:disabled) { background: #1e293b; }
+  .btn-secondary { background: #e2e8f0; color: #0f172a; }
+  .btn-secondary:hover:not(:disabled) { background: #cbd5e1; }
+  .btn-outline { background: white; color: #2563eb; border: 1px solid #2563eb; }
+  .btn-outline:hover:not(:disabled) { background: #eff6ff; }
+  .btn-ghost { background: none; color: #64748b; padding: 8px; }
+  .btn-ghost:hover { background: #f1f5f9; color: #0f172a; }
+
+  .hint { font-size: 11px; color: #94a3b8; margin-top: 16px; }
+
+  .recording-preview { background: #f8fafc; border-radius: 10px; padding: 16px; }
+  .preview-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .preview-icon { width: 38px; height: 38px; background: #dbeafe; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #2563eb; }
+  .preview-info { flex: 1; }
+  .preview-info .name { font-size: 13px; font-weight: 500; color: #0f172a; }
+  .preview-info .meta { font-size: 11px; color: #64748b; margin-top: 2px; }
+  audio { width: 100%; height: 36px; }
+
+  .upload-zone { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 28px; border: 2px dashed #cbd5e1; border-radius: 10px; cursor: pointer; color: #64748b; font-size: 13px; }
+  .upload-zone:hover { border-color: #2563eb; background: #eff6ff; color: #2563eb; }
+  .upload-zone input { display: none; }
+
+  .divider { display: flex; align-items: center; gap: 10px; margin: 16px 0; }
+  .divider .line { flex: 1; height: 1px; background: #e2e8f0; }
+  .divider .text { font-size: 10px; color: #94a3b8; letter-spacing: 0.1em; text-transform: uppercase; }
+
+  .char-count { font-size: 11px; color: #64748b; margin-top: 6px; }
+
+  .status { padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px; }
+  .status.success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #15803d; }
+  .status.error { background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; }
+  .status.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; }
+
+  .actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+  .icon { width: 16px; height: 16px; flex-shrink: 0; }
+  .footer { text-align: center; font-size: 11px; color: #94a3b8; margin-top: 24px; }
+
+  .live-transcript-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; min-height: 200px; max-height: 400px; overflow-y: auto; font-size: 14px; line-height: 1.7; color: #0f172a; }
+  .live-transcript-area .interim { color: #94a3b8; font-style: italic; }
+  .live-transcript-area:empty::before { content: 'Begin met praten. De tekst verschijnt hier live...'; color: #94a3b8; font-style: italic; font-size: 13px; }
+
+  .live-controls { display: flex; justify-content: center; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .live-status { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; background: #dcfce7; color: #15803d; border-radius: 20px; font-size: 12px; font-weight: 500; margin-bottom: 12px; }
+  .live-status .dot { width: 8px; height: 8px; background: #16a34a; border-radius: 50%; animation: blink 1s infinite; }
+  @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0.3; } }
+
+  .lang-selector { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .lang-selector select { padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; background: white; font-family: inherit; }
+
+  /* AFM Modal */
+  .afm-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  .afm-modal-overlay.active { display: flex !important; }
+  .afm-modal {
+    background: white;
+    border-radius: 14px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 28px;
+  }
+  .afm-modal-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+  .afm-modal-icon {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: #dcfce7; color: #16a34a;
+  }
+  .afm-modal h2 { font-size: 17px; font-weight: 600; color: #0f172a; }
+  .afm-modal-intro { font-size: 13px; color: #475569; margin-bottom: 20px; line-height: 1.6; }
+
+  .afm-steps { margin-bottom: 20px; }
+  .afm-step { display: flex; gap: 14px; margin-bottom: 14px; align-items: flex-start; }
+  .afm-step-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #2563eb; color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+    flex-shrink: 0;
+  }
+  .afm-step-text { font-size: 13px; color: #334155; line-height: 1.6; padding-top: 4px; }
+  .afm-step-text strong { color: #0f172a; }
+
+  .afm-warning {
+    background: #fffbeb;
+    border-left: 4px solid #d97706;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #78350f;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .afm-warning strong { color: #92400e; }
+
+  .afm-tip {
+    background: #eff6ff;
+    border-left: 4px solid #2563eb;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #1e40af;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+  .afm-tip strong { color: #1e3a8a; }
+  .afm-tip a { color: #2563eb; text-decoration: underline; font-weight: 500; }
+  .afm-tip a:hover { color: #1d4ed8; }
+
+  .afm-modal-footer {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 16px;
+    border-top: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+  }
+  .afm-open-btn { text-decoration: none; }
+
+  /* CHECKLIST */
+  .checklist-header {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 1px solid #bfdbfe;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+  }
+  .checklist-progress {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .checklist-progress .count {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e3a8a;
+  }
+  .checklist-progress .total {
+    font-size: 13px;
+    color: #64748b;
+  }
+  .checklist-bar {
+    flex: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .checklist-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2563eb, #16a34a);
+    transition: width 0.3s;
+    border-radius: 4px;
+  }
+  .checklist-hint {
+    font-size: 11px;
+    color: #475569;
+    margin-top: 4px;
+  }
+
+  .checklist-actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .checklist-actions button {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .checklist-group {
+    margin-bottom: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .checklist-group-header {
+    background: #f8fafc;
+    padding: 12px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid #e2e8f0;
+    transition: background 0.15s;
+  }
+  .checklist-group-header:hover { background: #eff6ff; }
+  .checklist-group-header.collapsed { border-bottom: none; }
+  .checklist-group-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .checklist-group-title .emoji {
+    font-size: 16px;
+  }
+  .checklist-group-stats {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    color: #64748b;
+  }
+  .checklist-group-stats .mini-count {
+    background: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    font-weight: 500;
+  }
+  .checklist-group-stats .chevron {
+    transition: transform 0.2s;
+  }
+  .checklist-group-header.collapsed .chevron {
+    transform: rotate(-90deg);
+  }
+
+  .checklist-items {
+    padding: 4px 0;
+  }
+  .checklist-items.hidden { display: none; }
+
+  .checklist-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background 0.15s;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .checklist-item:hover { background: #fafbfc; }
+  .checklist-item.status-done { background: #f0fdf4; }
+  .checklist-item.status-na { background: #f8fafc; opacity: 0.65; }
+  .checklist-item.status-warn { background: #fffbeb; }
+
+  .checklist-status-btns {
+    display: flex;
+    gap: 3px;
+    flex-shrink: 0;
+  }
+  .status-btn {
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    padding: 0;
+    transition: all 0.15s;
+  }
+  .status-btn:hover { transform: scale(1.1); }
+  .status-btn.active.done { background: #16a34a; border-color: #16a34a; color: white; }
+  .status-btn.active.warn { background: #d97706; border-color: #d97706; color: white; }
+  .status-btn.active.na { background: #64748b; border-color: #64748b; color: white; }
+
+  .checklist-label {
+    flex: 1;
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.5;
+    padding-top: 4px;
+  }
+  .checklist-item.status-done .checklist-label {
+    text-decoration: line-through;
+    color: #15803d;
+  }
+  .checklist-item.status-na .checklist-label {
+    text-decoration: line-through;
+    color: #64748b;
+  }
+
+  /* HANDLEIDING */
+  .guide-section { margin-bottom: 22px; }
+  .guide-section h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e3a8a;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .guide-section h3 .guide-icon {
+    width: 26px; height: 26px;
+    background: #eff6ff;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: #2563eb;
+    flex-shrink: 0;
+  }
+  .guide-section h3 .guide-icon svg { width: 14px; height: 14px; }
+
+  .guide-steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    counter-reset: step;
+  }
+  .guide-steps li {
+    counter-increment: step;
+    padding: 10px 12px 10px 44px;
+    position: relative;
+    font-size: 13px;
+    color: #334155;
+    line-height: 1.55;
+    border-left: 2px solid #e2e8f0;
+    margin-left: 12px;
+  }
+  .guide-steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: -14px;
+    top: 10px;
+    width: 26px; height: 26px;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .guide-steps li strong { color: #0f172a; }
+
+  .guide-tip {
+    background: #f0fdf4;
+    border-left: 4px solid #16a34a;
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #14532d;
+    margin-top: 10px;
+    line-height: 1.6;
+  }
+  .guide-tip strong { color: #15803d; }
+
+  .guide-faq {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  .guide-faq summary {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #0f172a;
+    background: #f8fafc;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .guide-faq summary::-webkit-details-marker { display: none; }
+  .guide-faq summary::before {
+    content: '?';
+    width: 20px; height: 20px;
+    background: #2563eb;
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    flex-shrink: 0;
+  }
+  .guide-faq[open] summary { background: #eff6ff; border-bottom: 1px solid #e2e8f0; }
+  .guide-faq summary:hover { background: #eff6ff; }
+  .guide-faq .faq-content {
+    padding: 12px 14px 12px 44px;
+    font-size: 12px;
+    color: #475569;
+    line-height: 1.6;
+  }
+
+  .guide-disclaimer {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-size: 11px;
+    color: #7f1d1d;
+    line-height: 1.6;
+    margin-top: 20px;
+  }
+  .guide-disclaimer strong { color: #991b1b; }
+
+  /* PRINT */
+  .print-only { display: none; }
+  @media print {
+    @page { size: A4; margin: 2cm; }
+    body { background: white; padding: 0; color: black; font-family: Georgia, 'Times New Roman', serif; }
+    .container, .header, .card, .tabs, .tab, .actions, .footer, #status, #permBanner { display: none !important; }
+    .print-only { display: block !important; max-width: 100%; color: black; }
+    .print-header { border-bottom: 3px solid #1e3a8a; padding-bottom: 16px; margin-bottom: 24px; }
+    .print-header h1 { font-size: 24pt; font-weight: bold; color: #1e3a8a; margin-bottom: 4px; }
+    .print-header .subtitle { font-size: 11pt; color: #475569; }
+    .print-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; margin-bottom: 28px; padding: 16px; background: #f8fafc !important; border-left: 4px solid #2563eb; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .print-meta .label { font-size: 9pt; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+    .print-meta .value { font-size: 11pt; color: #0f172a; font-weight: 600; }
+    .print-section-title { font-size: 14pt; font-weight: bold; color: #1e3a8a; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid #cbd5e1; }
+    .print-transcript { font-size: 11pt; line-height: 1.8; color: #0f172a; white-space: pre-wrap; word-wrap: break-word; text-align: justify; }
+    .print-notes { margin-top: 24px; padding: 12px 16px; background: #fffbeb !important; border-left: 4px solid #d97706; font-size: 10pt; font-style: italic; color: #475569; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .print-footer { margin-top: 36px; padding-top: 12px; border-top: 1px solid #cbd5e1; font-size: 9pt; color: #94a3b8; text-align: center; }
+    .print-signature { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .print-signature .sig-block { border-top: 1px solid #0f172a; padding-top: 4px; font-size: 9pt; color: #64748b; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">OG</div>
+    <div>
+      <h1>Opnemen Gesprek</h1>
+      <p>Neem op, transcribeer live of lees een bestand in</p>
+    </div>
+  </div>
+
+  <div id="permBanner" class="perm-banner info" style="display:none;">
+    <svg class="icon" style="margin-top:2px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    <div class="content">
+      <div class="title" id="permTitle">Microfoontoegang</div>
+      <div id="permMessage">Bezig met controleren...</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Klantgegevens</div>
+    <div class="form-grid">
+      <div>
+        <label>Klantnaam <span class="required">*</span></label>
+        <input type="text" id="customerName" placeholder="Bijv. Jan de Vries">
+      </div>
+      <div>
+        <label>Klant-ID (optioneel)</label>
+        <input type="text" id="customerId" placeholder="CRM referentie">
+      </div>
+      <div class="full">
+        <label>Notities (optioneel)</label>
+        <textarea id="notes" rows="2" placeholder="Optionele context voor dit gesprek..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab" data-tab="record">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        Opnemen
+      </button>
+      <button class="tab active" data-tab="live">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12a9 9 0 0 1 9-9M21 12a9 9 0 0 1-9 9"/><path d="M7 12a5 5 0 0 1 5-5M17 12a5 5 0 0 1-5 5"/><circle cx="12" cy="12" r="1"/></svg>
+        Live transcriberen
+      </button>
+      <button class="tab" data-tab="transcript">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Bestand inlezen
+      </button>
+      <button class="tab" data-tab="checklist">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        Checklist
+      </button>
+      <button class="tab" data-tab="handleiding">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Handleiding
+      </button>
+    </div>
+
+    <div class="tab-content" id="tab-record">
+      <div id="recordView" class="record-area">
+        <div class="mic-circle" id="micCircle">
+          <svg class="mic-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <div class="timer" id="timer">00:00</div>
+        <div class="btn-row" id="recordControls">
+          <button class="btn-primary" id="requestBtn">
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            Microfoon toestaan
+          </button>
+          <button class="btn-danger" id="startBtn" style="display:none;">
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            Opname starten
+          </button>
+        </div>
+        <div class="hint">De opname blijft volledig lokaal in je browser.</div>
+      </div>
+
+      <div id="previewView" class="recording-preview" style="display:none;">
+        <div class="preview-header">
+          <div class="preview-icon">
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </div>
+          <div class="preview-info">
+            <div class="name">Opname gereed</div>
+            <div class="meta" id="previewMeta">Duur: 00:00</div>
+          </div>
+          <button class="btn-ghost" id="deleteBtn" title="Verwijderen">
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          </button>
+        </div>
+        <audio id="audioPlayer" controls></audio>
+      </div>
+    </div>
+
+    <div class="tab-content active" id="tab-live">
+      <div id="liveUnsupported" class="perm-banner error" style="display:none;">
+        <svg class="icon" style="margin-top:2px;" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>
+        <div class="content">
+          <div class="title">Live transcriberen niet ondersteund</div>
+          <div>Gebruik Chrome of Edge op desktop.</div>
+        </div>
+      </div>
+      <div id="liveSupported">
+        <div class="lang-selector">
+          <label style="margin-bottom:0;">Taal:</label>
+          <select id="liveLanguage">
+            <option value="nl-NL" selected>Nederlands</option>
+            <option value="en-US">Engels (VS)</option>
+            <option value="en-GB">Engels (UK)</option>
+            <option value="de-DE">Duits</option>
+            <option value="fr-FR">Frans</option>
+          </select>
+        </div>
+        <div class="record-area" style="padding: 16px 0;">
+          <div class="mic-circle" id="liveMicCircle">
+            <svg class="mic-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          </div>
+          <div id="liveStatusIndicator" style="display:none;">
+            <span class="live-status"><span class="dot"></span> Luistert...</span>
+          </div>
+          <div class="live-controls">
+            <button class="btn-success" id="startLiveBtn">
+              <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Start live transcriptie
+            </button>
+            <button class="btn-dark" id="stopLiveBtn" style="display:none;">
+              <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14"/></svg>
+              Stop transcriptie
+            </button>
+            <button class="btn-secondary" id="clearLiveBtn" style="display:none;">
+              <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              Wissen
+            </button>
+          </div>
+        </div>
+        <div class="live-transcript-area" id="liveTranscript" contenteditable="true"></div>
+        <div class="char-count" id="liveCharCount" style="display:none; margin-top:8px;"></div>
+        <div class="hint" style="margin-top:16px; text-align:center;">Tip: je kunt de tekst hierboven aanpassen na het stoppen.</div>
+      </div>
+    </div>
+
+    <div class="tab-content" id="tab-transcript">
+      <label class="upload-zone" for="fileInput">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span id="uploadLabel">Klik om een bestand te kiezen (.txt, .md, .vtt, .srt)</span>
+        <input type="file" id="fileInput" accept=".txt,.md,.vtt,.srt,text/plain">
+      </label>
+      <div class="divider"><div class="line"></div><div class="text">of plak handmatig</div><div class="line"></div></div>
+      <label>Transcriptie</label>
+      <textarea id="transcriptText" rows="10" placeholder="Plak hier de transcriptie van het klantgesprek..."></textarea>
+      <div class="char-count" id="charCount" style="display:none;"></div>
+    </div>
+
+    <div class="tab-content" id="tab-checklist">
+      <div class="checklist-header">
+        <div class="checklist-progress">
+          <span class="count" id="checkCount">0</span>
+          <span class="total" id="checkTotal">/ 0 afgerond</span>
+          <div class="checklist-bar">
+            <div class="checklist-bar-fill" id="checkBar" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="checklist-hint">
+          Vink af tijdens het gesprek: ✓ = besproken · ⚠ = aandacht nodig · — = niet van toepassing
+        </div>
+      </div>
+      <div class="checklist-actions">
+        <button class="btn-secondary" id="checkResetBtn">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+          Reset
+        </button>
+        <button class="btn-secondary" id="checkExpandBtn">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          Alles openen
+        </button>
+        <button class="btn-secondary" id="checkCollapseBtn">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+          Alles sluiten
+        </button>
+      </div>
+      <div id="checklistContainer"></div>
+    </div>
+
+    <div class="tab-content" id="tab-handleiding">
+
+      <div class="guide-section">
+        <h3>
+          <span class="guide-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </span>
+          In 4 stappen een gespreksverslag maken
+        </h3>
+        <ol class="guide-steps">
+          <li><strong>Vul de klantnaam in</strong> (verplicht). Klant-ID en notities zijn optioneel.</li>
+          <li><strong>Kies een methode:</strong> "Opnemen" voor audio, "Live transcriberen" voor directe tekst tijdens het gesprek, of "Bestand inlezen" om een bestaande transcriptie te uploaden.</li>
+          <li><strong>Voer het gesprek</strong> of plak de transcriptie.</li>
+          <li><strong>Download, print of controleer</strong> met de knoppen onderaan.</li>
+        </ol>
+      </div>
+
+      <div class="guide-section">
+        <h3>
+          <span class="guide-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+          </span>
+          Per functie
+        </h3>
+        <details class="guide-faq">
+          <summary>Opnemen</summary>
+          <div class="faq-content">Neemt audio op via je microfoon. Je kunt pauzeren en hervatten. Na stoppen kun je de opname beluisteren of downloaden als .webm/.m4a-bestand. De audio wordt niet verstuurd — alles blijft lokaal in je browser.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Live transcriberen</summary>
+          <div class="faq-content">Zet spraak direct om in tekst tijdens het gesprek. Werkt alleen in Chrome of Edge op desktop. Je kunt de taal kiezen (Nederlands is standaard). Na stoppen kun je de tekst nog handmatig aanpassen. Let op: spraak wordt via Google verwerkt — voor gevoelige gesprekken gebruik je beter "Opnemen" en achteraf een aparte transcriptiedienst.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Bestand inlezen</summary>
+          <div class="faq-content">Upload een .txt, .md, .vtt of .srt-bestand met een bestaande transcriptie. Of plak de tekst handmatig in het tekstvak. Handig als je transcriptie via een andere tool hebt gemaakt (bijv. Whisper, Otter.ai, Good Tape).</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Checklist</summary>
+          <div class="faq-content">Ongeveer 70 aandachtspunten uit de AFM Leidraad Hypotheekadvisering, verdeeld over 11 categorieën. Vink tijdens het gesprek af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig (opvolgen), <strong>—</strong> = niet van toepassing. Je voortgang wordt automatisch opgeslagen per klantnaam — sluit je het tabblad en open je later opnieuw met dezelfde klantnaam, dan staan je vinkjes er nog.</div>
+        </details>
+      </div>
+
+      <div class="guide-section">
+        <h3>
+          <span class="guide-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          </span>
+          AFM-controlepakket: controleer je gesprek met AI
+        </h3>
+        <ol class="guide-steps">
+          <li>Klik op <strong>"Download AFM-controlepakket"</strong> — er worden 4 bestanden gedownload (prompt, transcriptie, adviessamenvatting, en leesinstructies).</li>
+          <li>Klik in het pop-up venster op <strong>"Open Claude.ai"</strong> en log in.</li>
+          <li><strong>Sleep alle 4 bestanden</strong> tegelijk in het chatvenster van Claude.ai.</li>
+          <li>Druk op Enter — Claude geeft een volledige analyse: ✅ besproken / ⚠️ oppervlakkig / ❌ ontbrekend per onderwerp, plus een compliance-score en verbeterpunten.</li>
+        </ol>
+        <div class="guide-tip">
+          <strong>💡 Tip voor extra diepgang:</strong> download ook de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">officiële AFM Leidraad (PDF)</a> en sleep die ook mee. Claude baseert het oordeel dan op de exacte tekst.
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>
+          <span class="guide-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+          </span>
+          Veelgestelde vragen
+        </h3>
+        <details class="guide-faq">
+          <summary>Mijn microfoon werkt niet, wat nu?</summary>
+          <div class="faq-content">Controleer: (1) je gebruikt https:// (niet http) — microfoon werkt alleen op beveiligde verbindingen. (2) Klik op het slotje in de adresbalk en zet Microfoon op "Toestaan". (3) Sluit andere programma's die de microfoon gebruiken (Teams, Zoom). (4) Ververs de pagina (Ctrl+R) na aanpassingen.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Waar worden mijn gegevens opgeslagen?</summary>
+          <div class="faq-content">Alles blijft lokaal in je browser. Audio-opnames, transcripties en klantgegevens worden niet naar een server verstuurd. De checklist-vinkjes worden opgeslagen in de browser-opslag (localStorage) van je eigen apparaat. Uitzondering: de live-transcriptie gebruikt Google's spraakservice, en het AFM-controlepakket stuurt tekst naar Claude.ai — alleen als jij dat actief doet.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Kan ik meerdere klanten bijhouden?</summary>
+          <div class="faq-content">Ja. De checklist wordt per klantnaam opgeslagen. Verander de klantnaam en je krijgt een lege checklist voor die klant. Type je later dezelfde naam opnieuw, dan laadt de opgeslagen voortgang weer. Audio en transcripties zijn per sessie — download deze dus direct na het gesprek.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Mag ik dit gebruiken voor AVG-gevoelige gesprekken?</summary>
+          <div class="faq-content">De tool zelf verwerkt geen data op externe servers. Wel geldt: live transcriberen loopt via Google, en het AFM-controlepakket in Claude.ai gaat naar Anthropic. Voor gevoelige dossiers: (1) gebruik "Opnemen" in plaats van "Live transcriberen", (2) anonimiseer transcripties voor je ze naar Claude.ai stuurt, (3) overweeg Claude voor Zakelijk met Zero Data Retention. Zorg altijd voor een werkbare verwerkersovereenkomst.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Welke browser werkt het beste?</summary>
+          <div class="faq-content">Chrome of Edge op desktop werken het beste — daar werken alle functies, inclusief live transcriberen. Firefox en Safari werken voor opnemen en bestand inlezen, maar live transcriberen is beperkt of werkt niet. Op mobiel: Chrome op Android werkt volledig, Safari op iPhone werkt alleen voor opnemen en bestand inlezen.</div>
+        </details>
+      </div>
+
+      <div class="guide-disclaimer">
+        <strong>Let op:</strong> Deze tool is een hulpmiddel voor de adviseur en biedt geen garantie van compliance. De AFM Leidraad Hypotheekadvisering is een voorbeeld van hoe een adviseur kan voldoen aan artikel 4:23 Wft, geen wet op zichzelf. De controle via AI is een ondersteunend oordeel en vervangt geen professionele beoordeling of klantdossier. Het adviesrapport en de klantdossier blijven leidend voor aantoonbaarheid richting AFM en klant.
+      </div>
+
+    </div>
+  </div>
+
+  <div id="status" class="status" style="display:none;"></div>
+
+  <div class="actions">
+    <button class="btn-outline" id="afmCheckBtn" disabled>
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><path d="M9 12l2 2 4-4"/></svg>
+      Download AFM-controlepakket
+    </button>
+    <button class="btn-outline" id="printBtn" disabled>
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print transcriptie
+    </button>
+    <button class="btn-primary" id="downloadBtn" disabled>
+      <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download bestand
+    </button>
+  </div>
+
+  <!-- AFM Controle Popup -->
+  <div id="afmModal" class="afm-modal-overlay" style="display:none;">
+    <div class="afm-modal">
+      <div class="afm-modal-header">
+        <div class="afm-modal-icon">
+          <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        </div>
+        <h2>AFM-controlepakket gedownload</h2>
+      </div>
+
+      <p class="afm-modal-intro">Er zijn 4 bestanden gedownload met alles wat Claude nodig heeft voor een volledige AFM-controle. Volg deze stappen:</p>
+
+      <div class="afm-steps">
+        <div class="afm-step">
+          <div class="afm-step-num">1</div>
+          <div class="afm-step-text">
+            <strong>Open Claude.ai</strong> via de knop hieronder
+          </div>
+        </div>
+        <div class="afm-step">
+          <div class="afm-step-num">2</div>
+          <div class="afm-step-text">
+            <strong>Sleep alle 4 bestanden</strong> (uit je downloadmap) tegelijk in het chatvenster van Claude.ai
+          </div>
+        </div>
+        <div class="afm-step">
+          <div class="afm-step-num">3</div>
+          <div class="afm-step-text">
+            <strong>Druk op Enter</strong> — Claude leest alles en geeft de volledige AFM-analyse
+          </div>
+        </div>
+      </div>
+
+      <div class="afm-tip">
+        <strong>💡 Extra diepgang:</strong> sleep ook de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">officiële AFM Leidraad PDF</a> mee — Claude baseert het oordeel dan op de exacte tekst van de leidraad.
+      </div>
+
+      <div class="afm-warning">
+        <strong>⚠️ Privacy-let op:</strong> Je verstuurt klantgegevens naar Claude.ai (Anthropic). Zorg dat dit past binnen je AVG-afspraken en verwerkersovereenkomst. Voor zeer gevoelige gegevens: anonimiseer de transcriptie eerst, of gebruik Claude voor Zakelijk met Zero Data Retention.
+      </div>
+
+      <div class="afm-modal-footer">
+        <button class="btn-secondary" id="afmCopyAgainBtn">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Opnieuw downloaden
+        </button>
+        <button class="btn-secondary" id="afmCloseBtn">Sluiten</button>
+        <a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer" class="btn-primary afm-open-btn">
+          <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Open Claude.ai
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">Alles draait lokaal in je browser. Geen data wordt verstuurd.</div>
+</div>
+
+<div class="print-only" id="printContent">
+  <div class="print-header">
+    <h1>Klantgespreksverslag</h1>
+    <div class="subtitle">Transcriptie van klantgesprek</div>
+  </div>
+  <div class="print-meta">
+    <div><div class="label">Klantnaam</div><div class="value" id="printCustomerName">—</div></div>
+    <div><div class="label">Klant-ID</div><div class="value" id="printCustomerId">—</div></div>
+    <div><div class="label">Datum</div><div class="value" id="printDate">—</div></div>
+    <div><div class="label">Tijd</div><div class="value" id="printTime">—</div></div>
+  </div>
+  <div class="print-section-title">Transcriptie</div>
+  <div class="print-transcript" id="printTranscript"></div>
+  <div id="printNotesWrapper" style="display:none;"><div class="print-notes" id="printNotes"></div></div>
+  <div class="print-signature">
+    <div class="sig-block">Handtekening adviseur</div>
+    <div class="sig-block">Handtekening klant</div>
+  </div>
+  <div class="print-footer">Gegenereerd via opnemengesprek.nl · <span id="printTimestamp"></span></div>
+</div>
+
+<script>
+  let mediaRecorder = null, audioChunks = [], audioBlob = null, audioUrl = null;
+  let timerInterval = null, seconds = 0, isRecording = false, isPaused = false;
+  let recognition = null, isListening = false, finalTranscript = '';
+  let activeTab = 'live';
+
+  const customerName = document.getElementById('customerName');
+  const customerId = document.getElementById('customerId');
+  const notes = document.getElementById('notes');
+  const micCircle = document.getElementById('micCircle');
+  const timerEl = document.getElementById('timer');
+  const recordControls = document.getElementById('recordControls');
+  const requestBtn = document.getElementById('requestBtn');
+  const startBtn = document.getElementById('startBtn');
+  const recordView = document.getElementById('recordView');
+  const previewView = document.getElementById('previewView');
+  const previewMeta = document.getElementById('previewMeta');
+  const deleteBtn = document.getElementById('deleteBtn');
+  const audioPlayer = document.getElementById('audioPlayer');
+  const fileInput = document.getElementById('fileInput');
+  const uploadLabel = document.getElementById('uploadLabel');
+  const transcriptText = document.getElementById('transcriptText');
+  const charCount = document.getElementById('charCount');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const printBtn = document.getElementById('printBtn');
+  const afmCheckBtn = document.getElementById('afmCheckBtn');
+  const afmModal = document.getElementById('afmModal');
+  const afmCloseBtn = document.getElementById('afmCloseBtn');
+  const afmCopyAgainBtn = document.getElementById('afmCopyAgainBtn');
+  const statusEl = document.getElementById('status');
+  const permBanner = document.getElementById('permBanner');
+  const permTitle = document.getElementById('permTitle');
+  const permMessage = document.getElementById('permMessage');
+  const liveSupported = document.getElementById('liveSupported');
+  const liveUnsupported = document.getElementById('liveUnsupported');
+  const liveMicCircle = document.getElementById('liveMicCircle');
+  const startLiveBtn = document.getElementById('startLiveBtn');
+  const stopLiveBtn = document.getElementById('stopLiveBtn');
+  const clearLiveBtn = document.getElementById('clearLiveBtn');
+  const liveLanguage = document.getElementById('liveLanguage');
+  const liveTranscript = document.getElementById('liveTranscript');
+  const liveCharCount = document.getElementById('liveCharCount');
+  const liveStatusIndicator = document.getElementById('liveStatusIndicator');
+
+  function showBanner(type, title, message) {
+    permBanner.className = 'perm-banner ' + type;
+    permBanner.style.display = 'flex';
+    permTitle.textContent = title;
+    permMessage.textContent = message;
+  }
+  function hideBanner() { permBanner.style.display = 'none'; }
+
+  async function checkPermissionStatus() {
+    if (!navigator.mediaDevices) {
+      showBanner('error', 'Browser niet ondersteund', 'Gebruik Chrome, Firefox, Safari of Edge.');
+      requestBtn.disabled = true;
+      return;
+    }
+    if (navigator.permissions && navigator.permissions.query) {
+      try {
+        const result = await navigator.permissions.query({ name: 'microphone' });
+        if (result.state === 'granted') {
+          setMicStatus('ready');
+          showBanner('success', 'Microfoon klaar voor gebruik', 'Je kunt nu opnemen of live transcriberen.');
+          setTimeout(hideBanner, 3000);
+          showStartButton();
+        } else if (result.state === 'denied') {
+          setMicStatus('denied');
+          showBanner('error', 'Microfoontoegang geblokkeerd', 'Klik op het slotje in de adresbalk en zet Microfoon op "Toestaan". Ververs daarna de pagina.');
+        } else {
+          showBanner('info', 'Microfoon nog niet toegestaan', 'Klik op "Microfoon toestaan" om te beginnen.');
+        }
+        result.onchange = () => {
+          if (result.state === 'granted') {
+            setMicStatus('ready');
+            showBanner('success', 'Microfoon toegestaan', 'Je kunt nu opnemen.');
+            setTimeout(hideBanner, 3000);
+            showStartButton();
+          }
+        };
+      } catch (e) {
+        showBanner('info', 'Microfoon nodig', 'Klik op "Microfoon toestaan" om te beginnen.');
+      }
+    } else {
+      showBanner('info', 'Microfoon nodig', 'Klik op "Microfoon toestaan" om te beginnen.');
+    }
+  }
+
+  async function requestMicPermission() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(t => t.stop());
+      setMicStatus('ready');
+      showBanner('success', 'Microfoon toegestaan', 'Je kunt nu opnemen of live transcriberen.');
+      setTimeout(hideBanner, 3000);
+      showStartButton();
+    } catch (err) { handlePermissionError(err); }
+  }
+
+  function handlePermissionError(err) {
+    setMicStatus('denied');
+    if (err.name === 'NotAllowedError') showBanner('error', 'Microfoontoegang geweigerd', 'Klik op het slotje in de adresbalk, zet Microfoon op "Toestaan" en ververs.');
+    else if (err.name === 'NotFoundError') showBanner('error', 'Geen microfoon gevonden', 'Sluit een microfoon aan.');
+    else if (err.name === 'NotReadableError') showBanner('error', 'Microfoon in gebruik', 'Sluit andere apps (Teams, Zoom).');
+    else showBanner('error', 'Fout', err.message || err.name);
+  }
+
+  function setMicStatus(status) {
+    micCircle.classList.remove('ready', 'denied', 'recording');
+    if (status) micCircle.classList.add(status);
+  }
+  function showStartButton() { requestBtn.style.display = 'none'; startBtn.style.display = 'inline-flex'; }
+
+  requestBtn.addEventListener('click', requestMicPermission);
+
+  function initSpeechRecognition() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { liveSupported.style.display = 'none'; liveUnsupported.style.display = 'flex'; return false; }
+    recognition = new SR();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = liveLanguage.value;
+    recognition.onstart = () => {
+      isListening = true;
+      liveMicCircle.classList.add('listening');
+      liveStatusIndicator.style.display = 'block';
+      startLiveBtn.style.display = 'none';
+      stopLiveBtn.style.display = 'inline-flex';
+      clearLiveBtn.style.display = 'inline-flex';
+    };
+    recognition.onresult = (event) => {
+      let interim = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const t = event.results[i][0].transcript;
+        if (event.results[i].isFinal) finalTranscript += t + ' ';
+        else interim += t;
+      }
+      liveTranscript.innerHTML = escapeHtml(finalTranscript) + '<span class="interim">' + escapeHtml(interim) + '</span>';
+      liveTranscript.scrollTop = liveTranscript.scrollHeight;
+      updateLiveCharCount(); updateButtons();
+    };
+    recognition.onerror = (event) => {
+      if (event.error === 'not-allowed') { showStatus('error', '<div>Microfoontoegang geweigerd.</div>'); stopLiveTranscription(); }
+      else if (event.error === 'network') { showStatus('error', '<div>Netwerkfout.</div>'); stopLiveTranscription(); }
+    };
+    recognition.onend = () => {
+      if (isListening) {
+        try { recognition.start(); }
+        catch (e) {
+          isListening = false;
+          liveMicCircle.classList.remove('listening');
+          liveStatusIndicator.style.display = 'none';
+          startLiveBtn.style.display = 'inline-flex';
+          stopLiveBtn.style.display = 'none';
+        }
+      } else {
+        liveMicCircle.classList.remove('listening');
+        liveStatusIndicator.style.display = 'none';
+        startLiveBtn.style.display = 'inline-flex';
+        stopLiveBtn.style.display = 'none';
+      }
+    };
+    return true;
+  }
+
+  function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+  function startLiveTranscription() {
+    if (!recognition) { if (!initSpeechRecognition()) return; }
+    recognition.lang = liveLanguage.value;
+    try { recognition.start(); }
+    catch (e) { recognition.stop(); setTimeout(() => { try { recognition.start(); } catch (e2) {} }, 200); }
+  }
+
+  function stopLiveTranscription() {
+    isListening = false;
+    if (recognition) { try { recognition.stop(); } catch (e) {} }
+    liveMicCircle.classList.remove('listening');
+    liveStatusIndicator.style.display = 'none';
+    startLiveBtn.style.display = 'inline-flex';
+    stopLiveBtn.style.display = 'none';
+    liveTranscript.innerHTML = escapeHtml(finalTranscript.trim());
+  }
+
+  function clearLiveTranscription() {
+    if (isListening) stopLiveTranscription();
+    finalTranscript = '';
+    liveTranscript.innerHTML = '';
+    updateLiveCharCount(); updateButtons();
+    clearLiveBtn.style.display = 'none';
+  }
+
+  function updateLiveCharCount() {
+    const txt = liveTranscript.innerText || '';
+    if (txt.trim().length > 0) {
+      const words = txt.trim().split(/\s+/).filter(Boolean).length;
+      liveCharCount.textContent = txt.length.toLocaleString('nl-NL') + ' tekens · ' + words.toLocaleString('nl-NL') + ' woorden';
+      liveCharCount.style.display = 'block';
+    } else liveCharCount.style.display = 'none';
+  }
+
+  startLiveBtn.addEventListener('click', startLiveTranscription);
+  stopLiveBtn.addEventListener('click', stopLiveTranscription);
+  clearLiveBtn.addEventListener('click', clearLiveTranscription);
+  liveTranscript.addEventListener('input', () => {
+    if (!isListening) { finalTranscript = liveTranscript.innerText; updateLiveCharCount(); updateButtons(); }
+  });
+  liveLanguage.addEventListener('change', () => { if (recognition) recognition.lang = liveLanguage.value; });
+  initSpeechRecognition();
+
+  // ============================================================
+  // AFM CHECKLIST
+  // ============================================================
+
+  const CHECKLIST = [
+    {
+      id: 'kennismaking',
+      title: 'Kennismaking',
+      emoji: '👋',
+      items: [
+        'Dienstenwijzer en Vergelijkingskaart gedeeld',
+        'Kosten van dienstverlening toegelicht',
+        'Zelfstandige rol van adviseur benoemd',
+        'Omvang dienstverlening duidelijk afgesproken',
+        'Klant geïnformeerd dat maximale leenruimte ≠ passende leenruimte',
+        'Huidige woonlasten en woonverleden besproken'
+      ]
+    },
+    {
+      id: 'inventarisatie',
+      title: 'Inventarisatie',
+      emoji: '📋',
+      items: [
+        'Inkomen uitgevraagd (stabiliteit beoordeeld)',
+        'Financiële verplichtingen uitgevraagd (leningen, alimentatie, studielening)',
+        'Bestaande voorzieningen uitgevraagd (pensioen, AO-dekking)',
+        'Sociale uitkeringen en rechten in kaart',
+        'Spaarkapitaal en spaarcapaciteit besproken',
+        'Uitgavenpatroon besproken (zeker bij hoge LTI)',
+        'Kennis & ervaring met hypotheken uitgevraagd',
+        'Risicobereidheid uitgevraagd',
+        'Doelstellingen en toekomstwensen in kaart'
+      ]
+    },
+    {
+      id: 'woonlasten',
+      title: 'Verantwoorde woonlasten',
+      emoji: '🏠',
+      items: [
+        'Totale woonlast besproken (hypotheek + energie + belastingen + onderhoud + opstal + erfpacht)',
+        'Betaalbaarheid nu beoordeeld',
+        'Betaalbaarheid tijdens pensionering doorgerekend',
+        'Scenario gezinsuitbreiding besproken',
+        'Scenario minder werken / sabbatical / ZZP besproken',
+        'Scenario eerder stoppen met werken besproken',
+        'Bij hoge LTI: netto-besteedbaar-inkomen analyse gemaakt',
+        'Tegenstrijdigheden in antwoorden onderzocht'
+      ]
+    },
+    {
+      id: 'rentevastperiode',
+      title: 'Rentevastperiode',
+      emoji: '📈',
+      items: [
+        'Samenhang looptijd ↔ maandlast uitgelegd',
+        'Samenhang looptijd ↔ zekerheid uitgelegd',
+        'Meerdere rentevastperiode-scenario\'s doorgerekend',
+        'Scenario rentestijging na afloop rentevastperiode getoond',
+        'Voorkeur klant over zekerheid vs. lage lasten vastgesteld',
+        'Risico dragen én risico kunnen dragen beoordeeld'
+      ]
+    },
+    {
+      id: 'verduurzaming',
+      title: 'Verduurzaming',
+      emoji: '🌱',
+      items: [
+        'Energielabel van woning besproken',
+        'Invloed energielabel op leenruimte uitgelegd',
+        'Wensen klant t.a.v. verduurzaming uitgevraagd',
+        'Bij slecht label: gevolgen energiekosten op woonlasten besproken',
+        'Financieringsmogelijkheden EBV\'s toegelicht (indien relevant)',
+        'Funderingsrisico\'s in regio besproken (indien relevant)'
+      ]
+    },
+    {
+      id: 'fiscaliteit',
+      title: 'Fiscaliteit',
+      emoji: '💶',
+      items: [
+        'Hypotheekverleden uitgevraagd (bij doorstromers)',
+        'Relevante fiscale documenten opgevraagd (aangiftes, aanslagen)',
+        'Eerdere looptijden en aflossingen in kaart',
+        'Opbouwproducten (KEW/SEW/BEW) geïnventariseerd',
+        'Bruto/netto maandlasten-overzicht gedeeld',
+        'Eigenwoningschuld en -reserve berekend',
+        'Overgangsregimes beoordeeld',
+        'Bij onzekerheid: prudente aannames gedocumenteerd'
+      ]
+    },
+    {
+      id: 'product',
+      title: 'Hypotheekproduct',
+      emoji: '🏦',
+      items: [
+        'Product niet alleen op rente, ook op voorwaarden vergeleken',
+        'Offertevoorwaarden besproken (dagrente vs. offerterente)',
+        'Meeneemregeling / verhuisregeling besproken',
+        'Boetevrij aflossen besproken',
+        'Bereidstellingsprovisie besproken',
+        'Rentemiddeling of automatische rentedaling besproken',
+        'Overbruggingskrediet besproken (indien relevant)',
+        'Onderbouwing gekozen aanbieder vastgelegd'
+      ]
+    },
+    {
+      id: 'lifeevents',
+      title: 'Life events & risico\'s',
+      emoji: '⚠️',
+      items: [
+        'Risico overlijden besproken',
+        'Risico arbeidsongeschiktheid besproken',
+        'Risico werkloosheid besproken',
+        'Nabestaandenpensioen in analyse meegenomen',
+        'WIA/WW-regelingen betrokken bij analyse',
+        'Eigen verzekeringen/voorzieningen in kaart',
+        'Inkomensscenario\'s per calamiteit doorgerekend',
+        'Risicoverzekering geadviseerd waar nodig',
+        'Afwijking van risicoadvies vastgelegd met motivatie'
+      ]
+    },
+    {
+      id: 'relatie',
+      title: 'Relatiebeëindiging',
+      emoji: '💔',
+      items: [
+        'Relatievorm besproken (huwelijk / GP / samenlevingscontract / geen)',
+        'Eigendomsverhouding en lastenverdeling vastgesteld',
+        'Scenario relatiebeëindiging besproken',
+        'Financiële afhankelijkheid tussen partners besproken',
+        'Notariële afspraken aanbevolen (indien nog niet aanwezig)'
+      ]
+    },
+    {
+      id: 'advies',
+      title: 'Advies & rapport',
+      emoji: '✍️',
+      items: [
+        'Advies onderbouwd met aansluiting op doelstellingen',
+        'Advies getoetst op risicobereidheid en financiële positie',
+        'Alternatieven besproken (indien van toepassing)',
+        'Adviesrapport met gelaagde opbouw (samenvatting → details)',
+        'Fiscale gevolgen opgenomen in rapport',
+        'Afwijkingen klant van advies vastgelegd met motivatie',
+        'Klant gewezen op risico\'s bij afwijken',
+        'Adviesrapport schriftelijk/digitaal verstrekt'
+      ]
+    },
+    {
+      id: 'nazorg',
+      title: 'Nazorg',
+      emoji: '🤝',
+      items: [
+        'Reikwijdte nazorg/beheerfase afgesproken',
+        'Vergoeding voor nazorg afgesproken',
+        'Momenten van contact afgesproken'
+      ]
+    }
+  ];
+
+  const checklistContainer = document.getElementById('checklistContainer');
+  const checkCountEl = document.getElementById('checkCount');
+  const checkTotalEl = document.getElementById('checkTotal');
+  const checkBarEl = document.getElementById('checkBar');
+  const checkResetBtn = document.getElementById('checkResetBtn');
+  const checkExpandBtn = document.getElementById('checkExpandBtn');
+  const checkCollapseBtn = document.getElementById('checkCollapseBtn');
+
+  // Status: null = leeg, 'done' = gedaan, 'warn' = aandacht, 'na' = n.v.t.
+  let checklistState = {};
+
+  // Laad uit localStorage (per klantnaam) — maar voorzichtig: werkt niet altijd, fallback naar session
+  function loadChecklistState() {
+    try {
+      const key = 'checklist_' + (customerName.value.trim() || 'default');
+      const stored = localStorage.getItem(key);
+      if (stored) checklistState = JSON.parse(stored);
+      else checklistState = {};
+    } catch (e) {
+      checklistState = {};
+    }
+  }
+
+  function saveChecklistState() {
+    try {
+      const key = 'checklist_' + (customerName.value.trim() || 'default');
+      localStorage.setItem(key, JSON.stringify(checklistState));
+    } catch (e) { /* stil falen als localStorage niet beschikbaar is */ }
+  }
+
+  function renderChecklist() {
+    checklistContainer.innerHTML = '';
+
+    CHECKLIST.forEach(group => {
+      const groupEl = document.createElement('div');
+      groupEl.className = 'checklist-group';
+
+      const groupDone = group.items.filter((_, idx) => {
+        const id = group.id + '_' + idx;
+        return checklistState[id] === 'done' || checklistState[id] === 'na';
+      }).length;
+
+      groupEl.innerHTML = `
+        <div class="checklist-group-header" data-group="${group.id}">
+          <div class="checklist-group-title">
+            <span class="emoji">${group.emoji}</span>
+            <span>${group.title}</span>
+          </div>
+          <div class="checklist-group-stats">
+            <span class="mini-count">${groupDone}/${group.items.length}</span>
+            <svg class="chevron icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <div class="checklist-items" data-group="${group.id}">
+          ${group.items.map((item, idx) => {
+            const id = group.id + '_' + idx;
+            const status = checklistState[id] || '';
+            return `
+              <div class="checklist-item ${status ? 'status-' + status : ''}" data-id="${id}">
+                <div class="checklist-status-btns">
+                  <button class="status-btn done ${status === 'done' ? 'active' : ''}" data-id="${id}" data-status="done" title="Besproken">✓</button>
+                  <button class="status-btn warn ${status === 'warn' ? 'active' : ''}" data-id="${id}" data-status="warn" title="Aandacht nodig">⚠</button>
+                  <button class="status-btn na ${status === 'na' ? 'active' : ''}" data-id="${id}" data-status="na" title="Niet van toepassing">—</button>
+                </div>
+                <div class="checklist-label">${item}</div>
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+      checklistContainer.appendChild(groupEl);
+    });
+
+    // Event listeners voor statusknoppen
+    checklistContainer.querySelectorAll('.status-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const status = btn.dataset.status;
+        // Toggle: als al actief, haal weg
+        if (checklistState[id] === status) delete checklistState[id];
+        else checklistState[id] = status;
+        saveChecklistState();
+        renderChecklist();
+        updateChecklistProgress();
+      });
+    });
+
+    // Event listeners voor inklappen/uitklappen van groepen
+    checklistContainer.querySelectorAll('.checklist-group-header').forEach(header => {
+      header.addEventListener('click', () => {
+        header.classList.toggle('collapsed');
+        const items = checklistContainer.querySelector('.checklist-items[data-group="' + header.dataset.group + '"]');
+        if (items) items.classList.toggle('hidden');
+      });
+    });
+
+    updateChecklistProgress();
+  }
+
+  function updateChecklistProgress() {
+    let total = 0;
+    let done = 0;
+    CHECKLIST.forEach(group => {
+      group.items.forEach((_, idx) => {
+        total++;
+        const id = group.id + '_' + idx;
+        if (checklistState[id] === 'done' || checklistState[id] === 'na') done++;
+      });
+    });
+    checkCountEl.textContent = done;
+    checkTotalEl.textContent = '/ ' + total + ' afgerond';
+    checkBarEl.style.width = total > 0 ? (done / total * 100) + '%' : '0%';
+  }
+
+  checkResetBtn.addEventListener('click', () => {
+    if (confirm('Weet je zeker dat je alle vinkjes wilt resetten?')) {
+      checklistState = {};
+      saveChecklistState();
+      renderChecklist();
+    }
+  });
+
+  checkExpandBtn.addEventListener('click', () => {
+    checklistContainer.querySelectorAll('.checklist-group-header').forEach(h => h.classList.remove('collapsed'));
+    checklistContainer.querySelectorAll('.checklist-items').forEach(i => i.classList.remove('hidden'));
+  });
+
+  checkCollapseBtn.addEventListener('click', () => {
+    checklistContainer.querySelectorAll('.checklist-group-header').forEach(h => h.classList.add('collapsed'));
+    checklistContainer.querySelectorAll('.checklist-items').forEach(i => i.classList.add('hidden'));
+  });
+
+  // Laad en herlaad bij verandering van klantnaam
+  loadChecklistState();
+  renderChecklist();
+  customerName.addEventListener('input', () => {
+    loadChecklistState();
+    renderChecklist();
+  });
+
+  function formatTime(s) {
+    const m = Math.floor(s / 60).toString().padStart(2, '0');
+    const sec = (s % 60).toString().padStart(2, '0');
+    return m + ':' + sec;
+  }
+  function showStatus(type, message) {
+    statusEl.className = 'status ' + type;
+    statusEl.innerHTML = message;
+    statusEl.style.display = 'flex';
+    if (type === 'success') setTimeout(() => { statusEl.style.display = 'none'; }, 4000);
+  }
+  function sanitizeFilename(name) {
+    return (name || 'onbekend').replace(/[^a-z0-9áéíóúñü\-_ ]/gi, '').replace(/\s+/g, '-').toLowerCase();
+  }
+  function getCurrentTranscriptText() {
+    if (activeTab === 'live') return liveTranscript.innerText.trim();
+    if (activeTab === 'transcript') return transcriptText.value.trim();
+    return '';
+  }
+  function updateButtons() {
+    const hasCustomer = customerName.value.trim().length > 0;
+    const hasAudio = audioBlob !== null;
+    const hasText = getCurrentTranscriptText().length > 0;
+    const hasContent = (activeTab === 'record' && hasAudio) || hasText;
+    const isActionTab = activeTab === 'live' || activeTab === 'transcript' || activeTab === 'record';
+
+    downloadBtn.disabled = !(hasCustomer && hasContent);
+    downloadBtn.style.display = isActionTab ? 'inline-flex' : 'none';
+
+    const canPrint = hasCustomer && hasText && (activeTab === 'live' || activeTab === 'transcript');
+    printBtn.disabled = !canPrint;
+    printBtn.style.display = (activeTab === 'live' || activeTab === 'transcript') ? 'inline-flex' : 'none';
+
+    // AFM-knop: alleen bij transcripties (live of bestand), ook zonder klantnaam
+    const canAfmCheck = hasText && (activeTab === 'live' || activeTab === 'transcript');
+    afmCheckBtn.disabled = !canAfmCheck;
+    afmCheckBtn.style.display = (activeTab === 'live' || activeTab === 'transcript') ? 'inline-flex' : 'none';
+  }
+
+  document.querySelectorAll('.tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      activeTab = btn.dataset.tab;
+      document.getElementById('tab-' + activeTab).classList.add('active');
+      updateButtons();
+    });
+  });
+
+  startBtn.addEventListener('click', async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      let mimeType = 'audio/webm';
+      if (!MediaRecorder.isTypeSupported(mimeType)) { mimeType = 'audio/mp4'; if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = ''; }
+      mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+      mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+        audioUrl = URL.createObjectURL(audioBlob);
+        audioPlayer.src = audioUrl;
+        previewMeta.textContent = 'Duur: ' + formatTime(seconds);
+        recordView.style.display = 'none';
+        previewView.style.display = 'block';
+        stream.getTracks().forEach(t => t.stop());
+        setMicStatus('ready');
+        updateButtons();
+      };
+      mediaRecorder.start();
+      isRecording = true; isPaused = false; seconds = 0;
+      timerEl.textContent = '00:00';
+      setMicStatus('recording');
+      hideBanner();
+      timerInterval = setInterval(() => { seconds++; timerEl.textContent = formatTime(seconds); }, 1000);
+      renderRecordControls();
+    } catch (err) { handlePermissionError(err); }
+  });
+
+  function renderRecordControls() {
+    if (!isRecording) {
+      recordControls.innerHTML = '';
+      recordControls.appendChild(startBtn);
+      startBtn.style.display = 'inline-flex';
+      return;
+    }
+    recordControls.innerHTML =
+      '<button class="btn-secondary" id="pauseBtn"><svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">' +
+      (isPaused ? '<polygon points="5 3 19 12 5 21 5 3"/>' : '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>') +
+      '</svg>' + (isPaused ? 'Hervatten' : 'Pauzeren') + '</button>' +
+      '<button class="btn-dark" id="stopBtn"><svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="5" width="14" height="14"/></svg>Stoppen</button>';
+    document.getElementById('pauseBtn').addEventListener('click', () => {
+      if (!mediaRecorder) return;
+      if (isPaused) { mediaRecorder.resume(); timerInterval = setInterval(() => { seconds++; timerEl.textContent = formatTime(seconds); }, 1000); }
+      else { mediaRecorder.pause(); clearInterval(timerInterval); }
+      isPaused = !isPaused;
+      renderRecordControls();
+    });
+    document.getElementById('stopBtn').addEventListener('click', () => {
+      if (mediaRecorder && isRecording) {
+        mediaRecorder.stop();
+        isRecording = false; isPaused = false;
+        clearInterval(timerInterval);
+        renderRecordControls();
+      }
+    });
+  }
+
+  deleteBtn.addEventListener('click', () => {
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    audioBlob = null; audioUrl = null; seconds = 0;
+    timerEl.textContent = '00:00';
+    previewView.style.display = 'none';
+    recordView.style.display = 'block';
+    updateButtons();
+  });
+
+  fileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    uploadLabel.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = ev => { transcriptText.value = ev.target.result; updateCharCount(); updateButtons(); };
+    reader.readAsText(file);
+  });
+
+  function updateCharCount() {
+    const txt = transcriptText.value;
+    if (txt.length > 0) {
+      const words = txt.split(/\s+/).filter(Boolean).length;
+      charCount.textContent = txt.length.toLocaleString('nl-NL') + ' tekens · ' + words.toLocaleString('nl-NL') + ' woorden';
+      charCount.style.display = 'block';
+    } else charCount.style.display = 'none';
+  }
+
+  transcriptText.addEventListener('input', () => { updateCharCount(); updateButtons(); });
+  customerName.addEventListener('input', updateButtons);
+  customerId.addEventListener('input', updateButtons);
+
+  printBtn.addEventListener('click', () => {
+    const now = new Date();
+    const datum = now.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const tijd = now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    document.getElementById('printCustomerName').textContent = customerName.value.trim() || '—';
+    document.getElementById('printCustomerId').textContent = customerId.value.trim() || '—';
+    document.getElementById('printDate').textContent = datum;
+    document.getElementById('printTime').textContent = tijd;
+    document.getElementById('printTranscript').textContent = getCurrentTranscriptText();
+    document.getElementById('printTimestamp').textContent = now.toLocaleString('nl-NL');
+    const notesValue = notes.value.trim();
+    const notesWrapper = document.getElementById('printNotesWrapper');
+    if (notesValue) { document.getElementById('printNotes').textContent = 'Notities: ' + notesValue; notesWrapper.style.display = 'block'; }
+    else notesWrapper.style.display = 'none';
+    setTimeout(() => window.print(), 100);
+  });
+
+  // ============================================================
+  // AFM CONTROLE — Klembord + modal
+  // ============================================================
+
+  function buildAfmPrompt() {
+    const transcript = getCurrentTranscriptText();
+    const klant = customerName.value.trim() || '[niet ingevuld]';
+    const klantId = customerId.value.trim();
+    const notitie = notes.value.trim();
+    const datum = new Date().toLocaleDateString('nl-NL');
+
+    return `Je bent een compliance-expert voor hypotheekadvisering in Nederland. Je beoordeelt of een adviseur tijdens een klantgesprek heeft voldaan aan de **AFM Leidraad Hypotheekadvisering (april 2026)**, gebaseerd op artikel 4:23 lid 1 Wet op het financieel toezicht (Wft).
+
+De volledige AFM-leidraad is beschikbaar op: https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering
+
+Als de gebruiker de PDF van de leidraad als bijlage heeft meegestuurd in deze chat, baseer je je oordeel primair op die tekst. Anders gebruik je je beste kennis van de leidraad zoals beschreven in de bron hierboven.
+
+## OPDRACHT
+
+Beoordeel de transcriptie hieronder per onderwerp. Houd rekening met de **specifieke klantsituatie** — niet elk onderwerp is bij elke klant even relevant (een starter zonder verleden hoeft bijvoorbeeld geen uitvoerige fiscale historie). Wees streng waar het ertoe doet, mild waar het terecht is.
+
+Gebruik per onderwerp één van deze statussen:
+- **✅ BESPROKEN** — onderwerp is voldoende behandeld voor deze klantsituatie
+- **⚠️ OPPERVLAKKIG** — onderwerp is wel aangestipt maar niet diep genoeg uitgewerkt
+- **❌ ONTBREKEND** — onderwerp is niet besproken, terwijl het in deze klantsituatie wél relevant is
+- **➖ N.V.T.** — onderwerp is niet relevant in deze klantsituatie (motiveer kort)
+
+**Bij ✅ en ⚠️:** citeer een korte passage uit het transcript als onderbouwing.
+**Bij ❌:** geef concreet aan welke vraag/uitleg ontbreekt en waarom dat voor déze klant relevant is.
+
+---
+
+## TE BEOORDELEN ONDERWERPEN
+
+### A. Rol van de adviseur (hoofdstuk 2)
+
+**A1. Zelfstandige rol benoemd**
+Heeft de adviseur duidelijk gemaakt dat hij/zij niet alleen wensen volgt, maar zelfstandig beoordeelt wat passend is? Vroeg in het gesprek genoemd dat ook gewaarschuwd wordt als wensen niet haalbaar zijn?
+
+**A2. Onderzoekende houding bij tegenstrijdigheden**
+Bij twijfel of inconsistentie in antwoorden: heeft de adviseur doorgevraagd, om toelichting of bewijs gevraagd, en samen met de klant geprioriteerd?
+
+**A3. Heldere afspraken over omvang dienstverlening**
+Is duidelijk wat wel/niet onder het advies valt (bijv. wel hypotheek, niet ORV)? Zijn Dienstenwijzer en Vergelijkingskaart gedeeld?
+
+### B. Kennismaking & inventarisatie (hoofdstuk 3)
+
+**B1. Financiële positie volledig in kaart**
+Inkomen (en stabiliteit), bestaande verplichtingen (consumptief krediet, studielening, alimentatie), bestaande voorzieningen (pensioen, AO-dekking), eigen vermogen.
+
+**B2. Doelstellingen, wensen én toekomstplannen**
+Niet alleen "wat wil de klant kopen", maar ook: gezinsuitbreiding, carrière-wijzigingen, verhuiswensen, pensioenwens.
+
+**B3. Kennis & ervaring met hypothecair krediet**
+Is het een starter of doorstromer? Hoeveel weet de klant al? Past de uitleg op dat niveau?
+
+**B4. Risicobereidheid uitgevraagd én getoetst**
+Niet alleen "vindt u risico erg?", maar concreet getoetst aan scenario's. Verschillen tussen partners besproken?
+
+**B5. Verificatie van mondelinge informatie**
+Heeft de adviseur waar nodig om documenten gevraagd of vervolgvragen gesteld om informatie te verifiëren?
+
+### C. Verantwoorde woonlasten (hoofdstuk 4)
+
+**C1. Volledige woonlast besproken**
+Niet alleen rente+aflossing maar ook: energielasten, gemeentelijke belastingen, onderhoud, opstalverzekering, eventueel erfpacht.
+
+**C2. Pensionering doorgerekend (indien relevant)**
+Loopt de hypotheek door na pensioendatum? Dan een scenarioanalyse van betaalbaarheid bij pensioeninkomen — niet alleen krediettoets aanbieder.
+
+**C3. Uitgavenpatroon en spaargedrag (vooral bij hoge LTI)**
+Hoe hoger de leennorm-benutting, hoe belangrijker dit. Bij maximaal lenen: budgetoverzicht of NBI-analyse.
+
+**C4. Life events voor woonlasten**
+Gezinsuitbreiding, ZZP worden, sabbatical, eerder stoppen, minder werken — voor zover relevant aan klantsituatie besproken?
+
+**C5. "Kan klant levensstijl realistisch aanpassen?"**
+Bij klanten die zeggen "ik kan wel bezuinigen": is doorgevraagd of dat ook werkelijk haalbaar is?
+
+### D. Rentevastperiode (hoofdstuk 5)
+
+**D1. Samenhang looptijd ↔ maandlast ↔ zekerheid uitgelegd**
+Begrijpt de klant dat korte rente = lage last + onzekerheid, en lange rente = hogere last + zekerheid?
+
+**D2. Scenario's met actuele rentes getoond**
+Concrete berekeningen bij verschillende rentevastperiodes (bijv. 5, 10, 20 jaar) gepresenteerd.
+
+**D3. Scenarioanalyse rentestijging na afloop rentevastperiode**
+Vooral bij korte rentevast en/of hoge LTI: wat gebeurt er bij +2% of +3% rentestijging?
+
+**D4. Tegenstrijdigheden in voorkeur klant uitgesproken en opgelost**
+Klanten die zowel "lage last" als "veel zekerheid" willen — is de tegenstrijdigheid besproken?
+
+### E. Verduurzaming (hoofdstuk 6)
+
+**E1. Energielabel + invloed op leenruimte**
+Is het label van de woning genoemd en de impact op extra leenruimte voor EBV?
+
+**E2. Energielasten bij slecht label**
+Bij label E/F/G: zijn de hoge verwachte energielasten meegenomen in de woonlast?
+
+**E3. Funderingsrisico's (indien regio-relevant)**
+In risicoregio's voor bodemdaling/verzakking: heeft de adviseur de klant gewaarschuwd voor herstelkosten?
+
+### F. Fiscaliteit (hoofdstuk 7)
+
+**F1. Hypotheekverleden uitgevraagd (bij doorstromers)**
+Aanslagen/aangiftes opgevraagd, eerdere kredietaanbieders, looptijden, opbouwproducten (KEW/SEW/BEW).
+
+**F2. Bruto/netto maandlasten met fiscaal effect getoond**
+Hypotheekrenteaftrek correct verwerkt? Effect op netto last duidelijk?
+
+**F3. Eigenwoningschuld & eigenwoningreserve berekend**
+Welk deel kwalificeert in box 1, welk deel niet? Overgangsregime correct toegepast?
+
+**F4. Aannames bij onvolledige info gedocumenteerd**
+Als verleden niet volledig te achterhalen: zijn prudente aannames gemaakt en met klant besproken?
+
+### G. Hypotheekproduct (hoofdstuk 8)
+
+**G1. Niet alleen rente, ook voorwaarden vergeleken**
+Boetevrij aflossen, meeneemregeling/verhuisregeling, bereidstellingsprovisie, dagrente vs. offerterente, overbruggingskrediet.
+
+**G2. Aansluiting voorwaarden bij persoonlijke situatie**
+Verwacht de klant snel af te lossen → automatische rentedaling? Verre passeerdatum → dalende offerterente?
+
+**G3. Onderbouwing keuze aanbieder**
+Is uitgelegd waarom déze aanbieder en niet de goedkoopste — vanuit het belang van de klant, niet van de adviseur?
+
+### H. Life events & risico's (hoofdstuk 9)
+
+**H1. Overlijden besproken**
+Inkomensverlies bij overlijden, nabestaandenpensioen, scenario achterblijvende partner.
+
+**H2. Arbeidsongeschiktheid besproken**
+Bij loondienst: WIA-traject. Bij ZZP: meestal geen vangnet — extra alert.
+
+**H3. Werkloosheid besproken**
+Bestaande WW-rechten, financiële buffer, mogelijke duur uitkering.
+
+**H4. Bestaande voorzieningen klantspecifiek geanalyseerd**
+Niet algemeen, maar concreet: welke bedragen, welke termijn, welke voorwaarden gelden?
+
+**H5. Scenarioanalyse inkomen bij calamiteit doorgerekend**
+Concreet bedrag inkomen versus woonlast bij overlijden/AO/WW. "Kan de klant het dragen?"
+
+**H6. Risicoverzekering geadviseerd waar nodig + afwijking gemotiveerd vastgelegd**
+Als adviseur ORV adviseert maar klant weigert: is dat in dossier vastgelegd, klant gewezen op consequenties?
+
+**H7. Relatiebeëindiging besproken**
+Vooral bij gemeenschappelijk eigendom of financiële afhankelijkheid: scenario's en aanbeveling notariële afspraken.
+
+### I. Adviesfase (hoofdstuk 8)
+
+**I1. Advies onderbouwd in klantcontext**
+Niet "u krijgt product X", maar "product X past omdat ... aansluit bij uw doel ...".
+
+**I2. Afwijkingen klant van advies vastgelegd**
+Als klant niet meegaat met advies: motivatie klant en consequenties expliciet vastgelegd.
+
+**I3. Klant gewezen op risico's bij afwijken**
+Is dat in begrijpelijke taal gebeurd?
+
+### J. Nazorg (hoofdstuk 3 + 9)
+
+**J1. Reikwijdte nazorg/beheerfase afgesproken**
+Wat is wel/niet onderdeel van het nazorgcontract? Welke kosten?
+
+---
+
+## SLOTOORDEEL
+
+Sluit af met:
+
+1. **Compliance-score (1-10)** — onderbouw kort
+2. **Top 3 verbeterpunten** — wat zou de adviseur nu meteen moeten oppakken voor dit dossier?
+3. **Vastleggings-tips** — wat moet sowieso in het adviesrapport/dossier worden opgenomen, met name als het gaat om afwijkingen, aannames of risico-acceptaties
+4. **Algemene observatie** — wat doet deze adviseur opvallend goed of slecht? Patroon dat structureel opvalt?
+
+---
+
+## METADATA
+- Klant: ${klant}${klantId ? ' (ID: ' + klantId + ')' : ''}
+- Datum gesprek: ${datum}${notitie ? '\n- Notities adviseur: ' + notitie : ''}
+
+## TRANSCRIPTIE
+
+${transcript}`;
+  }
+
+  function buildReadmeFile() {
+    const klant = customerName.value.trim() || '[niet ingevuld]';
+    const datum = new Date().toLocaleDateString('nl-NL');
+    return `AFM-CONTROLEPAKKET — LEES DIT EERST
+===========================================
+
+Klant: ${klant}
+Datum: ${datum}
+
+Dit pakket bevat 4 bestanden voor een volledige AFM-controle van het klantgesprek
+via Claude.ai (of een ander AI-taalmodel zoals ChatGPT Plus of Gemini).
+
+INHOUD:
+-------
+01-LEES-EERST.txt            → dit bestand met instructies
+02-prompt-voor-claude.txt    → de controleopdracht (plak of sleep in Claude.ai)
+03-transcriptie-*.txt        → het klantgesprek in tekstvorm
+04-adviessamenvatting-*.html → printbaar adviesrapport met ingevulde checklist
+
+INSTRUCTIES:
+------------
+1. Ga naar https://claude.ai/new (log in met je Claude-account)
+2. Sleep de bestanden 02, 03 en 04 tegelijk in het chatvenster
+3. (Optioneel) sleep ook de officiële AFM Leidraad Hypotheekadvisering (PDF)
+   mee — download deze gratis van:
+   https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering
+4. Druk op Enter
+5. Claude geeft een gestructureerde analyse met per onderwerp:
+   ✅ besproken / ⚠️ oppervlakkig / ❌ ontbrekend / ➖ n.v.t.
+   plus een compliance-score en verbeterpunten.
+
+PRIVACY-LET OP:
+---------------
+Door bestanden naar Claude.ai te sturen, verstuur je klantgegevens naar Anthropic.
+Zorg dat dit past binnen je AVG-afspraken en verwerkersovereenkomst.
+Voor zeer gevoelige dossiers: anonimiseer de transcriptie vóór verzending,
+of gebruik Claude voor Zakelijk met Zero Data Retention.
+
+ADVIESRAPPORT PRINTEN:
+----------------------
+Open het 04-bestand (adviessamenvatting) in je browser. Via Ctrl+P (of Cmd+P)
+kun je het rapport als PDF opslaan voor in het klantdossier.
+
+---
+Gegenereerd via opnemengesprek.nl
+`;
+  }
+
+  function buildAdviceReportHtml() {
+    const klant = customerName.value.trim() || '—';
+    const klantId = customerId.value.trim() || '—';
+    const notitie = notes.value.trim();
+    const now = new Date();
+    const datumLang = now.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    const tijd = now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+    const transcript = getCurrentTranscriptText();
+
+    // Checklist HTML genereren
+    let checklistHtml = '';
+    let totalItems = 0, doneItems = 0, warnItems = 0, naItems = 0, emptyItems = 0;
+    CHECKLIST.forEach(group => {
+      let groupHtml = '';
+      let hasAny = false;
+      group.items.forEach((item, idx) => {
+        totalItems++;
+        const id = group.id + '_' + idx;
+        const status = checklistState[id] || '';
+        if (status === 'done') doneItems++;
+        else if (status === 'warn') warnItems++;
+        else if (status === 'na') naItems++;
+        else emptyItems++;
+
+        const statusLabel = status === 'done' ? '<span class="st-done">✓ Besproken</span>'
+                         : status === 'warn' ? '<span class="st-warn">⚠ Aandacht</span>'
+                         : status === 'na' ? '<span class="st-na">— N.v.t.</span>'
+                         : '<span class="st-empty">○ Niet behandeld</span>';
+        if (status) hasAny = true;
+        groupHtml += `<tr><td class="cl-item">${item}</td><td class="cl-status">${statusLabel}</td></tr>`;
+      });
+      if (hasAny || true) {
+        checklistHtml += `<h3>${group.emoji} ${group.title}</h3><table class="checklist-table">${groupHtml}</table>`;
+      }
+    });
+
+    const scorePct = totalItems > 0 ? Math.round(((doneItems + naItems) / totalItems) * 100) : 0;
+
+    return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<title>Adviessamenvatting — ${escapeHtmlAttr(klant)}</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: #0f172a; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; }
+  .report-header { border-bottom: 3px solid #1e3a8a; padding-bottom: 16px; margin-bottom: 28px; }
+  .report-header h1 { font-size: 28px; color: #1e3a8a; margin: 0 0 6px 0; }
+  .report-header .subtitle { font-size: 13px; color: #475569; }
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; padding: 16px; background: #f8fafc; border-left: 4px solid #2563eb; margin-bottom: 28px; border-radius: 4px; }
+  .meta-grid .label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .meta-grid .value { font-size: 13px; color: #0f172a; font-weight: 600; }
+  h2 { font-size: 18px; color: #1e3a8a; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; margin-top: 32px; }
+  h3 { font-size: 14px; color: #2563eb; margin-top: 20px; margin-bottom: 8px; }
+  .summary-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0; }
+  .summary-box .cell { padding: 10px; border-radius: 6px; text-align: center; }
+  .summary-box .cell .num { font-size: 22px; font-weight: 700; }
+  .summary-box .cell .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .cell.done { background: #dcfce7; color: #15803d; }
+  .cell.warn { background: #fef3c7; color: #92400e; }
+  .cell.na { background: #f1f5f9; color: #64748b; }
+  .cell.empty { background: #fef2f2; color: #b91c1c; }
+  .progress-bar { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; margin: 8px 0 20px 0; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #16a34a); }
+  .checklist-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 12px; }
+  .checklist-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  .cl-item { color: #334155; }
+  .cl-status { text-align: right; white-space: nowrap; width: 160px; }
+  .st-done { color: #15803d; font-weight: 600; }
+  .st-warn { color: #d97706; font-weight: 600; }
+  .st-na { color: #64748b; }
+  .st-empty { color: #cbd5e1; }
+  .notes-box { background: #fffbeb; border-left: 4px solid #d97706; padding: 12px 16px; font-style: italic; border-radius: 4px; margin-top: 16px; }
+  .transcript { white-space: pre-wrap; font-size: 12px; line-height: 1.7; color: #334155; padding: 12px; background: #f8fafc; border-radius: 4px; border-left: 3px solid #cbd5e1; }
+  .signature { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .signature .sig { border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #64748b; }
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #cbd5e1; font-size: 10px; color: #94a3b8; text-align: center; }
+  @media print {
+    body { margin: 0; padding: 0; }
+    @page { size: A4; margin: 2cm; }
+  }
+</style>
+</head>
+<body>
+
+<div class="report-header">
+  <h1>Adviessamenvatting</h1>
+  <div class="subtitle">Klantgespreksverslag met AFM-checklist en transcriptie</div>
+</div>
+
+<div class="meta-grid">
+  <div><div class="label">Klantnaam</div><div class="value">${escapeHtmlAttr(klant)}</div></div>
+  <div><div class="label">Klant-ID</div><div class="value">${escapeHtmlAttr(klantId)}</div></div>
+  <div><div class="label">Datum</div><div class="value">${datumLang}</div></div>
+  <div><div class="label">Tijd</div><div class="value">${tijd}</div></div>
+</div>
+
+<h2>Overzicht AFM-checklist</h2>
+
+<div class="summary-box">
+  <div class="cell done"><div class="num">${doneItems}</div><div class="lbl">Besproken</div></div>
+  <div class="cell warn"><div class="num">${warnItems}</div><div class="lbl">Aandacht</div></div>
+  <div class="cell na"><div class="num">${naItems}</div><div class="lbl">N.v.t.</div></div>
+  <div class="cell empty"><div class="num">${emptyItems}</div><div class="lbl">Niet behandeld</div></div>
+</div>
+<div class="progress-bar"><div class="progress-fill" style="width:${scorePct}%"></div></div>
+<p style="font-size:12px; color:#64748b; margin-top:-10px;">Voortgang: ${doneItems + naItems} van ${totalItems} items afgerond (${scorePct}%)</p>
+
+${checklistHtml}
+
+${notitie ? `<h2>Notities adviseur</h2><div class="notes-box">${escapeHtmlAttr(notitie)}</div>` : ''}
+
+<h2>Volledige transcriptie</h2>
+<div class="transcript">${escapeHtmlAttr(transcript)}</div>
+
+<div class="signature">
+  <div class="sig">Handtekening adviseur</div>
+  <div class="sig">Handtekening klant</div>
+</div>
+
+<div class="footer">
+  Gegenereerd via opnemengesprek.nl — ${now.toLocaleString('nl-NL')}
+</div>
+
+</body>
+</html>`;
+  }
+
+  function escapeHtmlAttr(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function downloadTextFile(content, filename, mimeType) {
+    const blob = new Blob([content], { type: (mimeType || 'text/plain') + ';charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function downloadAfmPackage() {
+    const naam = sanitizeFilename(customerName.value.trim());
+    const datumStamp = new Date().toISOString().split('T')[0];
+    const transcript = getCurrentTranscriptText();
+    const klant = customerName.value.trim() || '[niet ingevuld]';
+    const klantId = customerId.value.trim();
+    const notitie = notes.value.trim();
+    const datumNL = new Date().toLocaleDateString('nl-NL');
+
+    // 1. README
+    downloadTextFile(buildReadmeFile(), '01-LEES-EERST.txt');
+
+    // 2. Prompt
+    setTimeout(() => {
+      downloadTextFile(buildAfmPrompt(), '02-prompt-voor-claude.txt');
+    }, 200);
+
+    // 3. Transcriptie
+    setTimeout(() => {
+      const header = 'Klantnaam: ' + klant + '\n' +
+                     (klantId ? 'Klant-ID: ' + klantId + '\n' : '') +
+                     'Datum: ' + datumNL + '\n' +
+                     (notitie ? 'Notities adviseur: ' + notitie + '\n' : '') +
+                     '\n' + '='.repeat(60) + '\nTRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
+      downloadTextFile(header + transcript, '03-transcriptie-' + naam + '-' + datumStamp + '.txt');
+    }, 400);
+
+    // 4. Adviessamenvatting (HTML printbaar)
+    setTimeout(() => {
+      downloadTextFile(buildAdviceReportHtml(), '04-adviessamenvatting-' + naam + '-' + datumStamp + '.html', 'text/html');
+    }, 600);
+  }
+
+  afmCheckBtn.addEventListener('click', () => {
+    downloadAfmPackage();
+    afmModal.classList.add('active');
+    afmModal.style.display = 'flex';
+  });
+
+  afmCopyAgainBtn.addEventListener('click', () => {
+    downloadAfmPackage();
+    const originalHtml = afmCopyAgainBtn.innerHTML;
+    afmCopyAgainBtn.innerHTML = '<svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Opnieuw gedownload!';
+    setTimeout(() => {
+      afmCopyAgainBtn.innerHTML = originalHtml;
+    }, 2000);
+  });
+
+  afmCloseBtn.addEventListener('click', () => {
+    afmModal.classList.remove('active');
+    afmModal.style.display = 'none';
+  });
+
+  afmModal.addEventListener('click', (e) => {
+    if (e.target === afmModal) {
+      afmModal.classList.remove('active');
+      afmModal.style.display = 'none';
+    }
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    const naam = sanitizeFilename(customerName.value.trim());
+    const datum = new Date().toISOString().split('T')[0];
+    const tijd = new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
+    const metadata = {
+      klantnaam: customerName.value.trim(),
+      klant_id: customerId.value.trim() || null,
+      notities: notes.value.trim() || null,
+      datum: new Date().toISOString()
+    };
+    if (activeTab === 'record' && audioBlob) {
+      metadata.type = 'audio'; metadata.duur_seconden = seconds;
+      const ext = audioBlob.type.includes('mp4') ? 'm4a' : 'webm';
+      const fn = 'gesprek-' + naam + '-' + datum + '-' + tijd + '.' + ext;
+      downloadBlob(audioBlob, fn);
+      setTimeout(() => downloadBlob(new Blob([JSON.stringify(metadata, null, 2)], { type: 'application/json' }), 'gesprek-' + naam + '-' + datum + '-' + tijd + '.json'), 300);
+    } else if (activeTab === 'live' && liveTranscript.innerText.trim()) {
+      metadata.type = 'live-transcriptie'; metadata.taal = liveLanguage.value;
+      const header = 'Klantnaam: ' + metadata.klantnaam + '\n' + (metadata.klant_id ? 'Klant-ID: ' + metadata.klant_id + '\n' : '') + 'Datum: ' + metadata.datum + '\n' + 'Taal: ' + metadata.taal + '\n' + (metadata.notities ? 'Notities: ' + metadata.notities + '\n' : '') + '\n' + '='.repeat(60) + '\nLIVE TRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
+      downloadBlob(new Blob([header + liveTranscript.innerText], { type: 'text/plain;charset=utf-8' }), 'live-transcriptie-' + naam + '-' + datum + '-' + tijd + '.txt');
+    } else if (activeTab === 'transcript' && transcriptText.value.trim()) {
+      metadata.type = 'transcriptie';
+      const header = 'Klantnaam: ' + metadata.klantnaam + '\n' + (metadata.klant_id ? 'Klant-ID: ' + metadata.klant_id + '\n' : '') + 'Datum: ' + metadata.datum + '\n' + (metadata.notities ? 'Notities: ' + metadata.notities + '\n' : '') + '\n' + '='.repeat(60) + '\nTRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
+      downloadBlob(new Blob([header + transcriptText.value], { type: 'text/plain;charset=utf-8' }), 'transcriptie-' + naam + '-' + datum + '-' + tijd + '.txt');
+    }
+    showStatus('success', '<div>Bestand gedownload.</div>');
+  });
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  checkPermissionStatus();
+  updateButtons();
+</script>
+
+</body>
+</html>
