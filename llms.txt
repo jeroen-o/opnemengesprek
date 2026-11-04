@@ -12,7 +12,8 @@ Doelgroep: hypotheekadviseurs en financieel adviseurs in Nederland
 - Live transcriberen met tijdstempels (Chrome en Edge, via de spraakdienst van Google)
 - Transcript inlezen: .txt, .md, .vtt, .srt en Teams-transcript als .docx
 - Checklist met 116 aandachtspunten op basis van de AFM Leidraad Hypotheekadvisering (april 2026), inclusief verduurzaming, relatiebeëindiging en oversluiten
-- Typen gesprek: hypotheekadvies (aankoop/doorstromer), oversluiten/rente openbreken, aanvullende hypotheek verduurzaming, periodiek onderhoud, pensioenadvies aan werkgever (tweede pijler) en pensioentransitie (Wtp), de laatste twee op basis van de AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)
+- Typen gesprek: hypotheekadvies (aankoop/doorstromer), oversluiten/rente openbreken, aanvullende hypotheek verduurzaming, periodiek onderhoud, pensioenadvies aan werkgever (tweede pijler) en pensioentransitie (Wtp) op basis van de AFM Leidraad tweedepijler-pensioenadvies (augustus 2023), en een klantinventarisatie particulier inclusief schadeverzekeringen
+- Overzicht "Mogelijk gemist": per gesprek alle checklistpunten die niet zijn afgevinkt en niet in het transcript zijn herkend; ook in verslag en voorbereiding vervolggesprek
 - Herkenning van besproken onderwerpen in het transcript op trefwoorden, met fragment en tijdstip
 - Gespreksverslag (samenvatting, kernpunten, afspraken, afwijkingen van advies, aannames, adviseursnotitie) met goedkeuring door de adviseur; tot goedkeuring staat CONCEPT op het verslag
 - Concept-klantmail via Gmail, Outlook of eigen mailprogramma; contactmoment naar Google Agenda, Outlook-agenda of .ics

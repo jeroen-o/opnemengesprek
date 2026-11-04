@@ -590,6 +590,20 @@
   @media (max-width: 720px) { .about-grid { grid-template-columns: 1fr; } }
   .about-note { margin-top: 14px; font-size: 11px !important; color: #64748b !important; }
 
+  /* GEMIST */
+  .missing-box { border: 1px solid #fecaca; background: #fef2f2; border-radius: 10px; margin-bottom: 12px; }
+  .missing-box.ok { border-color: #bbf7d0; background: #f0fdf4; }
+  .missing-box summary { cursor: pointer; padding: 10px 14px; font-size: 13px; font-weight: 600; color: #991b1b; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+  .missing-box.ok summary { color: #166534; }
+  .missing-box summary::-webkit-details-marker { display: none; }
+  .missing-box summary .hint-r { font-weight: 500; font-size: 12px; color: #7f1d1d; }
+  .missing-list { padding: 0 14px 12px; font-size: 12px; color: #334155; }
+  .missing-list h5 { font-size: 12px; margin: 10px 0 4px; color: #0f172a; }
+  .missing-list ul { padding-left: 18px; line-height: 1.6; }
+  .missing-list button.lnk { background: none; border: none; padding: 0; color: #1d4ed8; cursor: pointer; font: inherit; text-align: left; border-radius: 0; display: inline; }
+  .missing-list button.lnk:hover { text-decoration: underline; }
+  .checklist-item.flash { box-shadow: inset 3px 0 0 #dc2626; background: #fef2f2; }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -974,6 +988,10 @@
         <span id="suggestText"></span>
         <button class="btn-secondary btn-sm" id="applySuggestBtn">Herkende onderwerpen markeren als ✓</button>
       </div>
+      <details class="missing-box" id="missingBox" style="display:none;">
+        <summary><span id="missingTitle"></span><span class="hint-r">Toon lijst</span></summary>
+        <div class="missing-list" id="missingList"></div>
+      </details>
       <div id="checklistContainer"></div>
     </div>
 
@@ -1079,7 +1097,7 @@
         </details>
         <details class="guide-faq">
           <summary>Checklist</summary>
-          <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming, periodiek onderhoud, of pensioenadvies aan een werkgever en de pensioentransitie op basis van de <em>AFM Leidraad tweedepijler-pensioenadvies</em>); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
+          <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming, periodiek onderhoud, of pensioenadvies aan een werkgever en de pensioentransitie op basis van de <em>AFM Leidraad tweedepijler-pensioenadvies</em>, of een volledige klantinventarisatie particulier inclusief schadeverzekeringen); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
         </details>
         <details class="guide-faq">
           <summary>Koppelingen: Gmail, Outlook, Teams en eBlinqx</summary>
@@ -1089,6 +1107,10 @@
           <strong>Teams:</strong> deel de samenvatting en actiepunten in een Teams-chat; je kiest daar zelf de ontvanger. Lees het transcript van een Teams-vergadering in (.vtt of .docx via "Bestand inlezen"), of neem een online gesprek op met "Teams- of online gesprek opnemen".<br>
           <strong>eBlinqx:</strong> sla het verslag op als PDF of HTML met een vaste bestandsnaam (relatienummer, datum, klant) en upload het in het klantdossier. Een directe koppeling met eBlinqx vraagt een partnerovereenkomst met Blinqx en een server; die is er niet.<br><br>
           <em>Let op:</em> gebruik voor klantgegevens een zakelijk account (Google Workspace of Microsoft 365) met een verwerkersovereenkomst, geen privé-Gmail.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Wat heeft de adviseur gemist?</summary>
+          <div class="faq-content">Bij elk type gesprek toont de checklist bovenaan <strong>"Mogelijk gemist"</strong>: alle punten die je niet hebt afgevinkt én die niet in het transcript zijn herkend, plus punten met ⚠. Na het stoppen van een live transcriptie krijg je direct een melding met het aantal. Klik op een punt om ernaar te springen. Dezelfde lijst staat in het verslag en in de voorbereiding voor het vervolggesprek, zodat de inventarisatie compleet wordt. Wil je een inhoudelijk oordeel (ook over hoe grondig iets is besproken), gebruik dan het AFM-controlepakket.</div>
         </details>
         <details class="guide-faq">
           <summary>Tijdstempels &amp; herkenning van onderwerpen</summary>
@@ -1276,7 +1298,7 @@
         <ul>
           <li>Gesprek opnemen via de microfoon of een Teams-/online gesprek</li>
           <li>Live transcriberen met tijdstempels, of een transcript inlezen (.txt, .vtt, .srt, .docx)</li>
-          <li>Checklist per type gesprek: hypotheek (116 punten: aankoop, oversluiten, verduurzaming, onderhoud) en pensioenadvies aan werkgevers inclusief pensioentransitie</li>
+          <li>Checklist per type gesprek: hypotheek (116 punten: aankoop, oversluiten, verduurzaming, onderhoud), pensioenadvies aan werkgevers inclusief pensioentransitie, en een klantinventarisatie particulier inclusief schadeverzekeringen</li>
           <li>Gespreksverslag met kernpunten, afspraken, afwijkingen van advies en aannames</li>
           <li>Concept-klantmail via Gmail of Outlook, contactmoment in je agenda</li>
           <li>Voorbereiding van het vervolggesprek en export voor het eBlinqx-dossier</li>
@@ -1520,7 +1542,7 @@
     isListening = false;
     if (liveStartedAt) { liveAccumMs += Date.now() - liveStartedAt; liveStartedAt = null; }
     clearInterval(topicTimer);
-    setTimeout(refreshTopics, 50);
+    setTimeout(() => { refreshTopics(); notifyMissing(); }, 50);
     segStartMs = null;
     if (recognition) { try { recognition.stop(); } catch (e) {} }
     liveMicCircle.classList.remove('listening');
@@ -1778,6 +1800,98 @@
       { t: 'Bij bemiddeling: werkgever informeren over wezenlijke wijzigingen gedurende de looptijd (doorlopende zorgplicht)', k: ['wezenlijke wijziging', 'zorgplicht', 'looptijd'] },
       { t: 'Uitkomsten van adviessoftware zelf gecontroleerd; adviseur blijft verantwoordelijk', k: ['software', 'rekentool'] }
     ]}
+    ,
+    // ---------- Klantinventarisatie particulier (op basis van het Inventarisatieformulier Particulieren) ----------
+    { id: 'inv_persoon', title: 'Persoonlijke & juridische situatie', emoji: '🪪', q: 'Wie hoort er bij uw huishouden, en welke afspraken heeft u samen juridisch vastgelegd?', items: [
+      { t: 'Gegevens aanvrager en partner vastgelegd (geboortedatum, contact, roker/niet-roker)', k: ['geboortedatum', 'roker', 'rookt', 'geboren'] },
+      { t: 'Identificatie geregeld buiten de opname (geen BSN of ID-nummer in opname of transcript)', k: ['legitimatie', 'paspoort', 'identiteitsbewijs', 'bsn!'] },
+      { t: 'Burgerlijke staat en vermogensregime (gemeenschap, huwelijkse voorwaarden, geregistreerd partnerschap, samenlevingscontract)', k: ['getrouwd', 'gehuwd', 'samenwonend', 'huwelijkse voorwaarden', 'geregistreerd partner', 'samenlevingscontract', 'gemeenschap van goederen'] },
+      { t: 'Eerdere scheiding en lopende afspraken besproken', k: ['gescheiden', 'scheiding', 'ex-partner', 'echtscheidingsconvenant'] },
+      { t: 'Testament aanwezig / besproken', k: ['testament'] },
+      { t: 'Kinderen en hun woonsituatie in kaart', k: ['kinderen', 'zoon', 'dochter', 'thuiswonend', 'uitwonend'] },
+      { t: 'Bankrekening(en) en tenaamstelling vastgelegd', k: ['rekeningnummer', 'iban', 'bankrekening'] }
+    ]},
+    { id: 'inv_inkomen', title: 'Inkomen, werk & profiel', emoji: '💶', q: 'Hoe ziet uw werk en inkomen eruit, en wat verwacht u daarin de komende 2 tot 5 jaar?', items: [
+      { t: 'Werksituatie aanvrager en partner (loondienst, zelfstandig, DGA) en beroep', k: ['loondienst', 'zelfstandig', 'zzp', 'dga!', 'ondernemer', 'beroep', 'werkgever'] },
+      { t: 'Aard dienstverband: fulltime/parttime, vast/tijdelijk, intentieverklaring', k: ['fulltime', 'parttime', 'vast contract', 'tijdelijk contract', 'intentieverklaring', 'uur per week'] },
+      { t: 'Bruto inkomen incl. vakantiegeld, 13e maand, structureel overwerk, provisie en eindejaarsuitkering', k: ['bruto', 'salaris', 'vakantiegeld', '13e maand', 'dertiende maand', 'overwerk', 'provisie', 'eindejaarsuitkering'] },
+      { t: 'Overige inkomensbestanddelen (onkostenvergoeding, auto van de zaak, eigen bijdrage)', k: ['auto van de zaak', 'leaseauto', 'bijtelling', 'onkostenvergoeding'] },
+      { t: 'Alimentatieverplichtingen (partner en kinderen, duur)', k: ['alimentatie', 'kinderalimentatie', 'partneralimentatie'] },
+      { t: 'Opleidingsniveau vastgelegd', k: ['mbo!', 'hbo!', 'universiteit', 'opleiding', 'wo!'] },
+      { t: 'Verwachte wijzigingen in inkomen komende 2–5 jaar (gezinsuitbreiding, carrière, andere werkgever, eigen bedrijf)', k: ['gezinsuitbreiding', 'promotie', 'andere baan', 'nieuwe baan', 'voor mezelf', 'eigen bedrijf', 'komende jaren'] },
+      { t: 'Verhuisplannen komende 2–5 jaar', k: ['verhuizen', 'verhuis'] },
+      { t: 'Kennis van fiscale en sociale wetgeving', k: ['fiscaal', 'belasting', 'sociale zekerheid', 'toeslagen'] },
+      { t: 'Wat de klant belangrijk vindt in het leven (nu leven, zekerheid, studie kinderen, grotere woning, reizen)', k: ['belangrijk', 'genieten', 'zekerheid', 'studie', 'wereldreis', 'reizen'] },
+      { t: 'Risicobereidheid algemeen (zoveel mogelijk zekerheid … goed kunnen leven met risico)', k: ['risico', 'zekerheid', 'gokje', 'onzekerheid'] },
+      { t: 'Bereidheid uitgavenpatroon bij te stellen bij tegenvallers (woning verkopen, besparen, buffer)', k: ['bezuinigen', 'besparen', 'buffer', 'uitgaven', 'huis verkopen', 'minder op vakantie'] }
+    ]},
+    { id: 'inv_pensioen', title: 'Pensioen', emoji: '👴', q: 'Wanneer wilt u stoppen met werken, en met welk inkomen wilt u dan rondkomen?', items: [
+      { t: 'Huidige pensioenregeling in kaart (soort regeling, uitvoerder, pensioendatum, opbouw, eigen bijdrage)', k: ['pensioenregeling', 'pensioenfonds', 'pensioenoverzicht', 'uitvoerder', 'premieregeling', 'middelloon'] },
+      { t: 'Pensioen uit eerdere dienstverbanden in kaart (mijnpensioenoverzicht.nl)', k: ['vorige werkgever', 'mijnpensioenoverzicht', 'oude regeling', 'slapers'] },
+      { t: 'Gewenste pensioenleeftijd t.o.v. AOW-leeftijd en gewenst inkomen bij eerder stoppen', k: ['aow-leeftijd', 'aow!', 'eerder stoppen', 'pensioenleeftijd', 'met pensioen'] },
+      { t: 'Kennis van inkomenssituatie bij pensioen en gewenst inkomensniveau (bijv. 70/80/90%)', k: ['70%', '80%', '90%', 'inkomensniveau', 'procent van'] },
+      { t: 'Bij aanvullende voorziening: doel (aanvulling vanaf pensioendatum / eerder stoppen)', k: ['lijfrente', 'aanvullend pensioen', 'bijsparen', 'jaarruimte', 'reserveringsruimte'] },
+      { t: 'Bij aanvullende voorziening: acceptatie lagere uitkomst (garantie, beleggen, combinatie)', k: ['gegarandeerd', 'beleggen', 'garantie'] },
+      { t: 'Bij aanvullende voorziening: levenslang of tijdelijk, en premie doorbetalen bij lager inkomen', k: ['levenslang', 'tijdelijk', 'premie doorbetalen'] }
+    ]},
+    { id: 'inv_nabest', title: 'Nabestaanden', emoji: '🕊️', q: 'Wat moet er financieel geregeld zijn voor uw partner en kinderen als u komt te overlijden?', items: [
+      { t: 'Nabestaanden- en wezenpensioen (huidige en oude regelingen) in kaart', k: ['nabestaandenpensioen', 'partnerpensioen', 'wezenpensioen'] },
+      { t: 'ANW-hiaatverzekering en eigen bijdrage in kaart', k: ['anw', 'anw-hiaat'] },
+      { t: 'Kennis van inkomenssituatie bij overlijden en gewenst minimum-inkomensniveau', k: ['overlijden', 'overlijdt', 'nabestaanden'] },
+      { t: 'Doel nabestaandenvoorziening (aanvulling, eenmalige uitkering, uitvaart, aflossing schuld, opvang kinderen)', k: ['uitvaart', 'aflossen', 'eenmalige uitkering', 'opvang kinderen', 'overlijdensrisicoverzekering', 'orv!'] },
+      { t: 'Periode verzekeren (levenslang, tijdelijk, niet) en premie doorbetalen bij lager inkomen', k: ['levenslang', 'tijdelijk', 'niet verzekeren'] }
+    ]},
+    { id: 'inv_ao', title: 'Arbeidsongeschiktheid & werkloosheid', emoji: '🩺', q: 'Hoe lang kunt u rondkomen als u of uw partner ziek wordt of uw baan verliest?', items: [
+      { t: 'WIA-(excedent)verzekering via werkgever en eigen bijdrage in kaart', k: ['wia', 'wga', 'excedent', 'wia-hiaat'] },
+      { t: 'Aanvullende AO-/woonlastenverzekeringen in kaart (verzekeraar, looptijd, dekking AO/WW, bedrag)', k: ['aov!', 'arbeidsongeschiktheidsverzekering', 'woonlastenverzekering', 'woonlastenbeschermer'] },
+      { t: 'Kennis van inkomenssituatie bij AO en gewenst inkomensniveau plus duur (5/10/15/20 jaar)', k: ['arbeidsongeschikt', 'ziek', 'jaar'] },
+      { t: 'Bij extra voorziening: volledig of gedeeltelijk verzekeren, en kennis van uitkeringscriteria', k: ['volledig verzekeren', 'gedeeltelijk', 'beroepsarbeidsongeschikt', 'passende arbeid'] },
+      { t: 'Wachttijd en overbrugging tot uitkering besproken (vooral zelfstandigen)', k: ['wachttijd', 'eigenrisicotermijn', 'overbruggen'] }
+    ]},
+    { id: 'inv_woning', title: 'Woning & hypotheek', emoji: '🏡', q: 'Wat zijn uw plannen met de huidige woning, en wat wilt u met de hypotheek bereiken?', items: [
+      { t: 'Huidige woning: eigendom/huur, tenaamstelling, waarde, WOZ, erfpacht, verkoopplannen', k: ['huur', 'koopwoning', 'woz', 'erfpacht', 'te koop', 'verkocht', 'waarde'] },
+      { t: 'Eigenwoningreserve en huidige hypotheek (leningdelen, box 1/3, rentevast, boeterente)', k: ['eigenwoningreserve', 'overwaarde', 'leningdeel', 'box 1', 'boeterente', 'renteherziening'] },
+      { t: 'Opbouwproducten bij hypotheek (kapitaalopbouw, KEW-clausule, risicodekking, afkoopwaarde)', k: ['kew!', 'spaarhypotheek', 'beleggingshypotheek', 'afkoopwaarde', 'premiedepot'] },
+      { t: 'Nieuwe woning: koopsom, verbouwing, passeerdatum, ontbindende voorwaarden, waarborgsom, overbrugging', k: ['koopsom', 'verbouwing', 'passeerdatum', 'ontbindende voorwaarden', 'waarborgsom', 'bankgarantie', 'overbrugging', 'nieuwbouw'] },
+      { t: 'Kennis van hypotheekvormen', k: ['annuït', 'lineair', 'aflossingsvrij', 'hypotheekvorm'] },
+      { t: 'Doel van de hypotheek (aankoop, verbouwing, lagere lasten, overwaarde, consumptief)', k: ['aankoop', 'verbouwen', 'oversluiten', 'overwaarde', 'consumptief'] },
+      { t: 'Aflossingswens aan einde looptijd en acceptatie beleggingsrisico op aflossing', k: ['aflossen', 'afgelost', 'einde looptijd'] },
+      { t: 'Gewenste rentevastperiode en acceptatie van lastenwijzigingen', k: ['rentevast', 'variabele rente', 'rentestijging'] },
+      { t: 'Bereidheid lasten te blijven dragen bij lager inkomen (WW, overlijden, AO, pensioen)', k: ['lager inkomen', 'blijven betalen', 'kunnen dragen'] }
+    ]},
+    { id: 'inv_vermogen', title: 'Sparen, beleggen & verplichtingen', emoji: '🏦', q: 'Hoeveel spaart u maandelijks, waarvoor, en welke leningen of verplichtingen heeft u?', items: [
+      { t: 'Maandelijks vrij sparen en voorlopige teruggaaf inkomstenbelasting', k: ['sparen', 'spaar', 'voorlopige teruggaaf', 'teruggave'] },
+      { t: 'Spaar- en beleggingsrekeningen (instelling, saldo, tenaamstelling, doel)', k: ['spaarrekening', 'beleggingsrekening', 'saldo', 'depot'] },
+      { t: 'Ervaring met vermogensopbouw en of de klant financiële markten volgt', k: ['beleggingsfonds', 'aandelen', 'ervaring met beleggen', 'beurs'] },
+      { t: 'Doel van vermogensopbouw (aflossing, bestedingen, studie, inkomensaanvulling)', k: ['doel', 'studie', 'aflossing', 'aanvulling'] },
+      { t: 'Acceptatie lager doelvermogen en verwachte tussentijdse opnames', k: ['doelvermogen', 'tussentijds', 'opnemen'] },
+      { t: 'Kennis van beleggingsproducten', k: ['beleggingsproduct', 'risicoprofiel'] },
+      { t: 'Verplichtingen (doorlopend krediet, persoonlijke lening, saldo, rente, looptijd) en BKR-registratie', k: ['doorlopend krediet', 'persoonlijke lening', 'lening', 'bkr!', 'creditcard', 'studieschuld', 'duo!'] }
+    ]},
+    { id: 'inv_leven', title: 'Bestaande levensverzekeringen', emoji: '📄', q: 'Welke levensverzekeringen heeft u al, en waarvoor zijn ze bedoeld?', items: [
+      { t: 'Bestaande polissen in kaart (verzekeraar, soort, verzekeringnemer, verzekerde, looptijd)', k: ['polis', 'levensverzekering', 'verzekeraar'] },
+      { t: 'Uitkering bij leven/overlijden, gegarandeerd kapitaal, premie en doel per polis', k: ['uitkering', 'gegarandeerd kapitaal', 'premie'] }
+    ]},
+    { id: 'inv_schade', title: 'Schadeverzekeringen particulier', emoji: '🛡️', q: 'Welke schadeverzekeringen heeft u nu, en wat zou u financieel niet zelf kunnen dragen als het misgaat?', items: [
+      { t: 'Bestaande schadepolissen in kaart (verzekeraar, dekking, verzekerd bedrag, premie, eigen risico, contractvervaldatum)', k: ['polis', 'verzekerd bedrag', 'eigen risico', 'premie', 'vervaldatum', 'pakketpolis'] },
+      { t: 'Opstal: herbouwwaarde, bouwaard, dakbedekking (riet), bijgebouwen, eigendom of VvE', k: ['opstal', 'herbouwwaarde', 'rieten dak', 'bouwaard', 'vve!', 'bijgebouw'] },
+      { t: 'Inboedel: waarde (inboedelwaardemeter), kostbaarheden/lijfsieraden, onderverzekering', k: ['inboedel', 'kostbaarheden', 'sieraden', 'onderverzekering', 'waardemeter'] },
+      { t: 'Aansprakelijkheid particulieren (AVP): gezinssamenstelling, huisdieren, verzekerd bedrag', k: ['aansprakelijkheid', 'avp!', 'huisdier', 'hond'] },
+      { t: 'Rechtsbijstand: gewenste modules (verkeer, wonen, werk, consument) en wachttijd', k: ['rechtsbijstand', 'juridisch'] },
+      { t: 'Motorrijtuigen: WA/beperkt casco/allrisk, dagwaarde/nieuwwaarde, schadevrije jaren, regelmatige bestuurder', k: ['auto', 'allrisk', 'casco', 'wa!', 'schadevrije jaren', 'bonus-malus', 'bestuurder', 'scooter', 'motor'] },
+      { t: 'Reis- en annuleringsverzekering (doorlopend of kort, werelddekking, gezin)', k: ['reisverzekering', 'annulering', 'werelddekking', 'op vakantie'] },
+      { t: 'Overige risico\'s: caravan, boot, e-bike, ongevallen, glas, kostbare hobby\'s', k: ['caravan', 'boot', 'e-bike', 'fiets', 'ongevallen', 'glas'] },
+      { t: 'Schadeverleden, weigeringen/opzeggingen en strafrechtelijk verleden (mededelingsplicht) besproken', k: ['schadeverleden', 'schade gehad', 'geweigerd', 'opgezegd', 'mededelingsplicht', 'strafrechtelijk'] },
+      { t: 'Beveiliging en preventie (sloten, alarm, rookmelders)', k: ['beveiliging', 'alarm', 'sloten', 'rookmelder', 'inbraak'] },
+      { t: 'Dubbele of ontbrekende dekkingen gesignaleerd', k: ['dubbel verzekerd', 'dubbele dekking', 'niet verzekerd'] },
+      { t: 'Wensen en behoeften (demands & needs) per verzekering vastgelegd, inclusief bewust niet verzekerde risico\'s', k: ['wensen', 'behoefte', 'bewust niet', 'zelf dragen'] }
+    ]},
+    { id: 'inv_slot', title: 'Algemeen profiel & ondertekening', emoji: '✅', q: 'Hoe wilt u betrokken zijn bij uw financiële zaken, en klopt alles wat we hebben vastgelegd?', items: [
+      { t: 'Betrokkenheid bij financiële zaken (zelf op de hoogte, globaal, vertrouwt op anderen)', k: ['op de hoogte', 'vertrouw', 'verdiepen'] },
+      { t: 'Voorkeur bij financiële producten (risico/rendement, zekerheid, kwaliteit voorwaarden)', k: ['rendement', 'zekerheid', 'voorwaarden', 'garantie'] },
+      { t: 'Informatiebehoefte (naadje van de kous, globaal, geen details)', k: ['details', 'globaal', 'naadje van de kous'] },
+      { t: 'Klant heeft de geïnventariseerde gegevens gecontroleerd en bevestigd (ondertekening)', k: ['ondertekenen', 'handtekening', 'klopt dat', 'akkoord', 'controleren'] }
+    ]}
   ];
 
   const TEMPLATES = {
@@ -1786,6 +1900,8 @@
     ebv:         { label: 'Aanvullende hypotheek verduurzaming (EBV)', groups: ['verduurzaming', 'woonlasten', 'advies'] },
     onderhoud:   { label: 'Periodiek onderhoud / nazorggesprek', groups: ['onderhoud', 'lifeevents', 'woonlasten', 'relatie', 'nazorg'] },
     pensioen:    { label: 'Pensioenadvies aan werkgever (tweede pijler)', groups: ['pens_basis', 'pens_fin', 'pens_kennis', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true },
+    particulier: { label: 'Klantinventarisatie particulier (volledig, incl. schade)', groups: ['inv_persoon', 'inv_inkomen', 'inv_pensioen', 'inv_nabest', 'inv_ao', 'inv_woning', 'inv_vermogen', 'inv_leven', 'inv_schade', 'inv_slot'], source: { title: 'kantoorformulier Inventarisatie Particulieren (aangevuld met een schadeonderdeel) en art. 4:23 Wft', url: '' }, generic: true },
+    schade:      { label: 'Schadeverzekeringen particulier', groups: ['inv_schade', 'inv_persoon', 'inv_slot'], source: { title: 'zorgplicht en adviesnorm (art. 4:23 Wft) en de eis om wensen en behoeften vast te stellen bij verzekeringsdistributie (IDD); er is geen AFM-leidraad voor schadeadvies', url: '' }, generic: true },
     pensioentr:  { label: 'Pensioentransitie Wtp: advies aan werkgever', groups: ['pens_transitie', 'pens_basis', 'pens_fin', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true }
   };
   const SRC_HYP = { title: 'AFM Leidraad Hypotheekadvisering (april 2026)', url: 'https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering' };
@@ -2058,6 +2174,7 @@
       suggestText.textContent = visibleSuggest + ' onderwerpen herkend in het transcript' + (openSuggest ? ' (' + openSuggest + ' nog niet afgevinkt)' : '') + '. Controleer zelf of ze voldoende zijn besproken.';
       applySuggestBtn.style.display = openSuggest ? 'inline-flex' : 'none';
     } else suggestBar.style.display = 'none';
+    renderMissing();
 
     updateChecklistProgress();
   }
@@ -2334,7 +2451,7 @@
     const warn = [];
     tplGroups().forEach(g => g.items.forEach((it, idx) => { if (checklistState[g.id + '_' + idx] === 'warn') warn.push(g.title + ': ' + it.t); }));
     return 'Je bent een compliance-expert voor financiële dienstverlening in Nederland. Je beoordeelt of een adviseur tijdens een gesprek heeft gehandeld in lijn met de **' + src.title + '**, gebaseerd op artikel 4:23 lid 1 Wft.\n\n' +
-      'Bron: ' + src.url + '\nAls de PDF van de leidraad als bijlage is meegestuurd, baseer je je oordeel primair op die tekst. De leidraad heeft niet de status van wet- en regelgeving.\n\n' +
+      (src.url ? 'Bron: ' + src.url + '\nAls de PDF van de leidraad als bijlage is meegestuurd, baseer je je oordeel primair op die tekst. De leidraad heeft niet de status van wet- en regelgeving.\n\n' : 'Er is geen AFM-leidraad voor dit type gesprek; beoordeel op volledigheid van de inventarisatie en op de zorgplicht en adviesnorm uit de Wft.\n\n') +
       '## OPDRACHT\n\nType gesprek: **' + TEMPLATES[currentTpl].label + '**. Beoordeel het transcript per onderwerp hieronder (' + n + ' punten), rekening houdend met de specifieke situatie van de klant (werkgever). Regels kunnen beginnen met een tijdstempel [mm:ss]; noem dat bij citaten.\n\n' +
       'Statussen: ✅ BESPROKEN (citeer kort) · ⚠️ OPPERVLAKKIG (citeer, zeg wat ontbreekt) · ❌ ONTBREKEND (zeg waarom relevant) · ➖ N.V.T. (motiveer).\n\n## TE BEOORDELEN ONDERWERPEN\n' + subjects +
       '\n## SLOTOORDEEL\n1. **Indicatieve dekkingsscore (1-10)**, met de expliciete vermelding dat dit geen oordeel is over compliance.\n2. **Top 3 verbeterpunten.**\n3. **Vastleggingstips** voor het adviesdossier (reconstrueerbaarheid).\n4. **Conceptverslag**: samenvatting in één zin, korte samenvatting, kernpunten met tijdstempel, afspraken en actiepunten, punten voor het vervolggesprek. Markeer als CONCEPT.\n\n' +
@@ -2630,8 +2747,7 @@ INSTRUCTIES:
 1. Ga naar https://claude.ai/new (log in met je Claude-account)
 2. Sleep de bestanden 02, 03 en 04 tegelijk in het chatvenster
 3. (Optioneel) sleep ook de officiële ${tplSource().title} (PDF)
-   mee — download deze gratis van:
-   ${tplSource().url}
+   mee${tplSource().url ? ' — download deze gratis van:\n   ' + tplSource().url : ' (niet beschikbaar voor dit type gesprek)'}
 4. Druk op Enter
 5. Claude geeft een gestructureerde analyse met per onderwerp:
    ✅ besproken / ⚠️ oppervlakkig / ❌ ontbrekend / ➖ n.v.t.
@@ -2689,6 +2805,7 @@ Gegenereerd via opnemengesprek.nl
 </div>
 <div class="progress-bar"><div class="progress-fill" style="width:${scorePct}%"></div></div>
 <p style="font-size:12px; color:#64748b; margin-top:-10px;">Voortgang: ${doneItems + naItems} van ${totalItems} items afgerond (${scorePct}%). Dit is een registratie van de adviseur, geen oordeel over compliance.</p>
+${missingHtml()}
 ${checklistHtml}
 ${notitie ? `<h2>Notities</h2><div class="notes-box">${escapeHtmlAttr(notitie)}</div>` : ''}
 ${transcript ? `<h2>Volledige transcriptie</h2><div class="transcript">${escapeHtmlAttr(transcript)}</div>` : ''}
@@ -3054,7 +3171,7 @@ ${body}
       const warn = [], open = [];
       g.items.forEach((it, idx) => {
         const st = checklistState[g.id + '_' + idx];
-        if (st === 'warn') warn.push(it.t); else if (!st) open.push(it.t);
+        if (st === 'warn') warn.push(it.t); else if (!st && !suggestions[g.id + '_' + idx]) open.push(it.t);
       });
       if (!warn.length && !open.length) return;
       n += warn.length + open.length;
@@ -3342,6 +3459,61 @@ ${body}
       } else out.push(line);
     });
     return out.join('\n');
+  }
+
+  // ============================================================
+  // GEMIST: wat is (nog) niet besproken of afgevinkt — voor alle typen gesprek
+  // Niet afgevinkt én niet herkend in het transcript = waarschijnlijk gemist.
+  // ============================================================
+  function missingItems() {
+    const out = [];
+    tplGroups().forEach(g => {
+      const items = [];
+      g.items.forEach((it, idx) => {
+        const id = g.id + '_' + idx, st = checklistState[id];
+        if (st === 'warn') items.push({ id, t: it.t, kind: 'warn' });
+        else if (!st && !suggestions[id]) items.push({ id, t: it.t, kind: 'missing' });
+      });
+      if (items.length) out.push({ g, items });
+    });
+    return out;
+  }
+  function renderMissing() {
+    const box = document.getElementById('missingBox');
+    if (!box) return;
+    const hasTx = !!getCurrentTranscriptText();
+    const list = missingItems();
+    const nMiss = list.reduce((a, x) => a + x.items.filter(i => i.kind === 'missing').length, 0);
+    const nWarn = list.reduce((a, x) => a + x.items.filter(i => i.kind === 'warn').length, 0);
+    const anyState = Object.keys(checklistState).length > 0;
+    if (!hasTx && !anyState) { box.style.display = 'none'; return; }
+    box.style.display = '';
+    box.classList.toggle('ok', nMiss + nWarn === 0);
+    document.getElementById('missingTitle').textContent = nMiss + nWarn === 0
+      ? '✓ Volledig: alle punten zijn afgevinkt of herkend'
+      : '⚠ Mogelijk gemist: ' + nMiss + ' punt' + (nMiss === 1 ? '' : 'en') + ' niet besproken' + (nWarn ? ' · ' + nWarn + ' met aandacht' : '');
+    document.getElementById('missingList').innerHTML = list.map(x => `<h5>${x.g.emoji} ${escapeHtml(x.g.title)}</h5><ul>` +
+      x.items.map(i => `<li>${i.kind === 'warn' ? '⚠ ' : ''}<button class="lnk" data-id="${i.id}">${escapeHtml(i.t)}</button></li>`).join('') + '</ul>').join('') +
+      '<p style="margin-top:10px; color:#64748b;">"Niet besproken" = niet afgevinkt en niet herkend in het transcript. Herkenning werkt op trefwoorden; controleer zelf en vul ontbrekende punten aan, of plan ze in voor het vervolggesprek.</p>';
+    document.querySelectorAll('#missingList button.lnk').forEach(btn => btn.addEventListener('click', () => {
+      const el = checklistContainer.querySelector('.checklist-item[data-id="' + btn.dataset.id + '"]');
+      if (!el) return;
+      const items = el.closest('.checklist-items');
+      if (items) { items.classList.remove('hidden'); const h = checklistContainer.querySelector('.checklist-group-header[data-group="' + items.dataset.group + '"]'); if (h) h.classList.remove('collapsed'); }
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1800);
+    }));
+  }
+  function notifyMissing() {
+    if (!getCurrentTranscriptText()) return;
+    const n = missingItems().reduce((a, x) => a + x.items.filter(i => i.kind === 'missing').length, 0);
+    if (n > 0) showStatus('info', '<div>Gesprek gestopt. <strong>' + n + ' punten</strong> uit de checklist zijn mogelijk nog niet besproken. <button class="btn-secondary btn-sm" onclick="goTab(\'checklist\'); document.getElementById(\'missingBox\').open = true;">Bekijk wat ontbreekt</button></div>');
+  }
+  function missingHtml() {
+    const list = missingItems();
+    if (!list.length) return '';
+    return '<h2>Mogelijk gemist of nog open</h2><p style="font-size:12px; color:#64748b;">Punten die niet zijn afgevinkt en niet in het transcript zijn herkend, plus punten met aandacht. Zo nodig aanvullen of inplannen voor het vervolggesprek.</p>' +
+      list.map(x => `<h3>${x.g.emoji} ${escapeHtmlAttr(x.g.title)}</h3><ul style="font-size:12px; margin:0 0 8px 0;">` + x.items.map(i => `<li>${i.kind === 'warn' ? '⚠ ' : ''}${escapeHtmlAttr(i.t)}</li>`).join('') + '</ul>').join('');
   }
 
   checkPermissionStatus();
