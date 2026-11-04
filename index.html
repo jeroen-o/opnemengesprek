@@ -108,7 +108,7 @@
   .icon { width: 16px; height: 16px; flex-shrink: 0; }
   .footer { text-align: center; font-size: 11px; color: #94a3b8; margin-top: 24px; }
 
-  .live-transcript-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; min-height: 200px; max-height: 400px; overflow-y: auto; font-size: 14px; line-height: 1.7; color: #0f172a; }
+  .live-transcript-area { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-top: 16px; min-height: 200px; max-height: 400px; overflow-y: auto; font-size: 14px; line-height: 1.7; color: #0f172a; white-space: pre-wrap; }
   .live-transcript-area .interim { color: #94a3b8; font-style: italic; }
   .live-transcript-area:empty::before { content: 'Begin met praten. De tekst verschijnt hier live...'; color: #94a3b8; font-style: italic; font-size: 13px; }
 
@@ -362,6 +362,45 @@
     color: #64748b;
   }
 
+  /* TOESTEMMING, KANTOOR, VERSLAG, HERKENNING */
+  .consent-box { border: 1px solid #fde68a; background: #fffbeb; border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #78350f; }
+  .consent-box.ok { border-color: #bbf7d0; background: #f0fdf4; color: #14532d; }
+  .consent-box label.chk { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; font-weight: 600; color: inherit; margin: 0; cursor: pointer; }
+  .consent-box input[type=checkbox] { margin-top: 3px; width: 16px; height: 16px; flex-shrink: 0; }
+  .consent-box details { margin-top: 8px; }
+  .consent-box summary { cursor: pointer; font-size: 12px; text-decoration: underline; }
+  .consent-script { margin-top: 8px; padding: 10px 12px; background: white; border-radius: 8px; font-style: italic; line-height: 1.6; color: #334155; }
+  .consent-meta { font-size: 11px; margin-top: 6px; }
+  .office-details summary { cursor: pointer; font-size: 12px; font-weight: 500; color: #2563eb; }
+  .office-details .form-grid { margin-top: 12px; }
+  input[type="email"], input[type="date"], select.std { width: 100%; padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; font-family: inherit; background: white; color: #0f172a; }
+  input[type="file"] { font-size: 12px; max-width: 100%; }
+  input[type="color"] { width: 52px; height: 38px; border: 1px solid #cbd5e1; border-radius: 8px; padding: 2px; background: white; cursor: pointer; }
+  .inline-check { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #334155; margin: 0; cursor: pointer; font-weight: 500; }
+  .tpl-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+  .tpl-row label { margin: 0; }
+  .tpl-row select { flex: 1; min-width: 200px; }
+  .suggest-bar { display: none; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 10px 14px; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; margin-bottom: 12px; font-size: 12px; color: #1e3a8a; }
+  .cl-suggest { margin-top: 4px; font-size: 11px; color: #1d4ed8; background: #eff6ff; border-radius: 6px; padding: 4px 8px; font-style: italic; display: block; }
+  .checklist-item.status-done .cl-suggest, .checklist-item.status-na .cl-suggest { text-decoration: none; display: inline-block; }
+  .cl-suggest .ts { font-style: normal; font-weight: 600; font-family: ui-monospace, Consolas, monospace; margin-right: 4px; }
+  .group-q { font-size: 12px; color: #475569; padding: 8px 14px; background: #f8fafc; border-bottom: 1px solid #f1f5f9; }
+  .group-q strong { color: #0f172a; }
+  .verslag-grid { display: grid; gap: 14px; }
+  .verslag-grid textarea { font-family: inherit; font-size: 13px; }
+  .field-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .field-head label { margin: 0; }
+  .btn-sm { padding: 6px 10px; font-size: 12px; }
+  .section-sep { border: none; border-top: 1px solid #e2e8f0; margin: 2px 0; }
+  .dictating { background: #fee2e2 !important; color: #b91c1c !important; }
+  .calc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  @media (max-width: 520px) { .calc-grid { grid-template-columns: 1fr; } }
+  .calc-out { margin-top: 12px; padding: 12px 14px; background: #f0fdf4; border-radius: 10px; font-size: 13px; color: #14532d; }
+  .dp-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .dp-table th, .dp-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  .dp-table th { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
+  .dp-wrap { overflow-x: auto; }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -533,6 +572,27 @@
         <label>Notities (optioneel)</label>
         <textarea id="notes" rows="2" placeholder="Optionele context voor dit gesprek..."></textarea>
       </div>
+      <div class="full">
+        <div class="consent-box" id="consentBox">
+          <label class="chk"><input type="checkbox" id="consentCheck"> Klant is geïnformeerd dat het gesprek wordt opgenomen/uitgeschreven en gaat akkoord</label>
+          <div class="consent-meta" id="consentMeta"></div>
+          <details>
+            <summary>Voorleestekst tonen</summary>
+            <div class="consent-script">"Voordat we beginnen: ik wil dit gesprek graag opnemen en laten uitschrijven, zodat ik uw situatie en wensen goed en volledig kan vastleggen voor het advies. De opname en het verslag gebruik ik alleen voor uw dossier en ik bewaar ze niet langer dan nodig. Gaat u daarmee akkoord? U mag op elk moment vragen om de opname te stoppen."</div>
+          </details>
+        </div>
+      </div>
+      <div class="full">
+        <details class="office-details">
+          <summary>Kantoor &amp; huisstijl voor verslagen (optioneel)</summary>
+          <div class="form-grid">
+            <div><label for="officeName">Kantoornaam</label><input type="text" id="officeName" placeholder="Bijv. Hypotheekkantoor De Vries"></div>
+            <div><label for="advisorName">Naam adviseur</label><input type="text" id="advisorName" placeholder="Bijv. Petra Jansen"></div>
+            <div><label for="officeLogo">Logo (png, jpg of svg)</label><input type="file" id="officeLogo" accept="image/*"></div>
+            <div><label for="officeColor">Huisstijlkleur</label><input type="color" id="officeColor" value="#1e3a8a"></div>
+          </div>
+        </details>
+      </div>
     </div>
   </div>
 
@@ -553,6 +613,10 @@
       <button class="tab" data-tab="checklist">
         <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         Checklist
+      </button>
+      <button class="tab" data-tab="verslag">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Verslag
       </button>
       <button class="tab" data-tab="handleiding">
         <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
@@ -614,6 +678,7 @@
             <option value="de-DE">Duits</option>
             <option value="fr-FR">Frans</option>
           </select>
+          <label class="inline-check" style="margin-left:10px;"><input type="checkbox" id="liveTimestamps" checked> Tijdstempels</label>
         </div>
         <div class="record-area" style="padding: 16px 0;">
           <div class="mic-circle" id="liveMicCircle">
@@ -656,6 +721,10 @@
     </div>
 
     <div class="tab-content" id="tab-checklist">
+      <div class="tpl-row">
+        <label for="tplSelect">Type gesprek</label>
+        <select id="tplSelect" class="std"></select>
+      </div>
       <div class="checklist-header">
         <div class="checklist-progress">
           <span class="count" id="checkCount">0</span>
@@ -682,7 +751,61 @@
           Alles sluiten
         </button>
       </div>
+      <div class="checklist-actions">
+        <button class="btn-secondary" id="analyseBtn">🔍 Transcript analyseren</button>
+        <label class="inline-check"><input type="checkbox" id="rememberCheck"> Voortgang op dit apparaat onthouden</label>
+        <button class="btn-ghost btn-sm" id="wipeStoredBtn" title="Wis alle lokaal opgeslagen checklists en verslagen">Wis opgeslagen gegevens</button>
+      </div>
+      <div class="suggest-bar" id="suggestBar">
+        <span id="suggestText"></span>
+        <button class="btn-secondary btn-sm" id="applySuggestBtn">Herkende onderwerpen markeren als ✓</button>
+      </div>
       <div id="checklistContainer"></div>
+    </div>
+
+    <div class="tab-content" id="tab-verslag">
+      <div class="verslag-grid">
+        <div>
+          <label for="vOneLiner">Samenvatting in één zin</label>
+          <input type="text" id="vOneLiner" placeholder="Bijv. Starters oriënteren zich op eerste koopwoning tot € 425.000; kinderwens binnen 2 jaar.">
+        </div>
+        <div>
+          <label for="vSummary">Korte samenvatting</label>
+          <textarea id="vSummary" rows="4" placeholder="Situatie, wensen en belangrijkste uitkomsten van het gesprek..."></textarea>
+        </div>
+        <div>
+          <div class="field-head"><label for="vKeyPoints">Kernpunten (met moment in het gesprek)</label><button class="btn-secondary btn-sm" id="vFillBtn">Vul uit transcript</button></div>
+          <textarea id="vKeyPoints" rows="6" placeholder="- Inkomen: vast contract, € 4.250 bruto per maand [04:12]"></textarea>
+        </div>
+        <div>
+          <label for="vActions">Afspraken &amp; actiepunten (één per regel)</label>
+          <textarea id="vActions" rows="4" placeholder="Klant levert werkgeversverklaring aan&#10;Adviseur rekent rentevast 10 en 20 jaar door"></textarea>
+        </div>
+        <div>
+          <label for="vDeviations">Afwijkingen van advies + motivatie klant</label>
+          <textarea id="vDeviations" rows="3" placeholder="Bijv. Klant kiest ondanks advies geen ORV. Motivatie: ... Klant is gewezen op de gevolgen."></textarea>
+        </div>
+        <div>
+          <label for="vAssumptions">Aannames &amp; onzekerheden (bijv. fiscaal verleden)</label>
+          <textarea id="vAssumptions" rows="3" placeholder="Bijv. Bijleenregeling: uitgegaan van overwaarde € 60.000 o.b.v. verkoopprijs; definitief na verkoop."></textarea>
+        </div>
+        <div>
+          <div class="field-head"><label for="vAdvisorNote">Adviseursnotitie</label><button class="btn-secondary btn-sm" id="vDictateBtn">🎙 Inspreken</button></div>
+          <textarea id="vAdvisorNote" rows="3" placeholder="Eigen observaties na het gesprek. Inspreken werkt in Chrome/Edge via de spraakdienst van Google."></textarea>
+        </div>
+        <div class="form-grid">
+          <div><label for="vNextContact">Volgend contactmoment / nabellen</label><input type="date" id="vNextContact"></div>
+          <div><label for="vMailTo">E-mailadres klant (voor conceptmail)</label><input type="email" id="vMailTo" placeholder="naam@voorbeeld.nl"></div>
+        </div>
+        <label class="inline-check" style="font-size:13px; align-items:flex-start;"><input type="checkbox" id="vApproved" style="margin-top:3px;"> Verslag gecontroleerd en goedgekeurd door de adviseur. Zolang dit niet is aangevinkt, staat er CONCEPT op het verslag.</label>
+        <hr class="section-sep">
+        <div class="btn-row" style="justify-content:flex-start;">
+          <button class="btn-secondary" id="vMailBtn">✉ Concept-klantmail openen</button>
+          <button class="btn-secondary" id="vCopyMailBtn">Kopieer mailtekst</button>
+          <button class="btn-secondary" id="vPrepBtn">📋 Voorbereiding vervolggesprek</button>
+        </div>
+        <div class="hint" style="margin-top:0;">De conceptmail opent in je eigen mailprogramma; jij controleert en verstuurt. Het adviesrapport blijft leidend.</div>
+      </div>
     </div>
 
     <div class="tab-content" id="tab-handleiding">
@@ -695,10 +818,10 @@
           In 4 stappen een gespreksverslag maken
         </h3>
         <ol class="guide-steps">
-          <li><strong>Vul de klantnaam in</strong> (verplicht). Klant-ID en notities zijn optioneel.</li>
+          <li><strong>Vul de klantnaam in</strong> (verplicht) en <strong>informeer de klant over de opname</strong>: vinkje plus voorleestekst.</li>
           <li><strong>Kies een methode:</strong> "Opnemen" voor audio, "Live transcriberen" voor directe tekst tijdens het gesprek, of "Bestand inlezen" om een bestaande transcriptie te uploaden.</li>
           <li><strong>Voer het gesprek</strong> of plak de transcriptie.</li>
-          <li><strong>Download, print of controleer</strong> met de knoppen onderaan.</li>
+          <li><strong>Werk het verslag uit</strong> in het tabblad Verslag, keur het goed en <strong>print, download of controleer</strong> met de knoppen onderaan.</li>
         </ol>
       </div>
 
@@ -723,7 +846,15 @@
         </details>
         <details class="guide-faq">
           <summary>Checklist</summary>
-          <div class="faq-content">Ongeveer 70 aandachtspunten uit de AFM Leidraad Hypotheekadvisering, verdeeld over 11 categorieën. Vink tijdens het gesprek af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig (opvolgen), <strong>—</strong> = niet van toepassing. Je voortgang wordt automatisch opgeslagen per klantnaam — sluit je het tabblad en open je later opnieuw met dezelfde klantnaam, dan staan je vinkjes er nog.</div>
+          <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming of periodiek onderhoud); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Tijdstempels &amp; herkenning van onderwerpen</summary>
+          <div class="faq-content">Bij live transcriberen krijgt elke zin een tijdstempel [mm:ss]; ondertitelbestanden (.vtt/.srt) worden automatisch omgezet. Met <strong>"Transcript analyseren"</strong> zoekt de tool op trefwoorden welke checklistonderwerpen in het gesprek voorkomen en toont het fragment met het tijdstip. Dit gebeurt volledig in je browser. Let op: een herkend trefwoord betekent niet dat het onderwerp voldoende is besproken. Controleer elk item zelf.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Verslag, conceptmail en voorbereiding</summary>
+          <div class="faq-content">In het tabblad <strong>Verslag</strong> leg je de samenvatting, kernpunten (automatisch te vullen uit het transcript), afspraken, afwijkingen van advies, aannames en een ingesproken adviseursnotitie vast. Na controle vink je "goedgekeurd" aan; tot dan staat er CONCEPT op het verslag. Daarna maak je met één klik een <strong>concept-klantmail</strong> in je eigen mailprogramma, of een <strong>voorbereiding voor het vervolggesprek</strong> met alle open punten en ⚠-punten als vragenlijst.</div>
         </details>
       </div>
 
@@ -738,7 +869,7 @@
           <li>Klik op <strong>"Download AFM-controlepakket"</strong> — er worden 4 bestanden gedownload (prompt, transcriptie, adviessamenvatting, en leesinstructies).</li>
           <li>Klik in het pop-up venster op <strong>"Open Claude.ai"</strong> en log in.</li>
           <li><strong>Sleep alle 4 bestanden</strong> tegelijk in het chatvenster van Claude.ai.</li>
-          <li>Druk op Enter — Claude geeft een volledige analyse: ✅ besproken / ⚠️ oppervlakkig / ❌ ontbrekend per onderwerp, plus een compliance-score en verbeterpunten.</li>
+          <li>Druk op Enter — Claude geeft een volledige analyse: ✅ besproken / ⚠️ oppervlakkig / ❌ ontbrekend per onderwerp, plus een indicatieve dekkingsscore, verbeterpunten en een conceptverslag met klantmail. Je hoeft zelf geen prompt te schrijven: die zit in het pakket.</li>
         </ol>
         <div class="guide-tip">
           <strong>💡 Tip voor extra diepgang:</strong> download ook de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">officiële AFM Leidraad (PDF)</a> en sleep die ook mee. Claude baseert het oordeel dan op de exacte tekst.
@@ -758,11 +889,15 @@
         </details>
         <details class="guide-faq">
           <summary>Waar worden mijn gegevens opgeslagen?</summary>
-          <div class="faq-content">Alles blijft lokaal in je browser. Audio-opnames, transcripties en klantgegevens worden niet naar een server verstuurd. De checklist-vinkjes worden opgeslagen in de browser-opslag (localStorage) van je eigen apparaat. Uitzondering: de live-transcriptie gebruikt Google's spraakservice, en het AFM-controlepakket stuurt tekst naar Claude.ai — alleen als jij dat actief doet.</div>
+          <div class="faq-content">Standaard nergens: audio, transcripties, checklist en verslag staan alleen in het geheugen van dit tabblad en zijn weg als je het sluit. Download ze dus direct na het gesprek. Zet je "Voortgang op dit apparaat onthouden" aan, dan worden checklist, verslag en kantoorgegevens onversleuteld in de browser-opslag (localStorage) van dit apparaat bewaard. Doe dat niet op een gedeelde computer, en wis ze met "Wis opgeslagen gegevens". Uitzonderingen: live transcriberen en inspreken lopen via de spraakdienst van Google, en het AFM-controlepakket gaat naar Claude.ai, maar alleen als jij de bestanden daar uploadt. Zie ook het overzicht "Waar wordt wat verwerkt?" hieronder.</div>
         </details>
         <details class="guide-faq">
           <summary>Kan ik meerdere klanten bijhouden?</summary>
-          <div class="faq-content">Ja. De checklist wordt per klantnaam opgeslagen. Verander de klantnaam en je krijgt een lege checklist voor die klant. Type je later dezelfde naam opnieuw, dan laadt de opgeslagen voortgang weer. Audio en transcripties zijn per sessie — download deze dus direct na het gesprek.</div>
+          <div class="faq-content">Ja. Checklist en verslag horen bij de klantnaam. Verander je de klantnaam, dan begin je met een lege checklist voor die klant; type je later dezelfde naam, dan komt de voortgang terug: binnen dit tabblad altijd, en na het sluiten alleen als "onthouden" aanstaat. Audio en transcripties gelden per sessie. Download die dus direct na het gesprek.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Moet ik de klant vertellen dat ik het gesprek opneem?</summary>
+          <div class="faq-content">Ja. Volgens de AVG informeer je de klant vooraf over het opnemen, het doel en hoe lang je de opname bewaart. Gebruik de voorleestekst bij de klantgegevens en vink aan dat de klant akkoord is. Het tijdstip van bevestiging komt in het verslag en de downloads. Leg je verwerkingsgrondslag en bewaartermijn vast in je eigen privacybeleid; de tool regelt dat niet voor je.</div>
         </details>
         <details class="guide-faq">
           <summary>Mag ik dit gebruiken voor AVG-gevoelige gesprekken?</summary>
@@ -772,6 +907,42 @@
           <summary>Welke browser werkt het beste?</summary>
           <div class="faq-content">Chrome of Edge op desktop werken het beste — daar werken alle functies, inclusief live transcriberen. Firefox en Safari werken voor opnemen en bestand inlezen, maar live transcriberen is beperkt of werkt niet. Op mobiel: Chrome op Android werkt volledig, Safari op iPhone werkt alleen voor opnemen en bestand inlezen.</div>
         </details>
+      </div>
+
+      <div class="guide-section">
+        <h3>
+          <span class="guide-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          Waar wordt wat verwerkt?
+        </h3>
+        <div class="dp-wrap">
+          <table class="dp-table">
+            <tr><th>Functie</th><th>Verwerking</th><th>Opslag</th></tr>
+            <tr><td>Opnemen (audio)</td><td>In je browser</td><td>Alleen in het geheugen, tot jij downloadt</td></tr>
+            <tr><td>Live transcriberen, inspreken</td><td>Spraakdienst van Google (via Chrome/Edge)</td><td>Tekst in je browser; audioverwerking valt onder de voorwaarden van Google</td></tr>
+            <tr><td>Bestand inlezen, checklist, herkenning, verslag</td><td>In je browser</td><td>In het geheugen; op dit apparaat alleen als "onthouden" aanstaat</td></tr>
+            <tr><td>Concept-klantmail</td><td>Je eigen mailprogramma</td><td>Pas verstuurd als jij op verzenden klikt</td></tr>
+            <tr><td>AFM-controlepakket</td><td>Downloads op je apparaat; Claude.ai alleen als jij uploadt</td><td>Volgens je Claude-account en de voorwaarden van Anthropic</td></tr>
+            <tr><td>Website zelf</td><td>GitHub Pages levert alleen de pagina</td><td>Er wordt geen ingevoerde informatie naar een server gestuurd</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="guide-section">
+        <h3>
+          <span class="guide-icon">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </span>
+          Tijdwinst berekenen
+        </h3>
+        <div class="calc-grid">
+          <div><label for="calcConv">Gesprekken per week</label><input type="text" inputmode="numeric" id="calcConv" value="10"></div>
+          <div><label for="calcMin">Minuten minder uitwerktijd per gesprek</label><input type="text" inputmode="numeric" id="calcMin" value="30"></div>
+          <div><label for="calcRate">Uurtarief (€)</label><input type="text" inputmode="decimal" id="calcRate" value="75,00"></div>
+        </div>
+        <div class="calc-out" id="calcOut"></div>
+        <div class="hint" style="margin-top:8px;">Rekenvoorbeeld op basis van je eigen inschatting (52 weken per jaar). Geen garantie van werkelijke tijdsbesparing.</div>
       </div>
 
       <div class="guide-disclaimer">
@@ -790,7 +961,7 @@
     </button>
     <button class="btn-outline" id="printBtn" disabled>
       <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-      Print transcriptie
+      Print verslag
     </button>
     <button class="btn-primary" id="downloadBtn" disabled>
       <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -853,28 +1024,7 @@
     </div>
   </div>
 
-  <div class="footer">Alles draait lokaal in je browser. Geen data wordt verstuurd.</div>
-</div>
-
-<div class="print-only" id="printContent">
-  <div class="print-header">
-    <h1>Klantgespreksverslag</h1>
-    <div class="subtitle">Transcriptie van klantgesprek</div>
-  </div>
-  <div class="print-meta">
-    <div><div class="label">Klantnaam</div><div class="value" id="printCustomerName">—</div></div>
-    <div><div class="label">Klant-ID</div><div class="value" id="printCustomerId">—</div></div>
-    <div><div class="label">Datum</div><div class="value" id="printDate">—</div></div>
-    <div><div class="label">Tijd</div><div class="value" id="printTime">—</div></div>
-  </div>
-  <div class="print-section-title">Transcriptie</div>
-  <div class="print-transcript" id="printTranscript"></div>
-  <div id="printNotesWrapper" style="display:none;"><div class="print-notes" id="printNotes"></div></div>
-  <div class="print-signature">
-    <div class="sig-block">Handtekening adviseur</div>
-    <div class="sig-block">Handtekening klant</div>
-  </div>
-  <div class="print-footer">Gegenereerd via opnemengesprek.nl · <span id="printTimestamp"></span></div>
+  <div class="footer">Alles draait lokaal in je browser. Uitzonderingen: live transcriberen en inspreken (spraakdienst van Google) en het AFM-controlepakket, alleen als jij het zelf naar Claude.ai stuurt.</div>
 </div>
 
 <script>
@@ -882,6 +1032,7 @@
   let timerInterval = null, seconds = 0, isRecording = false, isPaused = false;
   let recognition = null, isListening = false, finalTranscript = '';
   let activeTab = 'live';
+  let transcriptSource = 'live', liveAccumMs = 0, liveStartedAt = null, segStartMs = null;
 
   const customerName = document.getElementById('customerName');
   const customerId = document.getElementById('customerId');
@@ -920,6 +1071,7 @@
   const liveTranscript = document.getElementById('liveTranscript');
   const liveCharCount = document.getElementById('liveCharCount');
   const liveStatusIndicator = document.getElementById('liveStatusIndicator');
+  const liveTimestamps = document.getElementById('liveTimestamps');
 
   function showBanner(type, title, message) {
     permBanner.className = 'perm-banner ' + type;
@@ -1011,8 +1163,17 @@
       let interim = '';
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const t = event.results[i][0].transcript;
-        if (event.results[i].isFinal) finalTranscript += t + ' ';
-        else interim += t;
+        if (segStartMs === null) segStartMs = liveElapsedMs();
+        if (event.results[i].isFinal) {
+          const clean = t.trim();
+          if (clean) {
+            if (liveTimestamps.checked) {
+              if (finalTranscript && !/\n$/.test(finalTranscript)) finalTranscript = finalTranscript.replace(/\s+$/, '') + '\n';
+              finalTranscript += '[' + fmtTs(segStartMs / 1000) + '] ' + clean + '\n';
+            } else finalTranscript += clean + ' ';
+          }
+          segStartMs = null;
+        } else interim += t;
       }
       liveTranscript.innerHTML = escapeHtml(finalTranscript) + '<span class="interim">' + escapeHtml(interim) + '</span>';
       liveTranscript.scrollTop = liveTranscript.scrollHeight;
@@ -1043,16 +1204,22 @@
   }
 
   function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+  function liveElapsedMs() { return liveAccumMs + (liveStartedAt ? Date.now() - liveStartedAt : 0); }
 
   function startLiveTranscription() {
+    if (!ensureConsent()) return;
+    if (dictating) { showStatus('error', '<div>Stop eerst het inspreken van de adviseursnotitie.</div>'); return; }
     if (!recognition) { if (!initSpeechRecognition()) return; }
     recognition.lang = liveLanguage.value;
+    liveStartedAt = Date.now(); segStartMs = null;
     try { recognition.start(); }
     catch (e) { recognition.stop(); setTimeout(() => { try { recognition.start(); } catch (e2) {} }, 200); }
   }
 
   function stopLiveTranscription() {
     isListening = false;
+    if (liveStartedAt) { liveAccumMs += Date.now() - liveStartedAt; liveStartedAt = null; }
+    segStartMs = null;
     if (recognition) { try { recognition.stop(); } catch (e) {} }
     liveMicCircle.classList.remove('listening');
     liveStatusIndicator.style.display = 'none';
@@ -1064,6 +1231,7 @@
   function clearLiveTranscription() {
     if (isListening) stopLiveTranscription();
     finalTranscript = '';
+    liveAccumMs = 0; liveStartedAt = null; segStartMs = null;
     liveTranscript.innerHTML = '';
     updateLiveCharCount(); updateButtons();
     clearLiveBtn.style.display = 'none';
@@ -1088,164 +1256,184 @@
   initSpeechRecognition();
 
   // ============================================================
-  // AFM CHECKLIST
+  // AFM CHECKLIST — AFM Leidraad Hypotheekadvisering (april 2026)
+  // t = tekst, k = trefwoorden voor herkenning in transcript ('!' = heel woord)
+  // Nieuwe items staan achteraan per groep zodat opgeslagen vinkjes blijven kloppen.
   // ============================================================
+  const V_FIELDS = ['vOneLiner', 'vSummary', 'vKeyPoints', 'vActions', 'vDeviations', 'vAssumptions', 'vAdvisorNote', 'vNextContact', 'vMailTo'];
 
   const CHECKLIST = [
-    {
-      id: 'kennismaking',
-      title: 'Kennismaking',
-      emoji: '👋',
-      items: [
-        'Dienstenwijzer en Vergelijkingskaart gedeeld',
-        'Kosten van dienstverlening toegelicht',
-        'Zelfstandige rol van adviseur benoemd',
-        'Omvang dienstverlening duidelijk afgesproken',
-        'Klant geïnformeerd dat maximale leenruimte ≠ passende leenruimte',
-        'Huidige woonlasten en woonverleden besproken'
-      ]
-    },
-    {
-      id: 'inventarisatie',
-      title: 'Inventarisatie',
-      emoji: '📋',
-      items: [
-        'Inkomen uitgevraagd (stabiliteit beoordeeld)',
-        'Financiële verplichtingen uitgevraagd (leningen, alimentatie, studielening)',
-        'Bestaande voorzieningen uitgevraagd (pensioen, AO-dekking)',
-        'Sociale uitkeringen en rechten in kaart',
-        'Spaarkapitaal en spaarcapaciteit besproken',
-        'Uitgavenpatroon besproken (zeker bij hoge LTI)',
-        'Kennis & ervaring met hypotheken uitgevraagd',
-        'Risicobereidheid uitgevraagd',
-        'Doelstellingen en toekomstwensen in kaart'
-      ]
-    },
-    {
-      id: 'woonlasten',
-      title: 'Verantwoorde woonlasten',
-      emoji: '🏠',
-      items: [
-        'Totale woonlast besproken (hypotheek + energie + belastingen + onderhoud + opstal + erfpacht)',
-        'Betaalbaarheid nu beoordeeld',
-        'Betaalbaarheid tijdens pensionering doorgerekend',
-        'Scenario gezinsuitbreiding besproken',
-        'Scenario minder werken / sabbatical / ZZP besproken',
-        'Scenario eerder stoppen met werken besproken',
-        'Bij hoge LTI: netto-besteedbaar-inkomen analyse gemaakt',
-        'Tegenstrijdigheden in antwoorden onderzocht'
-      ]
-    },
-    {
-      id: 'rentevastperiode',
-      title: 'Rentevastperiode',
-      emoji: '📈',
-      items: [
-        'Samenhang looptijd ↔ maandlast uitgelegd',
-        'Samenhang looptijd ↔ zekerheid uitgelegd',
-        'Meerdere rentevastperiode-scenario\'s doorgerekend',
-        'Scenario rentestijging na afloop rentevastperiode getoond',
-        'Voorkeur klant over zekerheid vs. lage lasten vastgesteld',
-        'Risico dragen én risico kunnen dragen beoordeeld'
-      ]
-    },
-    {
-      id: 'verduurzaming',
-      title: 'Verduurzaming',
-      emoji: '🌱',
-      items: [
-        'Energielabel van woning besproken',
-        'Invloed energielabel op leenruimte uitgelegd',
-        'Wensen klant t.a.v. verduurzaming uitgevraagd',
-        'Bij slecht label: gevolgen energiekosten op woonlasten besproken',
-        'Financieringsmogelijkheden EBV\'s toegelicht (indien relevant)',
-        'Funderingsrisico\'s in regio besproken (indien relevant)'
-      ]
-    },
-    {
-      id: 'fiscaliteit',
-      title: 'Fiscaliteit',
-      emoji: '💶',
-      items: [
-        'Hypotheekverleden uitgevraagd (bij doorstromers)',
-        'Relevante fiscale documenten opgevraagd (aangiftes, aanslagen)',
-        'Eerdere looptijden en aflossingen in kaart',
-        'Opbouwproducten (KEW/SEW/BEW) geïnventariseerd',
-        'Bruto/netto maandlasten-overzicht gedeeld',
-        'Eigenwoningschuld en -reserve berekend',
-        'Overgangsregimes beoordeeld',
-        'Bij onzekerheid: prudente aannames gedocumenteerd'
-      ]
-    },
-    {
-      id: 'product',
-      title: 'Hypotheekproduct',
-      emoji: '🏦',
-      items: [
-        'Product niet alleen op rente, ook op voorwaarden vergeleken',
-        'Offertevoorwaarden besproken (dagrente vs. offerterente)',
-        'Meeneemregeling / verhuisregeling besproken',
-        'Boetevrij aflossen besproken',
-        'Bereidstellingsprovisie besproken',
-        'Rentemiddeling of automatische rentedaling besproken',
-        'Overbruggingskrediet besproken (indien relevant)',
-        'Onderbouwing gekozen aanbieder vastgelegd'
-      ]
-    },
-    {
-      id: 'lifeevents',
-      title: 'Life events & risico\'s',
-      emoji: '⚠️',
-      items: [
-        'Risico overlijden besproken',
-        'Risico arbeidsongeschiktheid besproken',
-        'Risico werkloosheid besproken',
-        'Nabestaandenpensioen in analyse meegenomen',
-        'WIA/WW-regelingen betrokken bij analyse',
-        'Eigen verzekeringen/voorzieningen in kaart',
-        'Inkomensscenario\'s per calamiteit doorgerekend',
-        'Risicoverzekering geadviseerd waar nodig',
-        'Afwijking van risicoadvies vastgelegd met motivatie'
-      ]
-    },
-    {
-      id: 'relatie',
-      title: 'Relatiebeëindiging',
-      emoji: '💔',
-      items: [
-        'Relatievorm besproken (huwelijk / GP / samenlevingscontract / geen)',
-        'Eigendomsverhouding en lastenverdeling vastgesteld',
-        'Scenario relatiebeëindiging besproken',
-        'Financiële afhankelijkheid tussen partners besproken',
-        'Notariële afspraken aanbevolen (indien nog niet aanwezig)'
-      ]
-    },
-    {
-      id: 'advies',
-      title: 'Advies & rapport',
-      emoji: '✍️',
-      items: [
-        'Advies onderbouwd met aansluiting op doelstellingen',
-        'Advies getoetst op risicobereidheid en financiële positie',
-        'Alternatieven besproken (indien van toepassing)',
-        'Adviesrapport met gelaagde opbouw (samenvatting → details)',
-        'Fiscale gevolgen opgenomen in rapport',
-        'Afwijkingen klant van advies vastgelegd met motivatie',
-        'Klant gewezen op risico\'s bij afwijken',
-        'Adviesrapport schriftelijk/digitaal verstrekt'
-      ]
-    },
-    {
-      id: 'nazorg',
-      title: 'Nazorg',
-      emoji: '🤝',
-      items: [
-        'Reikwijdte nazorg/beheerfase afgesproken',
-        'Vergoeding voor nazorg afgesproken',
-        'Momenten van contact afgesproken'
-      ]
-    }
+    { id: 'kennismaking', title: 'Kennismaking', emoji: '👋', q: 'Wat wilt u uiteindelijk bereiken, en wanneer is dit traject voor u geslaagd?', items: [
+      { t: 'Dienstenwijzer en Vergelijkingskaart gedeeld', k: ['dienstenwijzer', 'vergelijkingskaart'] },
+      { t: 'Kosten van dienstverlening toegelicht', k: ['advieskosten', 'adviesvergoeding', 'bemiddelingskosten', 'kosten van ons', 'kosten voor het advies', 'vaste prijs', 'uurtarief', 'tarief'] },
+      { t: 'Zelfstandige rol van adviseur benoemd', k: ['eigen afweging', 'zelfstandig', 'ik waarschuw', 'eerlijk zeggen', 'niet verstandig', 'niet haalbaar'] },
+      { t: 'Omvang dienstverlening duidelijk afgesproken', k: ['adviseer ik niet', 'valt buiten', 'onderdeel van het advies', 'omvang', 'wel en niet'] },
+      { t: 'Klant geïnformeerd dat maximale leenruimte ≠ passende leenruimte', k: ['maximaal lenen', 'maximale hypotheek', 'maximale leen', 'verantwoord lenen', 'niet per se verstandig'] },
+      { t: 'Huidige woonlasten en woonverleden besproken', k: ['huidige woonlasten', 'woonverleden', 'huur', 'koopwoning gehad', 'eerder gekocht'] },
+      { t: 'Klant gewezen: geen garantie dat besproken leenbedrag wordt verstrekt', k: ['geen garantie', 'niet gegarandeerd', 'onder voorbehoud'] },
+      { t: 'In algemene zin geïnformeerd over relevante hypotheekconstructies', k: ['annuïte', 'annuite', 'lineair', 'aflossingsvrij', 'hypotheekvorm'] }
+    ]},
+    { id: 'inventarisatie', title: 'Inventarisatie', emoji: '📋', q: 'Welke inkomsten, verplichtingen en voorzieningen heeft u nu, en kunt u dat met documenten onderbouwen?', items: [
+      { t: 'Inkomen uitgevraagd (stabiliteit beoordeeld)', k: ['inkomen', 'salaris', 'loondienst', 'vast contract', 'tijdelijk contract', 'zzp', 'ondernemer', 'winst'] },
+      { t: 'Financiële verplichtingen uitgevraagd (leningen, alimentatie, studielening)', k: ['studielening', 'studieschuld', 'duo!', 'alimentatie', 'persoonlijke lening', 'doorlopend krediet', 'creditcard', 'private lease', 'bkr!', 'schulden'] },
+      { t: 'Bestaande voorzieningen uitgevraagd (pensioen, AO-dekking)', k: ['pensioenopbouw', 'pensioen', 'arbeidsongeschiktheidsverzekering', 'aov!', 'wia-excedent'] },
+      { t: 'Sociale uitkeringen en rechten in kaart', k: ['anw!', 'aow!', 'ww!', 'wia!', 'toeslag', 'uitkering'] },
+      { t: 'Spaarkapitaal en spaarcapaciteit besproken', k: ['spaargeld', 'spaarrekening', 'sparen', 'eigen geld', 'eigen middelen', 'buffer', 'vermogen'] },
+      { t: 'Uitgavenpatroon besproken (zeker bij hoge LTI)', k: ['uitgavenpatroon', 'uitgaven', 'budget', 'boodschappen', 'vaste lasten', 'nibud'] },
+      { t: 'Kennis & ervaring met hypotheken uitgevraagd', k: ['eerste huis', 'eerste woning', 'starter', 'ervaring met', 'bekend met', 'eerder een hypotheek'] },
+      { t: 'Risicobereidheid uitgevraagd', k: ['risicobereid', 'risico', 'zekerheid', 'spannend'] },
+      { t: 'Doelstellingen en toekomstwensen in kaart', k: ['doelstelling', 'doel', 'wens', 'toekomstplannen', 'plannen', 'toekomst'] },
+      { t: 'Mondelinge informatie geverifieerd (documenten of bewijs opgevraagd)', k: ['loonstrook', 'jaaropgave', 'werkgeversverklaring', 'uwv', 'mijnoverheid', 'bankafschrift', 'kopie', 'aanleveren', 'opsturen', 'uploaden'] },
+      { t: 'Verschillen tussen partners (wensen, risicobereidheid) besproken en geprioriteerd', k: ['allebei', 'beiden', 'jullie samen', 'met z\'n tweeën', 'je partner', 'uw partner'] }
+    ]},
+    { id: 'woonlasten', title: 'Verantwoorde woonlasten', emoji: '🏠', q: 'Welke maandlast voelt comfortabel, ook als er kinderen komen, u minder gaat werken of met pensioen gaat?', items: [
+      { t: 'Totale woonlast besproken (hypotheek + energie + belastingen + onderhoud + opstal + erfpacht)', k: ['energielasten', 'gemeentelijke belasting', 'ozb!', 'waterschap', 'onderhoud', 'opstal', 'erfpacht', 'vve!'] },
+      { t: 'Betaalbaarheid nu beoordeeld', k: ['betaalbaar', 'maandlast', 'netto last', 'kunt dragen', 'comfortabel'] },
+      { t: 'Betaalbaarheid tijdens pensionering doorgerekend', k: ['na uw pensioen', 'pensioendatum', 'pensioenleeftijd', 'met pensioen', 'pensioeninkomen'] },
+      { t: 'Scenario gezinsuitbreiding besproken', k: ['kinderwens', 'gezinsuitbreiding', 'kinderopvang', 'zwanger', 'baby', 'kinderen'] },
+      { t: 'Scenario minder werken / sabbatical / ZZP besproken', k: ['minder werken', 'parttime', 'deeltijd', 'sabbatical', 'voor jezelf', 'voor uzelf', 'eigen bedrijf', 'zzp'] },
+      { t: 'Scenario eerder stoppen met werken besproken', k: ['eerder stoppen', 'vervroegd', 'eerder met pensioen'] },
+      { t: 'Bij hoge LTI: netto-besteedbaar-inkomen analyse gemaakt', k: ['netto besteedbaar', 'nbi!', 'budgetoverzicht', 'werkelijke uitgaven', 'netto uitgaven'] },
+      { t: 'Tegenstrijdigheden in antwoorden onderzocht', k: ['tegenstrijdig', 'eerder gaf u aan', 'u zei net', 'klopt dat', 'hoe rijmt'] },
+      { t: 'Bij overschrijding Trhk-norm: bijzondere omstandigheid concreet doorgerekend', k: ['trhk', 'leennorm', 'boven de norm', 'explain', 'toetsinkomen'] },
+      { t: 'Klant nadrukkelijk gewezen op risico\'s als uitgavenpatroon niet aan te passen is', k: [] }
+    ]},
+    { id: 'rentevastperiode', title: 'Rentevastperiode', emoji: '📈', q: 'Wat zou een rentestijging van 2 à 3 procentpunt na de rentevaste periode voor u betekenen?', items: [
+      { t: 'Samenhang looptijd ↔ maandlast uitgelegd', k: ['rentevastperiode', 'rentevaste periode', 'rentevast'] },
+      { t: 'Samenhang looptijd ↔ zekerheid uitgelegd', k: ['renterisico', 'rentestijging', 'rente stijgt', 'zekerheid'] },
+      { t: 'Meerdere rentevastperiode-scenario\'s doorgerekend', k: ['5 jaar', '10 jaar', '15 jaar', '20 jaar', '30 jaar', 'vijf jaar', 'tien jaar', 'twintig jaar'] },
+      { t: 'Scenario rentestijging na afloop rentevastperiode getoond', k: ['rentestijging', 'rente stijgt', 'procentpunt', 'renteherziening', '2%', '3%'] },
+      { t: 'Voorkeur klant over zekerheid vs. lage lasten vastgesteld', k: ['liever zekerheid', 'zo laag mogelijk', 'lage maandlast', 'zekerheid'] },
+      { t: 'Risico dragen én risico kunnen dragen beoordeeld', k: ['kunnen dragen', 'kunt u dat dragen', 'opvangen', 'buffer'] },
+      { t: 'Afwijking van advies rentevastperiode vastgelegd met motivatie', k: [] },
+      { t: 'Spreiding renterisico (leningdelen met verschillende rentevast) besproken', k: ['spreiden', 'spreiding', 'leningdelen', 'leningdeel', 'splitsen'] }
+    ]},
+    { id: 'verduurzaming', title: 'Verduurzaming', emoji: '🌱', q: 'Heeft u plannen om de woning te verduurzamen, en is de staat van de fundering bekend?', items: [
+      { t: 'Energielabel van woning besproken', k: ['energielabel', 'label a!', 'label b!', 'label c!', 'label d!', 'label e!', 'label f!', 'label g!'] },
+      { t: 'Invloed energielabel op leenruimte uitgelegd', k: ['extra leenruimte', 'leenruimte', 'energiebespaar', 'ebb!', 'ebv!'] },
+      { t: 'Wensen klant t.a.v. verduurzaming uitgevraagd', k: ['verduurzam', 'zonnepanelen', 'isolatie', 'isoleren', 'warmtepomp', 'duurzaam'] },
+      { t: 'Bij slecht label: gevolgen energiekosten op woonlasten besproken', k: ['energiekosten', 'energierekening', 'stookkosten', 'gasrekening'] },
+      { t: 'Financieringsmogelijkheden EBV\'s toegelicht (indien relevant)', k: ['energiebespaarbudget', 'energie bespaar budget', 'warmtefonds', 'bouwdepot', 'duurzaamheidskorting', 'groene hypotheek', 'ebb!', 'ebv!'] },
+      { t: 'Funderingsrisico\'s in regio besproken (indien relevant)', k: ['fundering', 'verzakking', 'paalrot', 'bodemdaling', 'grondwater'] },
+      { t: 'Verwezen naar energieadviseur voor invulling maatregelen (indien relevant)', k: ['energieadviseur', 'energiebespaaradviseur', 'energieadvies', 'maatwerkadvies'] }
+    ]},
+    { id: 'fiscaliteit', title: 'Fiscaliteit', emoji: '💶', q: 'Welke hypotheken, opbouwproducten, schenkingen of overwaarde had u eerder, en heeft u daar stukken van?', items: [
+      { t: 'Hypotheekverleden uitgevraagd (bij doorstromers)', k: ['hypotheekverleden', 'vorige hypotheek', 'eerdere hypotheek', 'oude hypotheek', 'vorige woning', 'overwaarde', 'bijleenregeling'] },
+      { t: 'Relevante fiscale documenten opgevraagd (aangiftes, aanslagen)', k: ['aangifte', 'aanslag', 'belastingdienst', 'hypotheekoverzicht', 'jaaroverzicht'] },
+      { t: 'Eerdere looptijden en aflossingen in kaart', k: ['looptijd', 'afgelost', 'aflossingen'] },
+      { t: 'Opbouwproducten (KEW/SEW/BEW) geïnventariseerd', k: ['kew!', 'sew!', 'bew!', 'kapitaalverzekering', 'spaarhypotheek', 'beleggingshypotheek', 'bankspaar'] },
+      { t: 'Bruto/netto maandlasten-overzicht gedeeld', k: ['bruto', 'netto', 'hypotheekrenteaftrek', 'renteaftrek'] },
+      { t: 'Eigenwoningschuld en -reserve berekend', k: ['eigenwoningschuld', 'eigenwoningreserve', 'box 1', 'box 3'] },
+      { t: 'Overgangsregimes beoordeeld', k: ['overgangsrecht', 'overgangsregeling', 'voor 2013'] },
+      { t: 'Bij onzekerheid: prudente aannames gedocumenteerd', k: ['aanname', 'we gaan ervan uit', 'uitgangspunt'] },
+      { t: 'Schenking/erfenis, ongelijke inbreng of draagplichtovereenkomst besproken', k: ['schenking', 'erfenis', 'ongelijke inbreng', 'draagplicht', 'jubelton'] },
+      { t: 'Extern fiscaal advies overwogen bij complexe situatie', k: ['fiscalist', 'belastingadviseur', 'fiscaal advies'] }
+    ]},
+    { id: 'product', title: 'Hypotheekproduct', emoji: '🏦', q: 'Hoe lang verwacht u in de woning te blijven, en wilt u extra kunnen aflossen?', items: [
+      { t: 'Product niet alleen op rente, ook op voorwaarden vergeleken', k: ['voorwaarden', 'geldverstrekker', 'aanbieder'] },
+      { t: 'Offertevoorwaarden besproken (dagrente vs. offerterente)', k: ['dagrente', 'offerterente', 'passeerdatum', 'offerte'] },
+      { t: 'Meeneemregeling / verhuisregeling besproken', k: ['meeneemregeling', 'verhuisregeling', 'meenemen'] },
+      { t: 'Boetevrij aflossen besproken', k: ['boetevrij', 'vergoedingsvrij', 'extra aflossen'] },
+      { t: 'Bereidstellingsprovisie besproken', k: ['bereidstelling', 'offerte verlengen'] },
+      { t: 'Rentemiddeling of automatische rentedaling besproken', k: ['rentemiddeling', 'risicoklasse', 'rente daalt mee', 'ltv!'] },
+      { t: 'Overbruggingskrediet besproken (indien relevant)', k: ['overbrugging'] },
+      { t: 'Onderbouwing gekozen aanbieder vastgelegd', k: ['daarom adviseer', 'past het beste', 'beste aansluit', 'waarom deze'] },
+      { t: 'Verwachte woonduur besproken', k: ['woonduur', 'blijven wonen', 'hoe lang denkt'] },
+      { t: 'Gewenste maar niet geboden productkenmerken benoemd', k: [] },
+      { t: 'Eindadvies gecontroleerd op tegenstrijdigheden met eerdere onderwerpen', k: [] }
+    ]},
+    { id: 'lifeevents', title: 'Life events & risico\'s', emoji: '⚠️', q: 'Wat gebeurt er met de woonlasten bij overlijden, arbeidsongeschiktheid of werkloosheid, en wilt u dat risico zelf dragen?', items: [
+      { t: 'Risico overlijden besproken', k: ['overlijden', 'overlijdt', 'overlijdensrisico', 'nabestaande'] },
+      { t: 'Risico arbeidsongeschiktheid besproken', k: ['arbeidsongeschikt', 'ziek worden', 'langdurig ziek'] },
+      { t: 'Risico werkloosheid besproken', k: ['werkloos', 'baan kwijt', 'ontslag'] },
+      { t: 'Nabestaandenpensioen in analyse meegenomen', k: ['nabestaandenpensioen', 'partnerpensioen', 'anw!'] },
+      { t: 'WIA/WW-regelingen betrokken bij analyse', k: ['wia!', 'ww!', 'wga!', 'iva!', 'uwv'] },
+      { t: 'Eigen verzekeringen/voorzieningen in kaart', k: ['verzekering', 'polis', 'orv!', 'aov!'] },
+      { t: 'Inkomensscenario\'s per calamiteit doorgerekend', k: ['scenario', 'tekort', 'doorgerekend'] },
+      { t: 'Risicoverzekering geadviseerd waar nodig', k: ['overlijdensrisicoverzekering', 'woonlastenverzekering', 'woonlastenbeschermer', 'orv!'] },
+      { t: 'Afwijking van risicoadvies vastgelegd met motivatie', k: ['leg ik vast', 'in het dossier', 'vastleggen'] },
+      { t: 'Wachttijd en overbrugging tot uitkering besproken', k: ['wachttijd', 'eigenrisicotermijn', 'eigen risico periode', 'overbruggen'] },
+      { t: 'Geen verzekeringsadvies afgesproken maar risico niet draagbaar: actief doorverwezen', k: ['doorverwijzen', 'doorverwijs', 'specialist'] },
+      { t: 'Nabelafspraak bij uitgestelde beslissing risicoverzekering (goede praktijk)', k: ['nabellen', 'bel ik u', 'over een maand', 'neem ik contact'] }
+    ]},
+    { id: 'relatie', title: 'Relatiebeëindiging', emoji: '💔', q: 'Welke afspraken heeft u samen vastgelegd, en wat gebeurt er als de relatie eindigt?', items: [
+      { t: 'Relatievorm besproken (huwelijk / GP / samenlevingscontract / geen)', k: ['getrouwd', 'huwelijk', 'geregistreerd partner', 'samenlevingscontract', 'samenlevingsovereenkomst', 'huwelijkse voorwaarden'] },
+      { t: 'Eigendomsverhouding en lastenverdeling vastgesteld', k: ['eigendomsverhouding', '50/50', 'ieder de helft', 'lastenverdeling'] },
+      { t: 'Scenario relatiebeëindiging besproken', k: ['uit elkaar', 'scheiding', 'scheiden', 'relatiebeëindiging', 'relatie eindigt'] },
+      { t: 'Financiële afhankelijkheid tussen partners besproken', k: ['afhankelijk', 'laagste inkomen', 'minder verdient'] },
+      { t: 'Notariële afspraken aanbevolen (indien nog niet aanwezig)', k: ['notaris', 'testament'] },
+      { t: 'Partner met laagste inkomen begrijpt persoonlijke gevolgen', k: ['laagste inkomen', 'minder verdient'] },
+      { t: 'Kinderen/kinderwens betrokken bij scenario relatiebeëindiging', k: ['kinderen', 'kinderwens'] },
+      { t: 'Partner bekend bij pensioenfonds aanbevolen (goede praktijk)', k: ['pensioenfonds', 'partner aanmelden'] }
+    ]},
+    { id: 'advies', title: 'Advies & rapport', emoji: '✍️', q: 'Is het advies voor u duidelijk, en past het bij wat u wilt bereiken?', items: [
+      { t: 'Advies onderbouwd met aansluiting op doelstellingen', k: ['past bij', 'aansluit', 'omdat u'] },
+      { t: 'Advies getoetst op risicobereidheid en financiële positie', k: ['risicobereidheid', 'financiële positie'] },
+      { t: 'Alternatieven besproken (indien van toepassing)', k: ['alternatief', 'andere optie', 'ook kiezen voor'] },
+      { t: 'Adviesrapport met gelaagde opbouw (samenvatting → details)', k: ['adviesrapport'] },
+      { t: 'Fiscale gevolgen opgenomen in rapport', k: ['fiscale gevolgen', 'fiscaal'] },
+      { t: 'Afwijkingen klant van advies vastgelegd met motivatie', k: ['afwijk', 'tegen het advies'] },
+      { t: 'Klant gewezen op risico\'s bij afwijken', k: ['consequentie', 'gevolgen'] },
+      { t: 'Adviesrapport schriftelijk/digitaal verstrekt', k: ['rapport', 'toesturen', 'per mail'] },
+      { t: 'Advies tijdig gedeeld vóór start bemiddeling/aanvraag', k: ['voordat we aanvragen', 'voor de aanvraag', 'eerst het advies'] },
+      { t: 'Gecontroleerd of klant het advies begrijpt', k: ['begrijpt u', 'is dat duidelijk', 'heeft u vragen', 'snapt u'] }
+    ]},
+    { id: 'nazorg', title: 'Nazorg', emoji: '🤝', q: 'Hoe en hoe vaak wilt u dat we contact houden na het afsluiten?', items: [
+      { t: 'Reikwijdte nazorg/beheerfase afgesproken', k: ['nazorg', 'beheer', 'servicekosten', 'abonnement'] },
+      { t: 'Vergoeding voor nazorg afgesproken', k: ['servicekosten', 'abonnement', 'vergoeding'] },
+      { t: 'Momenten van contact afgesproken', k: ['jaarlijks', 'periodiek', 'contactmoment', 'evaluatie'] }
+    ]},
+    { id: 'oversluiten', title: 'Oversluiten', emoji: '🔁', q: 'Wat is uw belangrijkste doel met oversluiten, en wat is er veranderd sinds het vorige advies?', items: [
+      { t: 'Doel van oversluiten vastgesteld (lagere lasten, zekerheid, schuld verlagen)', k: ['oversluiten', 'overstappen', 'openbreken', 'renteherziening'] },
+      { t: 'Checkvraag: relevante wijzigingen in klantsituatie (vorig advies < 5 jaar)', k: ['gewijzigd', 'veranderd', 'wijzigingen', 'nog hetzelfde'] },
+      { t: 'Klantinformatie opnieuw ingewonnen (vorig advies > 5 jaar)', k: [] },
+      { t: 'Huidige hypotheek en opbouwproducten in kaart', k: ['huidige hypotheek', 'leningdelen', 'opbouw', 'polis'] },
+      { t: 'Kosten oversluiten geïnventariseerd (boeterente, notaris, taxatie)', k: ['boeterente', 'vergoeding', 'notaris', 'taxatie', 'oversluitkosten'] },
+      { t: 'Huidige én andere kredietaanbieders vergeleken', k: ['huidige bank', 'andere bank', 'huidige geldverstrekker', 'andere aanbieder'] },
+      { t: 'Terugverdientijd berekend', k: ['terugverdien'] },
+      { t: 'Fiscale gevolgen besproken (bijv. meefinancieren kosten); zo nodig fiscalist', k: ['meefinancier', 'aftrekbaar', 'fiscalist', 'fiscaal'] },
+      { t: 'Gevolgen voor verbonden producten en aflosvorm uitgelegd', k: ['aflosvorm', 'omzetten', 'annuït', 'aflossingsvrij'] },
+      { t: 'Betaalbaarheid na pensioen / herfinanciering aflossingsvrij deel beoordeeld', k: ['herfinanc', 'aflossingsvrij', 'pensioen'] },
+      { t: 'Uitkomst analyse en overwegingen vastgelegd in adviesrapport', k: [] }
+    ]},
+    { id: 'onderhoud', title: 'Periodiek onderhoud', emoji: '🔄', q: 'Wat is er sinds ons vorige gesprek veranderd in uw werk, gezin of plannen?', items: [
+      { t: 'Gewijzigde klantsituatie uitgevraagd (werk, inkomen, gezin, relatie)', k: ['veranderd', 'gewijzigd', 'nieuwe baan', 'gezinsuitbreiding', 'gescheiden'] },
+      { t: 'Einde rentevastperiode / renteherziening besproken', k: ['rentevast', 'renteherziening', 'afloop'] },
+      { t: 'Aflossingsvrij deel richting pensioen besproken', k: ['aflossingsvrij', 'pensioen'] },
+      { t: 'Risicodekkingen nog passend bij huidige situatie', k: ['verzekering', 'dekking', 'orv!', 'aov!'] },
+      { t: 'Mogelijkheden extra aflossen / rentemiddeling besproken', k: ['extra aflossen', 'rentemiddeling', 'risicoklasse'] },
+      { t: 'Verduurzamingswensen geïnventariseerd', k: ['verduurzam', 'energielabel', 'zonnepanelen', 'isolatie'] },
+      { t: 'Volgend contactmoment afgesproken', k: ['volgend jaar', 'jaarlijks', 'contactmoment'] }
+    ]}
   ];
+
+  const TEMPLATES = {
+    hypotheek:   { label: 'Hypotheekadvies (aankoop / doorstromer)', groups: ['kennismaking', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'verduurzaming', 'fiscaliteit', 'product', 'lifeevents', 'relatie', 'advies', 'nazorg'] },
+    oversluiten: { label: 'Oversluiten / rente openbreken (Leidraad hfst. 10)', groups: ['oversluiten', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'fiscaliteit', 'product', 'lifeevents', 'advies'] },
+    ebv:         { label: 'Aanvullende hypotheek verduurzaming (EBV)', groups: ['verduurzaming', 'woonlasten', 'advies'] },
+    onderhoud:   { label: 'Periodiek onderhoud / nazorggesprek', groups: ['onderhoud', 'lifeevents', 'woonlasten', 'relatie', 'nazorg'] }
+  };
+  let currentTpl = 'hypotheek';
+
+  function compileKw(list) {
+    if (!list || !list.length) return null;
+    const esc = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    try {
+      const parts = list.map(kw => {
+        const whole = kw.endsWith('!');
+        return '(?<![\\p{L}\\p{N}])' + esc(kw.replace(/!$/, '')) + (whole ? '(?![\\p{L}\\p{N}])' : '');
+      });
+      return new RegExp(parts.join('|'), 'iu');
+    } catch (e) {
+      const low = list.map(k => k.replace(/!$/, '').toLowerCase());
+      return { exec: s => { const l = s.toLowerCase(); for (const k of low) { const i = l.indexOf(k); if (i >= 0) { const m = [s.substr(i, k.length)]; m.index = i; return m; } } return null; } };
+    }
+  }
+  CHECKLIST.forEach(g => g.items.forEach(it => { it.re = compileKw(it.k); }));
+
+  function tplGroups() {
+    return TEMPLATES[currentTpl].groups.map(id => CHECKLIST.find(g => g.id === id)).filter(Boolean);
+  }
 
   const checklistContainer = document.getElementById('checklistContainer');
   const checkCountEl = document.getElementById('checkCount');
@@ -1254,46 +1442,195 @@
   const checkResetBtn = document.getElementById('checkResetBtn');
   const checkExpandBtn = document.getElementById('checkExpandBtn');
   const checkCollapseBtn = document.getElementById('checkCollapseBtn');
+  const tplSelect = document.getElementById('tplSelect');
+  const analyseBtn = document.getElementById('analyseBtn');
+  const rememberCheck = document.getElementById('rememberCheck');
+  const wipeStoredBtn = document.getElementById('wipeStoredBtn');
+  const suggestBar = document.getElementById('suggestBar');
+  const suggestText = document.getElementById('suggestText');
+  const applySuggestBtn = document.getElementById('applySuggestBtn');
+  const consentCheck = document.getElementById('consentCheck');
+  const consentBox = document.getElementById('consentBox');
+  const consentMeta = document.getElementById('consentMeta');
+  const officeName = document.getElementById('officeName');
+  const advisorName = document.getElementById('advisorName');
+  const officeLogo = document.getElementById('officeLogo');
+  const officeColor = document.getElementById('officeColor');
+  const vApproved = document.getElementById('vApproved');
+  const vEl = {};
+  V_FIELDS.forEach(id => { vEl[id] = document.getElementById(id); });
 
-  // Status: null = leeg, 'done' = gedaan, 'warn' = aandacht, 'na' = n.v.t.
-  let checklistState = {};
+  Object.keys(TEMPLATES).forEach(k => {
+    const o = document.createElement('option');
+    o.value = k; o.textContent = TEMPLATES[k].label;
+    tplSelect.appendChild(o);
+  });
 
-  // Laad uit localStorage (per klantnaam) — maar voorzichtig: werkt niet altijd, fallback naar session
-  function loadChecklistState() {
-    try {
-      const key = 'checklist_' + (customerName.value.trim() || 'default');
-      const stored = localStorage.getItem(key);
-      if (stored) checklistState = JSON.parse(stored);
-      else checklistState = {};
-    } catch (e) {
-      checklistState = {};
+  // ---------- Opslag: standaard alleen in het geheugen, lokaal opslaan is opt-in ----------
+  let rememberOn = false;
+  try {
+    const pref = localStorage.getItem('og_remember');
+    if (pref === null) rememberOn = Object.keys(localStorage).some(k => k.startsWith('checklist_')); // bestaande gebruikers behouden gedrag
+    else rememberOn = pref === '1';
+  } catch (e) { rememberOn = false; }
+  rememberCheck.checked = rememberOn;
+
+  const memStore = {};
+  let stateKey = null;
+  let checklistState = {};   // itemId -> 'done' | 'warn' | 'na'
+  let verslagState = {};
+  let consentAt = null;
+  let suggestions = {};
+
+  function keyFor(name) { return 'checklist_' + (name || 'default'); }
+  function readStore(key) {
+    if (rememberOn) { try { const s = localStorage.getItem(key); if (s) return JSON.parse(s); } catch (e) {} }
+    return memStore[key] || null;
+  }
+  function writeStore(key, obj) {
+    memStore[key] = obj;
+    if (rememberOn) { try { localStorage.setItem(key, JSON.stringify(obj)); } catch (e) {} }
+  }
+  function readVerslagFields() { V_FIELDS.forEach(id => { verslagState[id] = vEl[id].value; }); }
+  function writeVerslagFields() { V_FIELDS.forEach(id => { vEl[id].value = verslagState[id] || ''; }); }
+
+  function saveState() {
+    readVerslagFields();
+    writeStore(stateKey || keyFor(''), { c: checklistState, v: verslagState, tpl: currentTpl, approved: vApproved.checked, consent: consentAt ? consentAt.toISOString() : null });
+  }
+  let saveTimer = null;
+  function saveStateSoon() { clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 400); }
+
+  function loadState() {
+    const newKey = keyFor(customerName.value.trim());
+    if (newKey === stateKey) return;
+    const stored = readStore(newKey);
+    if (stored) {
+      if (stored.c) {
+        checklistState = stored.c; verslagState = stored.v || {};
+        if (stored.tpl && TEMPLATES[stored.tpl]) currentTpl = stored.tpl;
+        consentAt = stored.consent ? new Date(stored.consent) : null;
+        vApproved.checked = !!stored.approved;
+      } else { checklistState = stored; verslagState = {}; consentAt = null; } // oud formaat
+      writeVerslagFields();
+    } else {
+      // Bij het (verder) typen van dezelfde naam de lopende invoer meenemen; bij een andere klant leeg beginnen.
+      const prev = stateKey ? stateKey.slice(10) : 'default';
+      const next = newKey.slice(10);
+      const continuing = stateKey === null || prev === 'default' || next === 'default' || next.startsWith(prev) || prev.startsWith(next);
+      if (!continuing) { checklistState = {}; verslagState = {}; consentAt = null; vApproved.checked = false; writeVerslagFields(); }
     }
+    stateKey = newKey;
+    consentCheck.checked = !!consentAt;
+    renderConsent();
+    tplSelect.value = currentTpl;
+    if (stored === null && (Object.keys(checklistState).length || consentAt)) saveState();
   }
 
-  function saveChecklistState() {
+  function wipeStored() {
+    try { Object.keys(localStorage).filter(k => k.startsWith('checklist_') || k === 'og_office').forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    showStatus('success', '<div>Lokaal opgeslagen checklists, verslagen en kantoorgegevens zijn van dit apparaat gewist.</div>');
+  }
+  rememberCheck.addEventListener('change', () => {
+    rememberOn = rememberCheck.checked;
+    try { localStorage.setItem('og_remember', rememberOn ? '1' : '0'); } catch (e) {}
+    if (rememberOn) { saveState(); saveOffice(); }
+    else if (confirm('Wil je ook alle eerder op dit apparaat opgeslagen checklists en verslagen wissen?')) wipeStored();
+  });
+  wipeStoredBtn.addEventListener('click', () => {
+    if (confirm('Alle lokaal opgeslagen checklists, verslagen en kantoorgegevens op dit apparaat wissen? Dit kan niet ongedaan worden gemaakt.')) wipeStored();
+  });
+
+  // ---------- Toestemming / melding opname ----------
+  function renderConsent() {
+    consentBox.classList.toggle('ok', consentCheck.checked);
+    consentMeta.textContent = consentCheck.checked && consentAt
+      ? 'Bevestigd op ' + consentAt.toLocaleString('nl-NL') + '. Dit wordt vermeld in verslag en downloads.'
+      : 'Nog niet bevestigd. Lees bij voorkeur de tekst hieronder voor aan het begin van het gesprek, dan staat de melding ook in de opname.';
+  }
+  function consentLine() {
+    return consentCheck.checked && consentAt
+      ? 'Klant geïnformeerd over opname en akkoord: ja (' + consentAt.toLocaleString('nl-NL') + ')'
+      : 'Klant geïnformeerd over opname: niet bevestigd';
+  }
+  function ensureConsent() {
+    if (consentCheck.checked) return true;
+    return confirm('Je hebt nog niet bevestigd dat de klant is geïnformeerd over de opname.\nVolgens de AVG informeer je de klant vooraf over het opnemen en het doel daarvan.\n\nToch starten?');
+  }
+  consentCheck.addEventListener('change', () => { consentAt = consentCheck.checked ? new Date() : null; renderConsent(); saveState(); });
+
+  // ---------- Kantoor & huisstijl ----------
+  let officeLogoData = '';
+  function loadOffice() {
     try {
-      const key = 'checklist_' + (customerName.value.trim() || 'default');
-      localStorage.setItem(key, JSON.stringify(checklistState));
-    } catch (e) { /* stil falen als localStorage niet beschikbaar is */ }
+      const o = JSON.parse(localStorage.getItem('og_office') || '{}');
+      officeName.value = o.name || ''; advisorName.value = o.advisor || '';
+      if (o.color) officeColor.value = o.color;
+      officeLogoData = o.logo || '';
+    } catch (e) {}
+  }
+  function saveOffice() {
+    if (!rememberOn) return;
+    try { localStorage.setItem('og_office', JSON.stringify({ name: officeName.value, advisor: advisorName.value, color: officeColor.value, logo: officeLogoData })); } catch (e) {}
+  }
+  [officeName, advisorName, officeColor].forEach(el => el.addEventListener('input', saveOffice));
+  officeLogo.addEventListener('change', e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    if (f.size > 600 * 1024) { showStatus('error', '<div>Logo is groter dan 600 kB. Kies een kleiner bestand.</div>'); officeLogo.value = ''; return; }
+    const r = new FileReader();
+    r.onload = ev => { officeLogoData = ev.target.result; saveOffice(); showStatus('success', '<div>Logo toegevoegd aan verslagen.</div>'); };
+    r.readAsDataURL(f);
+  });
+
+  // ---------- Herkenning van onderwerpen in het transcript ----------
+  const TS_RE = /^\s*\[((?:\d{1,2}:)?\d{1,2}:\d{2})\]\s*/;
+  function segmentTranscript(text) {
+    const segs = [];
+    let ts = '';
+    text.split(/\n+/).forEach(line => {
+      const m = line.match(TS_RE);
+      if (m) { ts = m[1]; line = line.slice(m[0].length); }
+      line.split(/(?<=[.!?])\s+/).forEach(s => { s = s.trim(); if (s.length > 2) segs.push({ ts, text: s }); });
+    });
+    return segs;
+  }
+  function makeSnippet(t, i, len) {
+    const start = Math.max(0, i - 60), end = Math.min(t.length, i + len + 80);
+    return (start > 0 ? '…' : '') + t.slice(start, end).trim() + (end < t.length ? '…' : '');
+  }
+  function analyseTranscript() {
+    suggestions = {};
+    const text = getCurrentTranscriptText();
+    if (!text) return 0;
+    const segs = segmentTranscript(text);
+    CHECKLIST.forEach(g => g.items.forEach((it, idx) => {
+      if (!it.re) return;
+      for (const s of segs) {
+        const m = it.re.exec(s.text);
+        if (m) { suggestions[g.id + '_' + idx] = { ts: s.ts, snippet: makeSnippet(s.text, m.index, m[0].length) }; break; }
+      }
+    }));
+    return Object.keys(suggestions).length;
   }
 
   function renderChecklist() {
     checklistContainer.innerHTML = '';
+    let visibleSuggest = 0, openSuggest = 0;
 
-    CHECKLIST.forEach(group => {
+    tplGroups().forEach(group => {
       const groupEl = document.createElement('div');
       groupEl.className = 'checklist-group';
-
       const groupDone = group.items.filter((_, idx) => {
-        const id = group.id + '_' + idx;
-        return checklistState[id] === 'done' || checklistState[id] === 'na';
+        const st = checklistState[group.id + '_' + idx];
+        return st === 'done' || st === 'na';
       }).length;
 
       groupEl.innerHTML = `
         <div class="checklist-group-header" data-group="${group.id}">
           <div class="checklist-group-title">
             <span class="emoji">${group.emoji}</span>
-            <span>${group.title}</span>
+            <span>${escapeHtml(group.title)}</span>
           </div>
           <div class="checklist-group-stats">
             <span class="mini-count">${groupDone}/${group.items.length}</span>
@@ -1301,9 +1638,12 @@
           </div>
         </div>
         <div class="checklist-items" data-group="${group.id}">
+          <div class="group-q"><strong>Openingsvraag:</strong> ${escapeHtml(group.q)}</div>
           ${group.items.map((item, idx) => {
             const id = group.id + '_' + idx;
             const status = checklistState[id] || '';
+            const sg = suggestions[id];
+            if (sg) { visibleSuggest++; if (!status) openSuggest++; }
             return `
               <div class="checklist-item ${status ? 'status-' + status : ''}" data-id="${id}">
                 <div class="checklist-status-btns">
@@ -1311,31 +1651,23 @@
                   <button class="status-btn warn ${status === 'warn' ? 'active' : ''}" data-id="${id}" data-status="warn" title="Aandacht nodig">⚠</button>
                   <button class="status-btn na ${status === 'na' ? 'active' : ''}" data-id="${id}" data-status="na" title="Niet van toepassing">—</button>
                 </div>
-                <div class="checklist-label">${item}</div>
-              </div>
-            `;
+                <div class="checklist-label">${escapeHtml(item.t)}${sg ? `<div class="cl-suggest">${sg.ts ? '<span class="ts">[' + sg.ts + ']</span>' : '💬 '}${escapeHtml(sg.snippet)}</div>` : ''}</div>
+              </div>`;
           }).join('')}
-        </div>
-      `;
+        </div>`;
       checklistContainer.appendChild(groupEl);
     });
 
-    // Event listeners voor statusknoppen
     checklistContainer.querySelectorAll('.status-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', e => {
         e.stopPropagation();
-        const id = btn.dataset.id;
-        const status = btn.dataset.status;
-        // Toggle: als al actief, haal weg
+        const id = btn.dataset.id, status = btn.dataset.status;
         if (checklistState[id] === status) delete checklistState[id];
         else checklistState[id] = status;
-        saveChecklistState();
+        saveState();
         renderChecklist();
-        updateChecklistProgress();
       });
     });
-
-    // Event listeners voor inklappen/uitklappen van groepen
     checklistContainer.querySelectorAll('.checklist-group-header').forEach(header => {
       header.addEventListener('click', () => {
         header.classList.toggle('collapsed');
@@ -1344,49 +1676,61 @@
       });
     });
 
+    if (visibleSuggest > 0) {
+      suggestBar.style.display = 'flex';
+      suggestText.textContent = visibleSuggest + ' onderwerpen herkend in het transcript' + (openSuggest ? ' (' + openSuggest + ' nog niet afgevinkt)' : '') + '. Controleer zelf of ze voldoende zijn besproken.';
+      applySuggestBtn.style.display = openSuggest ? 'inline-flex' : 'none';
+    } else suggestBar.style.display = 'none';
+
     updateChecklistProgress();
   }
 
   function updateChecklistProgress() {
-    let total = 0;
-    let done = 0;
-    CHECKLIST.forEach(group => {
-      group.items.forEach((_, idx) => {
-        total++;
-        const id = group.id + '_' + idx;
-        if (checklistState[id] === 'done' || checklistState[id] === 'na') done++;
-      });
-    });
+    let total = 0, done = 0;
+    tplGroups().forEach(group => group.items.forEach((_, idx) => {
+      total++;
+      const st = checklistState[group.id + '_' + idx];
+      if (st === 'done' || st === 'na') done++;
+    }));
     checkCountEl.textContent = done;
     checkTotalEl.textContent = '/ ' + total + ' afgerond';
     checkBarEl.style.width = total > 0 ? (done / total * 100) + '%' : '0%';
   }
 
-  checkResetBtn.addEventListener('click', () => {
-    if (confirm('Weet je zeker dat je alle vinkjes wilt resetten?')) {
-      checklistState = {};
-      saveChecklistState();
-      renderChecklist();
-    }
+  tplSelect.addEventListener('change', () => { currentTpl = tplSelect.value; saveState(); renderChecklist(); });
+  analyseBtn.addEventListener('click', () => {
+    const n = analyseTranscript();
+    renderChecklist();
+    if (!getCurrentTranscriptText()) showStatus('error', '<div>Er is nog geen transcript. Gebruik eerst "Live transcriberen" of "Bestand inlezen".</div>');
+    else if (!n) showStatus('error', '<div>Geen onderwerpen herkend in het transcript.</div>');
   });
-
+  applySuggestBtn.addEventListener('click', () => {
+    if (!confirm('De herkende onderwerpen worden als ✓ besproken gemarkeerd.\n\nLet op: herkenning werkt op trefwoorden en zegt niets over de kwaliteit of volledigheid van de bespreking. Controleer elk item zelf.\n\nDoorgaan?')) return;
+    tplGroups().forEach(g => g.items.forEach((_, idx) => {
+      const id = g.id + '_' + idx;
+      if (suggestions[id] && !checklistState[id]) checklistState[id] = 'done';
+    }));
+    saveState();
+    renderChecklist();
+  });
+  checkResetBtn.addEventListener('click', () => {
+    if (confirm('Weet je zeker dat je alle vinkjes wilt resetten?')) { checklistState = {}; saveState(); renderChecklist(); }
+  });
   checkExpandBtn.addEventListener('click', () => {
     checklistContainer.querySelectorAll('.checklist-group-header').forEach(h => h.classList.remove('collapsed'));
     checklistContainer.querySelectorAll('.checklist-items').forEach(i => i.classList.remove('hidden'));
   });
-
   checkCollapseBtn.addEventListener('click', () => {
     checklistContainer.querySelectorAll('.checklist-group-header').forEach(h => h.classList.add('collapsed'));
     checklistContainer.querySelectorAll('.checklist-items').forEach(i => i.classList.add('hidden'));
   });
 
-  // Laad en herlaad bij verandering van klantnaam
-  loadChecklistState();
+  loadOffice();
+  loadState();
   renderChecklist();
-  customerName.addEventListener('input', () => {
-    loadChecklistState();
-    renderChecklist();
-  });
+  customerName.addEventListener('input', () => { loadState(); renderChecklist(); });
+  V_FIELDS.forEach(id => vEl[id].addEventListener('input', () => { if (vApproved.checked) { vApproved.checked = false; showStatus('info', '<div>Verslag gewijzigd: goedkeuring is ingetrokken. Keur opnieuw goed na controle.</div>'); } saveStateSoon(); updateButtons(); }));
+  vApproved.addEventListener('change', saveState);
 
   function formatTime(s) {
     const m = Math.floor(s / 60).toString().padStart(2, '0');
@@ -1403,9 +1747,11 @@
     return (name || 'onbekend').replace(/[^a-z0-9áéíóúñü\-_ ]/gi, '').replace(/\s+/g, '-').toLowerCase();
   }
   function getCurrentTranscriptText() {
-    if (activeTab === 'live') return liveTranscript.innerText.trim();
-    if (activeTab === 'transcript') return transcriptText.value.trim();
-    return '';
+    if (activeTab === 'record') return '';
+    const live = liveTranscript.innerText.trim(), file = transcriptText.value.trim();
+    if (activeTab === 'live') return live;
+    if (activeTab === 'transcript') return file;
+    return transcriptSource === 'live' ? (live || file) : (file || live);
   }
   function updateButtons() {
     const hasCustomer = customerName.value.trim().length > 0;
@@ -1417,14 +1763,13 @@
     downloadBtn.disabled = !(hasCustomer && hasContent);
     downloadBtn.style.display = isActionTab ? 'inline-flex' : 'none';
 
-    const canPrint = hasCustomer && hasText && (activeTab === 'live' || activeTab === 'transcript');
-    printBtn.disabled = !canPrint;
-    printBtn.style.display = (activeTab === 'live' || activeTab === 'transcript') ? 'inline-flex' : 'none';
+    const docTab = ['live', 'transcript', 'checklist', 'verslag'].includes(activeTab);
+    printBtn.disabled = !(hasCustomer && (hasText || hasVerslag()));
+    printBtn.style.display = docTab ? 'inline-flex' : 'none';
 
-    // AFM-knop: alleen bij transcripties (live of bestand), ook zonder klantnaam
-    const canAfmCheck = hasText && (activeTab === 'live' || activeTab === 'transcript');
-    afmCheckBtn.disabled = !canAfmCheck;
-    afmCheckBtn.style.display = (activeTab === 'live' || activeTab === 'transcript') ? 'inline-flex' : 'none';
+    // AFM-knop: zodra er een transcript is, ook zonder klantnaam
+    afmCheckBtn.disabled = !hasText;
+    afmCheckBtn.style.display = docTab ? 'inline-flex' : 'none';
   }
 
   document.querySelectorAll('.tab').forEach(btn => {
@@ -1434,11 +1779,14 @@
       btn.classList.add('active');
       activeTab = btn.dataset.tab;
       document.getElementById('tab-' + activeTab).classList.add('active');
+      if (activeTab === 'live' || activeTab === 'transcript') transcriptSource = activeTab;
+      if (activeTab === 'checklist') { analyseTranscript(); renderChecklist(); }
       updateButtons();
     });
   });
 
   startBtn.addEventListener('click', async () => {
+    if (!ensureConsent()) return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioChunks = [];
@@ -1510,7 +1858,12 @@
     if (!file) return;
     uploadLabel.textContent = file.name;
     const reader = new FileReader();
-    reader.onload = ev => { transcriptText.value = ev.target.result; updateCharCount(); updateButtons(); };
+    reader.onload = ev => {
+      let txt = ev.target.result;
+      if (/\.(vtt|srt)$/i.test(file.name)) txt = parseSubtitles(txt);
+      transcriptText.value = txt; transcriptSource = 'transcript';
+      updateCharCount(); updateButtons();
+    };
     reader.readAsText(file);
   });
 
@@ -1528,20 +1881,7 @@
   customerId.addEventListener('input', updateButtons);
 
   printBtn.addEventListener('click', () => {
-    const now = new Date();
-    const datum = now.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const tijd = now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
-    document.getElementById('printCustomerName').textContent = customerName.value.trim() || '—';
-    document.getElementById('printCustomerId').textContent = customerId.value.trim() || '—';
-    document.getElementById('printDate').textContent = datum;
-    document.getElementById('printTime').textContent = tijd;
-    document.getElementById('printTranscript').textContent = getCurrentTranscriptText();
-    document.getElementById('printTimestamp').textContent = now.toLocaleString('nl-NL');
-    const notesValue = notes.value.trim();
-    const notesWrapper = document.getElementById('printNotesWrapper');
-    if (notesValue) { document.getElementById('printNotes').textContent = 'Notities: ' + notesValue; notesWrapper.style.display = 'block'; }
-    else notesWrapper.style.display = 'none';
-    setTimeout(() => window.print(), 100);
+    openPrintWindow(buildAdviceReportHtml(), 'verslag-' + sanitizeFilename(customerName.value.trim()) + '.html');
   });
 
   // ============================================================
@@ -1554,6 +1894,15 @@
     const klantId = customerId.value.trim();
     const notitie = notes.value.trim();
     const datum = new Date().toLocaleDateString('nl-NL');
+    const tplLabel = TEMPLATES[currentTpl].label;
+    const warnItems = [];
+    tplGroups().forEach(g => g.items.forEach((it, idx) => { if (checklistState[g.id + '_' + idx] === 'warn') warnItems.push(g.title + ': ' + it.t); }));
+    readVerslagFields();
+    const vs = verslagState;
+    const verslagMeta = [
+      vs.vDeviations && vs.vDeviations.trim() ? '- Afwijkingen van advies (volgens adviseur): ' + vs.vDeviations.trim() : '',
+      vs.vAssumptions && vs.vAssumptions.trim() ? '- Aannames (volgens adviseur): ' + vs.vAssumptions.trim() : ''
+    ].filter(Boolean).join('\n');
 
     return `Je bent een compliance-expert voor hypotheekadvisering in Nederland. Je beoordeelt of een adviseur tijdens een klantgesprek heeft voldaan aan de **AFM Leidraad Hypotheekadvisering (april 2026)**, gebaseerd op artikel 4:23 lid 1 Wet op het financieel toezicht (Wft).
 
@@ -1563,7 +1912,7 @@ Als de gebruiker de PDF van de leidraad als bijlage heeft meegestuurd in deze ch
 
 ## OPDRACHT
 
-Beoordeel de transcriptie hieronder per onderwerp. Houd rekening met de **specifieke klantsituatie** — niet elk onderwerp is bij elke klant even relevant (een starter zonder verleden hoeft bijvoorbeeld geen uitvoerige fiscale historie). Wees streng waar het ertoe doet, mild waar het terecht is.
+Type gesprek: **${tplLabel}**. Beoordeel de transcriptie hieronder per onderwerp; onderdelen die niet bij dit type gesprek horen markeer je als ➖ N.V.T. Regels in het transcript kunnen beginnen met een tijdstempel [mm:ss]: noem dat tijdstip bij je citaten. Houd rekening met de **specifieke klantsituatie** — niet elk onderwerp is bij elke klant even relevant (een starter zonder verleden hoeft bijvoorbeeld geen uitvoerige fiscale historie). Wees streng waar het ertoe doet, mild waar het terecht is.
 
 Gebruik per onderwerp één van deze statussen:
 - **✅ BESPROKEN** — onderwerp is voldoende behandeld voor deze klantsituatie
@@ -1623,6 +1972,9 @@ Gezinsuitbreiding, ZZP worden, sabbatical, eerder stoppen, minder werken — voo
 **C5. "Kan klant levensstijl realistisch aanpassen?"**
 Bij klanten die zeggen "ik kan wel bezuinigen": is doorgevraagd of dat ook werkelijk haalbaar is?
 
+**C6. Overschrijding leennormen (Trhk) concreet onderbouwd**
+Als meer wordt geadviseerd dan de Trhk-norm: is de bijzondere omstandigheid doorgerekend? Een uitleg als "goed toekomstperspectief" of "behoorlijk eigen vermogen" is niet voldoende.
+
 ### D. Rentevastperiode (hoofdstuk 5)
 
 **D1. Samenhang looptijd ↔ maandlast ↔ zekerheid uitgelegd**
@@ -1637,6 +1989,12 @@ Vooral bij korte rentevast en/of hoge LTI: wat gebeurt er bij +2% of +3% rentest
 **D4. Tegenstrijdigheden in voorkeur klant uitgesproken en opgelost**
 Klanten die zowel "lage last" als "veel zekerheid" willen — is de tegenstrijdigheid besproken?
 
+**D5. Afwijking van advies rentevastperiode vastgelegd**
+Kiest de klant anders dan geadviseerd? Zijn de motieven van de klant en de risico's vastgelegd?
+
+**D6. Spreiding renterisico**
+Als de klant leningdelen met verschillende rentevaste periodes wil: is beoordeeld of de klant dat risico ook kan dragen?
+
 ### E. Verduurzaming (hoofdstuk 6)
 
 **E1. Energielabel + invloed op leenruimte**
@@ -1647,6 +2005,9 @@ Bij label E/F/G: zijn de hoge verwachte energielasten meegenomen in de woonlast?
 
 **E3. Funderingsrisico's (indien regio-relevant)**
 In risicoregio's voor bodemdaling/verzakking: heeft de adviseur de klant gewaarschuwd voor herstelkosten?
+
+**E4. Verwijzing energieadviseur / financiering EBV**
+Zijn de financieringsmogelijkheden voor energiebesparende voorzieningen besproken, en is voor de invulling van maatregelen verwezen naar een energieadviseur?
 
 ### F. Fiscaliteit (hoofdstuk 7)
 
@@ -1662,6 +2023,12 @@ Welk deel kwalificeert in box 1, welk deel niet? Overgangsregime correct toegepa
 **F4. Aannames bij onvolledige info gedocumenteerd**
 Als verleden niet volledig te achterhalen: zijn prudente aannames gemaakt en met klant besproken?
 
+**F5. Schenkingen, erfenissen, ongelijke inbreng, draagplicht**
+Zijn deze bronnen uitgevraagd en meegenomen in de eigenwoningschuld?
+
+**F6. Extern fiscaal advies bij complexiteit**
+Is bij een complexe fiscale situatie overwogen om een fiscalist in te schakelen?
+
 ### G. Hypotheekproduct (hoofdstuk 8)
 
 **G1. Niet alleen rente, ook voorwaarden vergeleken**
@@ -1672,6 +2039,12 @@ Verwacht de klant snel af te lossen → automatische rentedaling? Verre passeerd
 
 **G3. Onderbouwing keuze aanbieder**
 Is uitgelegd waarom déze aanbieder en niet de goedkoopste — vanuit het belang van de klant, niet van de adviseur?
+
+**G4. Verwachte woonduur en toekomstige wensen**
+Is de verwachte woonduur besproken (meeneemregeling) en is benoemd welke wensen het product niet biedt?
+
+**G5. Eindadvies consistent**
+Is gecontroleerd dat het productadvies niet strijdig is met eerdere onderwerpen (woonlasten, rentevast, risico's)?
 
 ### H. Life events & risico's (hoofdstuk 9)
 
@@ -1694,9 +2067,18 @@ Concreet bedrag inkomen versus woonlast bij overlijden/AO/WW. "Kan de klant het 
 Als adviseur ORV adviseert maar klant weigert: is dat in dossier vastgelegd, klant gewezen op consequenties?
 
 **H7. Relatiebeëindiging besproken**
-Vooral bij gemeenschappelijk eigendom of financiële afhankelijkheid: scenario's en aanbeveling notariële afspraken.
+Vooral bij gemeenschappelijk eigendom of financiële afhankelijkheid: relatievorm, eigendoms- en lastenverdeling, kinderen of kinderwens, scenario's, en of vooral de partner met het laagste inkomen de gevolgen begrijpt. Goede praktijk: notariële afspraken en partner aanmelden bij het pensioenfonds.
 
-### I. Adviesfase (hoofdstuk 8)
+**H8. Wachttijd tot uitkering**
+Is besproken of de klant de periode tot een verzekering uitkeert financieel kan overbruggen?
+
+**H9. Doorverwijzen als geen verzekeringsadvies is afgesproken**
+Als het risico niet te dragen is maar risicoverzekeringen buiten de opdracht vallen: is de klant nadrukkelijk gewezen op de consequenties en actief doorverwezen?
+
+**H10. Nabellen bij uitgestelde beslissing (goede praktijk)**
+Is afgesproken om de klant na verloop van tijd te bellen als de beslissing over een risicoverzekering is uitgesteld?
+
+### I. Adviesfase (hoofdstuk 3 en 8)
 
 **I1. Advies onderbouwd in klantcontext**
 Niet "u krijgt product X", maar "product X past omdat ... aansluit bij uw doel ...".
@@ -1707,10 +2089,41 @@ Als klant niet meegaat met advies: motivatie klant en consequenties expliciet va
 **I3. Klant gewezen op risico's bij afwijken**
 Is dat in begrijpelijke taal gebeurd?
 
+**I4. Advies tijdig gedeeld**
+Wordt het onderbouwde advies gedeeld voordat het bemiddelingstraject start, zodat de klant weloverwogen kan kiezen?
+
+**I5. Begrip gecontroleerd**
+Heeft de adviseur nagegaan of de klant het advies begrijpt en of het aansluit bij de voorkeuren?
+
 ### J. Nazorg (hoofdstuk 3 + 9)
 
 **J1. Reikwijdte nazorg/beheerfase afgesproken**
 Wat is wel/niet onderdeel van het nazorgcontract? Welke kosten?
+
+### K. Oversluiten (hoofdstuk 10), alleen bij oversluiten of rente openbreken
+
+**K1. Doel van oversluiten vastgesteld**
+Lagere maandlasten, langere zekerheid, of verlagen van de (aflossingsvrije) schuld met het oog op pensioen?
+
+**K2. Actueel klantbeeld**
+Vorig advies korter dan 5 jaar geleden: is de checkvraag naar relevante wijzigingen gesteld? Langer dan 5 jaar: is de informatie opnieuw ingewonnen?
+
+**K3. Kosten en aanbieders vergeleken**
+Boeterente, notaris- en taxatiekosten; vergelijking tussen oversluiten bij de huidige en bij andere kredietaanbieders (tenzij duidelijk is dat de adviseur over één aanbieder adviseert).
+
+**K4. Terugverdientijd berekend**
+Is het voordeel afgezet tegen de kosten? Bij een andere aflosvorm: wegen de voordelen op tegen de kosten?
+
+**K5. Fiscale gevolgen, verbonden producten en aflosvorm**
+Bijvoorbeeld het meefinancieren van kosten, gevolgen voor opbouwproducten, omzetting van aflossingsvrij naar annuïtair. Zo nodig verwezen naar een fiscalist?
+
+**K6. Betaalbaarheid in de toekomst**
+Is beoordeeld of de hypotheek ook na pensionering betaalbaar blijft, of herfinanciering van het aflossingsvrije deel mogelijk is, en zijn life events meegenomen voor zover relevant?
+
+### L. Overig (AVG, geen onderdeel van de leidraad)
+
+**L1. Melding van opname**
+Is aan het begin van het gesprek gemeld dat het gesprek wordt opgenomen, met het doel? (Alleen beoordelen als dit uit het transcript blijkt.)
 
 ---
 
@@ -1718,16 +2131,19 @@ Wat is wel/niet onderdeel van het nazorgcontract? Welke kosten?
 
 Sluit af met:
 
-1. **Compliance-score (1-10)** — onderbouw kort
+1. **Indicatieve dekkingsscore (1-10)**: geef kort aan hoe volledig de relevante onderwerpen in dit transcript zijn behandeld. Vermeld expliciet dat dit geen oordeel is over compliance en geen garantie richting de AFM.
 2. **Top 3 verbeterpunten** — wat zou de adviseur nu meteen moeten oppakken voor dit dossier?
 3. **Vastleggings-tips** — wat moet sowieso in het adviesrapport/dossier worden opgenomen, met name als het gaat om afwijkingen, aannames of risico-acceptaties
 4. **Algemene observatie** — wat doet deze adviseur opvallend goed of slecht? Patroon dat structureel opvalt?
+5. **Conceptverslag**: een samenvatting in één zin, een korte samenvatting, kernpunten met tijdstempel, afspraken en actiepunten, punten voor het vervolggesprek met concrete vragen, en een korte concept-klantmail (geen advies, verwijst naar het adviesrapport). Markeer het als CONCEPT: de adviseur controleert en keurt goed.
 
 ---
 
 ## METADATA
 - Klant: ${klant}${klantId ? ' (ID: ' + klantId + ')' : ''}
 - Datum gesprek: ${datum}${notitie ? '\n- Notities adviseur: ' + notitie : ''}
+- Type gesprek: ${tplLabel}
+- ${consentLine()}${warnItems.length ? '\n- Door adviseur als ⚠ aandacht gemarkeerd: ' + warnItems.join('; ') : ''}${verslagMeta ? '\n' + verslagMeta : ''}
 
 ## TRANSCRIPTIE
 
@@ -1751,7 +2167,7 @@ INHOUD:
 01-LEES-EERST.txt            → dit bestand met instructies
 02-prompt-voor-claude.txt    → de controleopdracht (plak of sleep in Claude.ai)
 03-transcriptie-*.txt        → het klantgesprek in tekstvorm
-04-adviessamenvatting-*.html → printbaar adviesrapport met ingevulde checklist
+04-adviessamenvatting-*.html → printbaar gespreksverslag met checklist en transcriptie
 
 INSTRUCTIES:
 ------------
@@ -1763,7 +2179,8 @@ INSTRUCTIES:
 4. Druk op Enter
 5. Claude geeft een gestructureerde analyse met per onderwerp:
    ✅ besproken / ⚠️ oppervlakkig / ❌ ontbrekend / ➖ n.v.t.
-   plus een compliance-score en verbeterpunten.
+   plus een indicatieve dekkingsscore, verbeterpunten en een conceptverslag.
+   Let op: de score is geen oordeel over compliance.
 
 PRIVACY-LET OP:
 ---------------
@@ -1783,104 +2200,31 @@ Gegenereerd via opnemengesprek.nl
   }
 
   function buildAdviceReportHtml() {
-    const klant = customerName.value.trim() || '—';
-    const klantId = customerId.value.trim() || '—';
     const notitie = notes.value.trim();
-    const now = new Date();
-    const datumLang = now.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const tijd = now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
     const transcript = getCurrentTranscriptText();
-
-    // Checklist HTML genereren
     let checklistHtml = '';
     let totalItems = 0, doneItems = 0, warnItems = 0, naItems = 0, emptyItems = 0;
-    CHECKLIST.forEach(group => {
-      let groupHtml = '';
-      let hasAny = false;
+    tplGroups().forEach(group => {
+      let rows = '';
       group.items.forEach((item, idx) => {
         totalItems++;
-        const id = group.id + '_' + idx;
-        const status = checklistState[id] || '';
+        const status = checklistState[group.id + '_' + idx] || '';
         if (status === 'done') doneItems++;
         else if (status === 'warn') warnItems++;
         else if (status === 'na') naItems++;
         else emptyItems++;
-
-        const statusLabel = status === 'done' ? '<span class="st-done">✓ Besproken</span>'
-                         : status === 'warn' ? '<span class="st-warn">⚠ Aandacht</span>'
-                         : status === 'na' ? '<span class="st-na">— N.v.t.</span>'
-                         : '<span class="st-empty">○ Niet behandeld</span>';
-        if (status) hasAny = true;
-        groupHtml += `<tr><td class="cl-item">${item}</td><td class="cl-status">${statusLabel}</td></tr>`;
+        const lbl = status === 'done' ? '<span class="st-done">✓ Besproken</span>'
+                  : status === 'warn' ? '<span class="st-warn">⚠ Aandacht</span>'
+                  : status === 'na' ? '<span class="st-na">— N.v.t.</span>'
+                  : '<span class="st-empty">○ Niet behandeld</span>';
+        rows += `<tr><td class="cl-item">${escapeHtmlAttr(item.t)}</td><td class="cl-status">${lbl}</td></tr>`;
       });
-      if (hasAny || true) {
-        checklistHtml += `<h3>${group.emoji} ${group.title}</h3><table class="checklist-table">${groupHtml}</table>`;
-      }
+      checklistHtml += `<h3>${group.emoji} ${escapeHtmlAttr(group.title)}</h3><table class="checklist-table">${rows}</table>`;
     });
-
     const scorePct = totalItems > 0 ? Math.round(((doneItems + naItems) / totalItems) * 100) : 0;
 
-    return `<!DOCTYPE html>
-<html lang="nl">
-<head>
-<meta charset="UTF-8">
-<title>Adviessamenvatting — ${escapeHtmlAttr(klant)}</title>
-<style>
-  * { box-sizing: border-box; }
-  body { font-family: Georgia, 'Times New Roman', serif; color: #0f172a; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; }
-  .report-header { border-bottom: 3px solid #1e3a8a; padding-bottom: 16px; margin-bottom: 28px; }
-  .report-header h1 { font-size: 28px; color: #1e3a8a; margin: 0 0 6px 0; }
-  .report-header .subtitle { font-size: 13px; color: #475569; }
-  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; padding: 16px; background: #f8fafc; border-left: 4px solid #2563eb; margin-bottom: 28px; border-radius: 4px; }
-  .meta-grid .label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
-  .meta-grid .value { font-size: 13px; color: #0f172a; font-weight: 600; }
-  h2 { font-size: 18px; color: #1e3a8a; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; margin-top: 32px; }
-  h3 { font-size: 14px; color: #2563eb; margin-top: 20px; margin-bottom: 8px; }
-  .summary-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0; }
-  .summary-box .cell { padding: 10px; border-radius: 6px; text-align: center; }
-  .summary-box .cell .num { font-size: 22px; font-weight: 700; }
-  .summary-box .cell .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
-  .cell.done { background: #dcfce7; color: #15803d; }
-  .cell.warn { background: #fef3c7; color: #92400e; }
-  .cell.na { background: #f1f5f9; color: #64748b; }
-  .cell.empty { background: #fef2f2; color: #b91c1c; }
-  .progress-bar { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; margin: 8px 0 20px 0; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #16a34a); }
-  .checklist-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 12px; }
-  .checklist-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
-  .cl-item { color: #334155; }
-  .cl-status { text-align: right; white-space: nowrap; width: 160px; }
-  .st-done { color: #15803d; font-weight: 600; }
-  .st-warn { color: #d97706; font-weight: 600; }
-  .st-na { color: #64748b; }
-  .st-empty { color: #cbd5e1; }
-  .notes-box { background: #fffbeb; border-left: 4px solid #d97706; padding: 12px 16px; font-style: italic; border-radius: 4px; margin-top: 16px; }
-  .transcript { white-space: pre-wrap; font-size: 12px; line-height: 1.7; color: #334155; padding: 12px; background: #f8fafc; border-radius: 4px; border-left: 3px solid #cbd5e1; }
-  .signature { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-  .signature .sig { border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #64748b; }
-  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #cbd5e1; font-size: 10px; color: #94a3b8; text-align: center; }
-  @media print {
-    body { margin: 0; padding: 0; }
-    @page { size: A4; margin: 2cm; }
-  }
-</style>
-</head>
-<body>
-
-<div class="report-header">
-  <h1>Adviessamenvatting</h1>
-  <div class="subtitle">Klantgespreksverslag met AFM-checklist en transcriptie</div>
-</div>
-
-<div class="meta-grid">
-  <div><div class="label">Klantnaam</div><div class="value">${escapeHtmlAttr(klant)}</div></div>
-  <div><div class="label">Klant-ID</div><div class="value">${escapeHtmlAttr(klantId)}</div></div>
-  <div><div class="label">Datum</div><div class="value">${datumLang}</div></div>
-  <div><div class="label">Tijd</div><div class="value">${tijd}</div></div>
-</div>
-
+    const body = verslagHtml() + `
 <h2>Overzicht AFM-checklist</h2>
-
 <div class="summary-box">
   <div class="cell done"><div class="num">${doneItems}</div><div class="lbl">Besproken</div></div>
   <div class="cell warn"><div class="num">${warnItems}</div><div class="lbl">Aandacht</div></div>
@@ -1888,26 +2232,15 @@ Gegenereerd via opnemengesprek.nl
   <div class="cell empty"><div class="num">${emptyItems}</div><div class="lbl">Niet behandeld</div></div>
 </div>
 <div class="progress-bar"><div class="progress-fill" style="width:${scorePct}%"></div></div>
-<p style="font-size:12px; color:#64748b; margin-top:-10px;">Voortgang: ${doneItems + naItems} van ${totalItems} items afgerond (${scorePct}%)</p>
-
+<p style="font-size:12px; color:#64748b; margin-top:-10px;">Voortgang: ${doneItems + naItems} van ${totalItems} items afgerond (${scorePct}%). Dit is een registratie van de adviseur, geen oordeel over compliance.</p>
 ${checklistHtml}
-
-${notitie ? `<h2>Notities adviseur</h2><div class="notes-box">${escapeHtmlAttr(notitie)}</div>` : ''}
-
-<h2>Volledige transcriptie</h2>
-<div class="transcript">${escapeHtmlAttr(transcript)}</div>
-
+${notitie ? `<h2>Notities</h2><div class="notes-box">${escapeHtmlAttr(notitie)}</div>` : ''}
+${transcript ? `<h2>Volledige transcriptie</h2><div class="transcript">${escapeHtmlAttr(transcript)}</div>` : ''}
 <div class="signature">
   <div class="sig">Handtekening adviseur</div>
   <div class="sig">Handtekening klant</div>
-</div>
-
-<div class="footer">
-  Gegenereerd via opnemengesprek.nl — ${now.toLocaleString('nl-NL')}
-</div>
-
-</body>
-</html>`;
+</div>`;
+    return reportShell('Klantgespreksverslag', 'Gespreksverslag met AFM-checklist en transcriptie', body, { concept: !vApproved.checked });
   }
 
   function escapeHtmlAttr(str) {
@@ -1952,7 +2285,7 @@ ${notitie ? `<h2>Notities adviseur</h2><div class="notes-box">${escapeHtmlAttr(n
     setTimeout(() => {
       const header = 'Klantnaam: ' + klant + '\n' +
                      (klantId ? 'Klant-ID: ' + klantId + '\n' : '') +
-                     'Datum: ' + datumNL + '\n' +
+                     'Datum: ' + datumNL + '\n' + consentLine() + '\n' +
                      (notitie ? 'Notities adviseur: ' + notitie + '\n' : '') +
                      '\n' + '='.repeat(60) + '\nTRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
       downloadTextFile(header + transcript, '03-transcriptie-' + naam + '-' + datumStamp + '.txt');
@@ -1999,7 +2332,8 @@ ${notitie ? `<h2>Notities adviseur</h2><div class="notes-box">${escapeHtmlAttr(n
       klantnaam: customerName.value.trim(),
       klant_id: customerId.value.trim() || null,
       notities: notes.value.trim() || null,
-      datum: new Date().toISOString()
+      datum: new Date().toISOString(),
+      melding_opname: consentLine()
     };
     if (activeTab === 'record' && audioBlob) {
       metadata.type = 'audio'; metadata.duur_seconden = seconds;
@@ -2009,11 +2343,11 @@ ${notitie ? `<h2>Notities adviseur</h2><div class="notes-box">${escapeHtmlAttr(n
       setTimeout(() => downloadBlob(new Blob([JSON.stringify(metadata, null, 2)], { type: 'application/json' }), 'gesprek-' + naam + '-' + datum + '-' + tijd + '.json'), 300);
     } else if (activeTab === 'live' && liveTranscript.innerText.trim()) {
       metadata.type = 'live-transcriptie'; metadata.taal = liveLanguage.value;
-      const header = 'Klantnaam: ' + metadata.klantnaam + '\n' + (metadata.klant_id ? 'Klant-ID: ' + metadata.klant_id + '\n' : '') + 'Datum: ' + metadata.datum + '\n' + 'Taal: ' + metadata.taal + '\n' + (metadata.notities ? 'Notities: ' + metadata.notities + '\n' : '') + '\n' + '='.repeat(60) + '\nLIVE TRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
+      const header = 'Klantnaam: ' + metadata.klantnaam + '\n' + (metadata.klant_id ? 'Klant-ID: ' + metadata.klant_id + '\n' : '') + 'Datum: ' + metadata.datum + '\n' + consentLine() + '\n' + 'Taal: ' + metadata.taal + '\n' + (metadata.notities ? 'Notities: ' + metadata.notities + '\n' : '') + '\n' + '='.repeat(60) + '\nLIVE TRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
       downloadBlob(new Blob([header + liveTranscript.innerText], { type: 'text/plain;charset=utf-8' }), 'live-transcriptie-' + naam + '-' + datum + '-' + tijd + '.txt');
     } else if (activeTab === 'transcript' && transcriptText.value.trim()) {
       metadata.type = 'transcriptie';
-      const header = 'Klantnaam: ' + metadata.klantnaam + '\n' + (metadata.klant_id ? 'Klant-ID: ' + metadata.klant_id + '\n' : '') + 'Datum: ' + metadata.datum + '\n' + (metadata.notities ? 'Notities: ' + metadata.notities + '\n' : '') + '\n' + '='.repeat(60) + '\nTRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
+      const header = 'Klantnaam: ' + metadata.klantnaam + '\n' + (metadata.klant_id ? 'Klant-ID: ' + metadata.klant_id + '\n' : '') + 'Datum: ' + metadata.datum + '\n' + consentLine() + '\n' + (metadata.notities ? 'Notities: ' + metadata.notities + '\n' : '') + '\n' + '='.repeat(60) + '\nTRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
       downloadBlob(new Blob([header + transcriptText.value], { type: 'text/plain;charset=utf-8' }), 'transcriptie-' + naam + '-' + datum + '-' + tijd + '.txt');
     }
     showStatus('success', '<div>Bestand gedownload.</div>');
@@ -2028,6 +2362,291 @@ ${notitie ? `<h2>Notities adviseur</h2><div class="notes-box">${escapeHtmlAttr(n
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
+
+  // ============================================================
+  // VERSLAG, KLANTMAIL, VOORBEREIDING, PRINT
+  // ============================================================
+  const vFillBtn = document.getElementById('vFillBtn');
+  const vDictateBtn = document.getElementById('vDictateBtn');
+  const vMailBtn = document.getElementById('vMailBtn');
+  const vCopyMailBtn = document.getElementById('vCopyMailBtn');
+  const vPrepBtn = document.getElementById('vPrepBtn');
+
+  function fmtTs(sec) {
+    sec = Math.max(0, Math.floor(sec));
+    const h = Math.floor(sec / 3600), m = Math.floor((sec % 3600) / 60), x = sec % 60;
+    const p = n => String(n).padStart(2, '0');
+    return (h ? h + ':' + p(m) : p(m)) + ':' + p(x);
+  }
+  function fmtDateNl(iso) {
+    if (!iso) return '';
+    const d = new Date(iso + 'T12:00:00');
+    return isNaN(d) ? iso : d.toLocaleDateString('nl-NL', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+  }
+  function hasVerslag() { return V_FIELDS.slice(0, 7).some(id => vEl[id].value.trim()); }
+
+  // Ondertitelbestanden (.vtt/.srt) omzetten naar regels met [mm:ss]
+  function parseSubtitles(raw) {
+    const out = [];
+    const tRe = /(?:(\d{1,2}):)?(\d{1,2}):(\d{2})[.,]\d{1,3}\s*-->/;
+    raw.replace(/\r/g, '').split(/\n\s*\n/).forEach(block => {
+      const lines = block.split('\n');
+      const ti = lines.findIndex(l => tRe.test(l));
+      if (ti < 0) return;
+      const m = lines[ti].match(tRe);
+      const secs = parseInt(m[1] || '0', 10) * 3600 + parseInt(m[2], 10) * 60 + parseInt(m[3], 10);
+      let text = lines.slice(ti + 1).join(' ');
+      const sp = text.match(/<v\s+([^>]+)>/i);
+      text = text.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+      if (!text) return;
+      out.push('[' + fmtTs(secs) + '] ' + (sp ? sp[1].trim() + ': ' : '') + text);
+    });
+    return out.length ? out.join('\n') : raw;
+  }
+
+  vFillBtn.addEventListener('click', () => {
+    const n = analyseTranscript();
+    if (!n) { showStatus('error', '<div>Geen transcript of geen herkende onderwerpen gevonden.</div>'); return; }
+    const lines = [];
+    tplGroups().forEach(g => {
+      const seen = new Set();
+      g.items.map((_, idx) => suggestions[g.id + '_' + idx]).filter(Boolean)
+        .filter(h => !seen.has(h.snippet) && seen.add(h.snippet)).slice(0, 2)
+        .forEach(h => lines.push('- ' + g.title + ': "' + h.snippet + '"' + (h.ts ? ' [' + h.ts + ']' : '')));
+    });
+    if (vEl.vKeyPoints.value.trim() && !confirm('Bestaande kernpunten overschrijven?')) return;
+    vEl.vKeyPoints.value = lines.join('\n') + '\n\n(Automatisch op trefwoorden geselecteerd. Herschrijf en controleer voordat je dit gebruikt.)';
+    vApproved.checked = false;
+    saveState(); renderChecklist(); updateButtons();
+  });
+
+  // Adviseursnotitie inspreken
+  let dictRec = null, dictating = false;
+  function setDictUi() {
+    vDictateBtn.classList.toggle('dictating', dictating);
+    vDictateBtn.textContent = dictating ? '■ Stop inspreken' : '🎙 Inspreken';
+  }
+  vDictateBtn.addEventListener('click', () => {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) { showStatus('error', '<div>Inspreken werkt alleen in Chrome of Edge.</div>'); return; }
+    if (dictating) { dictating = false; try { dictRec.stop(); } catch (e) {} setDictUi(); return; }
+    if (isListening) { showStatus('error', '<div>Stop eerst de live transcriptie.</div>'); return; }
+    dictRec = new SR();
+    dictRec.lang = liveLanguage.value; dictRec.continuous = true; dictRec.interimResults = false;
+    dictRec.onresult = ev => {
+      for (let i = ev.resultIndex; i < ev.results.length; i++) {
+        if (!ev.results[i].isFinal) continue;
+        const t = ev.results[i][0].transcript.trim();
+        const cur = vEl.vAdvisorNote.value;
+        vEl.vAdvisorNote.value = cur + (cur && !/\s$/.test(cur) ? ' ' : '') + t;
+      }
+      vApproved.checked = false;
+      saveStateSoon(); updateButtons();
+    };
+    dictRec.onend = () => { if (dictating) { try { dictRec.start(); } catch (e) { dictating = false; setDictUi(); } } };
+    dictRec.onerror = ev => {
+      if (ev.error === 'not-allowed' || ev.error === 'network' || ev.error === 'service-not-allowed') {
+        dictating = false; setDictUi(); showStatus('error', '<div>Inspreken mislukt (' + escapeHtml(ev.error) + ').</div>');
+      }
+    };
+    dictating = true; setDictUi();
+    try { dictRec.start(); } catch (e) { dictating = false; setDictUi(); }
+  });
+
+  // Concept-klantmail
+  function buildMailText() {
+    readVerslagFields();
+    const v = verslagState;
+    const naam = customerName.value.trim();
+    const datum = new Date().toLocaleDateString('nl-NL', { day: 'numeric', month: 'long', year: 'numeric' });
+    const acts = (v.vActions || '').split('\n').map(s => s.trim().replace(/^[-•*]\s*/, '')).filter(Boolean);
+    let t = 'Beste ' + (naam || '[naam klant]') + ',\n\nHartelijk dank voor ons gesprek van ' + datum + '. Hieronder vat ik kort samen wat we hebben besproken.\n\n';
+    const sum = (v.vSummary || '').trim() || (v.vOneLiner || '').trim();
+    if (sum) t += sum + '\n\n';
+    if (acts.length) t += 'Afspraken en vervolgstappen:\n' + acts.map(a => '- ' + a).join('\n') + '\n\n';
+    if (v.vNextContact) t += 'Ons volgende contactmoment: ' + fmtDateNl(v.vNextContact) + '.\n\n';
+    t += 'Dit is een samenvatting van ons gesprek en geen advies. Het advies en de onderbouwing ontvangt u in het adviesrapport; dat is leidend. Klopt er iets niet of mist u iets? Laat het mij dan weten.\n\nMet vriendelijke groet,\n\n' +
+      (advisorName.value.trim() || '[naam adviseur]') + (officeName.value.trim() ? '\n' + officeName.value.trim() : '');
+    return t;
+  }
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; }
+    catch (e) {
+      const ta = document.createElement('textarea');
+      ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand('copy'); } catch (e2) {}
+      document.body.removeChild(ta); return ok;
+    }
+  }
+  vCopyMailBtn.addEventListener('click', async () => {
+    const ok = await copyText(buildMailText());
+    showStatus(ok ? 'success' : 'error', ok ? '<div>Mailtekst gekopieerd. Controleer de tekst voordat je verstuurt.</div>' : '<div>Kopiëren mislukt.</div>');
+  });
+  vMailBtn.addEventListener('click', async () => {
+    if (!vApproved.checked && !confirm('Het verslag is nog niet als gecontroleerd goedgekeurd. Toch een conceptmail openen?')) return;
+    const body = buildMailText();
+    const to = vEl.vMailTo.value.replace(/\s/g, '');
+    const subj = 'Samenvatting van ons gesprek' + (officeName.value.trim() ? ' – ' + officeName.value.trim() : '');
+    let url = 'mailto:' + to + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent(body);
+    if (url.length > 1800) {
+      await copyText(body);
+      url = 'mailto:' + to + '?subject=' + encodeURIComponent(subj) + '&body=' + encodeURIComponent('[Plak hier de gekopieerde tekst met Ctrl+V / Cmd+V]');
+      showStatus('info', '<div>De tekst is te lang voor een mail-link en staat op je klembord. Plak hem in de mail die nu opent.</div>');
+    }
+    window.location.href = url;
+  });
+
+  // Gedeelde opmaak voor verslag en voorbereiding
+  function secHtml(h, val, cls) {
+    return val && String(val).trim() ? `<h3>${h}</h3><div class="${cls || 'txt'}">${escapeHtmlAttr(String(val).trim())}</div>` : '';
+  }
+  function reportShell(title, subtitle, body, opts) {
+    opts = opts || {};
+    const c = /^#[0-9a-f]{6}$/i.test(officeColor.value) ? officeColor.value : '#1e3a8a';
+    const office = [officeName.value.trim(), advisorName.value.trim()].filter(Boolean).join(' · ');
+    const now = new Date();
+    const concept = opts.concept ? '<div class="concept">CONCEPT · nog niet gecontroleerd en goedgekeurd door de adviseur</div>' : '';
+    return `<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${escapeHtmlAttr(title)} — ${escapeHtmlAttr(customerName.value.trim() || 'klant')}</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: Georgia, 'Times New Roman', serif; color: #0f172a; max-width: 800px; margin: 40px auto; padding: 20px; line-height: 1.6; background: #fff; }
+  .report-header { border-bottom: 3px solid ${c}; padding-bottom: 16px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; }
+  .report-header h1 { font-size: 28px; color: ${c}; margin: 0 0 6px 0; }
+  .report-header .subtitle { font-size: 13px; color: #475569; }
+  .report-header .office { font-size: 12px; color: #0f172a; margin-top: 4px; font-weight: 600; }
+  .report-header img.logo { max-height: 64px; max-width: 200px; object-fit: contain; }
+  .concept { border: 2px dashed #d97706; color: #92400e; background: #fffbeb; padding: 8px 12px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-align: center; margin-bottom: 20px; border-radius: 4px; }
+  .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 24px; padding: 16px; background: #f8fafc; border-left: 4px solid ${c}; margin-bottom: 28px; border-radius: 4px; }
+  .meta-grid .label { font-size: 10px; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+  .meta-grid .value { font-size: 13px; color: #0f172a; font-weight: 600; }
+  .meta-grid .wide { grid-column: 1 / -1; }
+  h2 { font-size: 18px; color: ${c}; border-bottom: 1px solid #cbd5e1; padding-bottom: 6px; margin-top: 32px; }
+  h3 { font-size: 14px; color: ${c}; margin-top: 20px; margin-bottom: 8px; }
+  .txt { white-space: pre-wrap; font-size: 13px; color: #1e293b; }
+  .warnbox { white-space: pre-wrap; font-size: 13px; background: #fffbeb; border-left: 4px solid #d97706; padding: 10px 14px; border-radius: 4px; }
+  .q { font-size: 12px; color: #475569; font-style: italic; margin: 0 0 6px 0; }
+  .summary-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 16px 0; }
+  .summary-box .cell { padding: 10px; border-radius: 6px; text-align: center; }
+  .summary-box .cell .num { font-size: 22px; font-weight: 700; }
+  .summary-box .cell .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .cell.done { background: #dcfce7; color: #15803d; } .cell.warn { background: #fef3c7; color: #92400e; }
+  .cell.na { background: #f1f5f9; color: #64748b; } .cell.empty { background: #fef2f2; color: #b91c1c; }
+  .progress-bar { height: 10px; background: #e2e8f0; border-radius: 5px; overflow: hidden; margin: 8px 0 20px 0; }
+  .progress-fill { height: 100%; background: ${c}; }
+  .checklist-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 12px; }
+  .checklist-table td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  .cl-item { color: #334155; } .cl-status { text-align: right; white-space: nowrap; width: 160px; }
+  .st-done { color: #15803d; font-weight: 600; } .st-warn { color: #d97706; font-weight: 600; }
+  .st-na { color: #64748b; } .st-empty { color: #94a3b8; } .st-open { color: #1d4ed8; font-weight: 600; }
+  .notes-box { background: #fffbeb; border-left: 4px solid #d97706; padding: 12px 16px; border-radius: 4px; margin-top: 16px; font-size: 13px; }
+  .transcript { white-space: pre-wrap; font-size: 12px; line-height: 1.7; color: #334155; padding: 12px; background: #f8fafc; border-radius: 4px; border-left: 3px solid #cbd5e1; }
+  .signature { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .signature .sig { border-top: 1px solid #0f172a; padding-top: 4px; font-size: 10px; color: #64748b; }
+  .footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #cbd5e1; font-size: 10px; color: #94a3b8; text-align: center; }
+  @media (max-width: 560px) { body { margin: 0; padding: 16px; } .meta-grid, .summary-box { grid-template-columns: 1fr 1fr; } .report-header { flex-direction: column-reverse; align-items: flex-start; } }
+  @media print { body { margin: 0; padding: 0; max-width: none; } @page { size: A4; margin: 2cm; } * { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+<div class="report-header">
+  <div>
+    <h1>${escapeHtmlAttr(title)}</h1>
+    <div class="subtitle">${escapeHtmlAttr(subtitle)}</div>
+    ${office ? `<div class="office">${escapeHtmlAttr(office)}</div>` : ''}
+  </div>
+  ${officeLogoData ? `<img class="logo" src="${escapeHtmlAttr(officeLogoData)}" alt="Logo">` : ''}
+</div>
+${concept}
+<div class="meta-grid">
+  <div><div class="label">Klantnaam</div><div class="value">${escapeHtmlAttr(customerName.value.trim() || '—')}</div></div>
+  <div><div class="label">Klant-ID</div><div class="value">${escapeHtmlAttr(customerId.value.trim() || '—')}</div></div>
+  <div><div class="label">Datum</div><div class="value">${now.toLocaleDateString('nl-NL', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</div></div>
+  <div><div class="label">Tijd</div><div class="value">${now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' })}</div></div>
+  <div><div class="label">Type gesprek</div><div class="value">${escapeHtmlAttr(TEMPLATES[currentTpl].label)}</div></div>
+  <div><div class="label">Melding opname</div><div class="value">${escapeHtmlAttr(consentLine().replace(/^Klant geïnformeerd over opname( en akkoord)?: /, ''))}</div></div>
+</div>
+${body}
+<div class="footer">
+  Gegenereerd via opnemengesprek.nl — ${now.toLocaleString('nl-NL')}<br>
+  Checklist gebaseerd op de AFM Leidraad Hypotheekadvisering (april 2026). Hulpmiddel voor de adviseur, geen garantie van compliance. Het adviesrapport en het klantdossier blijven leidend.
+</div>
+</body>
+</html>`;
+  }
+
+  function verslagHtml() {
+    readVerslagFields();
+    const v = verslagState;
+    let out = secHtml('Samenvatting in één zin', v.vOneLiner) + secHtml('Samenvatting', v.vSummary) +
+      secHtml('Kernpunten', v.vKeyPoints) + secHtml('Afspraken &amp; actiepunten', v.vActions) +
+      secHtml('Afwijkingen van advies (incl. motivatie klant)', v.vDeviations, 'warnbox') +
+      secHtml('Aannames &amp; onzekerheden', v.vAssumptions) + secHtml('Adviseursnotitie', v.vAdvisorNote);
+    if (v.vNextContact) out += `<h3>Volgend contactmoment</h3><div class="txt">${escapeHtmlAttr(fmtDateNl(v.vNextContact))}</div>`;
+    return out ? '<h2>Gespreksverslag</h2>' + out : '';
+  }
+
+  function buildPrepHtml() {
+    let body = '<div class="notes-box">Open met de checkvraag: <strong>"Zijn er sinds ons vorige gesprek relevante wijzigingen in uw situatie: werk, inkomen, gezin, relatie of plannen?"</strong></div>';
+    let n = 0;
+    tplGroups().forEach(g => {
+      const warn = [], open = [];
+      g.items.forEach((it, idx) => {
+        const st = checklistState[g.id + '_' + idx];
+        if (st === 'warn') warn.push(it.t); else if (!st) open.push(it.t);
+      });
+      if (!warn.length && !open.length) return;
+      n += warn.length + open.length;
+      body += `<h3>${g.emoji} ${escapeHtmlAttr(g.title)}</h3><p class="q">Vraag: ${escapeHtmlAttr(g.q)}</p><table class="checklist-table">` +
+        warn.map(t => `<tr><td class="cl-item">${escapeHtmlAttr(t)}</td><td class="cl-status"><span class="st-warn">Hoog · opvolgen</span></td></tr>`).join('') +
+        open.map(t => `<tr><td class="cl-item">${escapeHtmlAttr(t)}</td><td class="cl-status"><span class="st-open">Nog bespreken</span></td></tr>`).join('') + '</table>';
+    });
+    if (!n) body += '<p>Alle onderwerpen van deze checklist zijn afgerond of n.v.t. Gebruik de checkvraag en de actiepunten hieronder.</p>';
+    readVerslagFields();
+    const v = verslagState;
+    body += secHtml('Openstaande afspraken &amp; actiepunten', v.vActions) +
+      secHtml('Afwijkingen van advies: opnieuw bespreken?', v.vDeviations, 'warnbox') +
+      secHtml('Aannames om te verifiëren', v.vAssumptions);
+    if (v.vNextContact) body += `<h3>Gepland contactmoment</h3><div class="txt">${escapeHtmlAttr(fmtDateNl(v.vNextContact))}</div>`;
+    return reportShell('Voorbereiding vervolggesprek', 'Openstaande punten en aandachtspunten uit het vorige gesprek', body);
+  }
+
+  // Printen via een nieuw venster (werkt ook als de tool in een iframe staat)
+  function openPrintWindow(html, fallbackName) {
+    const w = window.open('', '_blank');
+    if (!w) {
+      downloadTextFile(html, fallbackName, 'text/html');
+      showStatus('info', '<div>Pop-up geblokkeerd: het verslag is als HTML-bestand gedownload. Open het en print met Ctrl+P / Cmd+P.</div>');
+      return;
+    }
+    w.document.open(); w.document.write(html); w.document.close();
+    w.focus();
+    setTimeout(() => { try { w.print(); } catch (e) {} }, 500);
+  }
+  vPrepBtn.addEventListener('click', () => {
+    openPrintWindow(buildPrepHtml(), 'voorbereiding-' + sanitizeFilename(customerName.value.trim()) + '.html');
+  });
+
+  // Tijdwinst-calculator (handleiding)
+  const calcConv = document.getElementById('calcConv');
+  const calcMin = document.getElementById('calcMin');
+  const calcRate = document.getElementById('calcRate');
+  const calcOut = document.getElementById('calcOut');
+  function parseNl(v) { const n = parseFloat(String(v).replace(/[^\d,.-]/g, '').replace(/\./g, '').replace(',', '.')); return isNaN(n) ? 0 : n; }
+  function fmtEur(n) { return '€ ' + n.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function runCalc() {
+    const hrs = parseNl(calcConv.value) * parseNl(calcMin.value) / 60 * 52 / 12;
+    const val = hrs * parseNl(calcRate.value);
+    calcOut.innerHTML = 'Indicatief <strong>' + hrs.toLocaleString('nl-NL', { maximumFractionDigits: 1 }) + ' uur</strong> per maand, ter waarde van <strong>' + fmtEur(val) + '</strong> per maand (' + fmtEur(val * 12) + ' per jaar).';
+  }
+  [calcConv, calcMin, calcRate].forEach(el => el.addEventListener('input', runCalc));
+  calcRate.addEventListener('blur', () => { calcRate.value = parseNl(calcRate.value).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); });
+  runCalc();
 
   checkPermissionStatus();
   updateButtons();
