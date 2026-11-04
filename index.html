@@ -1079,7 +1079,7 @@
         </details>
         <details class="guide-faq">
           <summary>Checklist</summary>
-          <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming of periodiek onderhoud); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
+          <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming, periodiek onderhoud, of pensioenadvies aan een werkgever en de pensioentransitie op basis van de <em>AFM Leidraad tweedepijler-pensioenadvies</em>); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
         </details>
         <details class="guide-faq">
           <summary>Koppelingen: Gmail, Outlook, Teams en eBlinqx</summary>
@@ -1276,7 +1276,7 @@
         <ul>
           <li>Gesprek opnemen via de microfoon of een Teams-/online gesprek</li>
           <li>Live transcriberen met tijdstempels, of een transcript inlezen (.txt, .vtt, .srt, .docx)</li>
-          <li>Checklist met 116 punten per type gesprek: aankoop, oversluiten, verduurzaming, onderhoud</li>
+          <li>Checklist per type gesprek: hypotheek (116 punten: aankoop, oversluiten, verduurzaming, onderhoud) en pensioenadvies aan werkgevers inclusief pensioentransitie</li>
           <li>Gespreksverslag met kernpunten, afspraken, afwijkingen van advies en aannames</li>
           <li>Concept-klantmail via Gmail of Outlook, contactmoment in je agenda</li>
           <li>Voorbereiding van het vervolggesprek en export voor het eBlinqx-dossier</li>
@@ -1322,7 +1322,7 @@
   </section>
 
   <div class="footer">Alles draait lokaal in je browser. Uitzonderingen: live transcriberen en inspreken (spraakdienst van Google) en het AFM-controlepakket, alleen als jij het zelf naar Claude.ai stuurt.<br>
-    Checklist gebaseerd op de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">AFM Leidraad Hypotheekadvisering (april 2026)</a>. De leidraad is een voorbeeld van hoe je kunt voldoen aan artikel 4:23 Wft en geen wet- of regelgeving; deze tool biedt geen garantie van compliance.</div>
+    Checklist gebaseerd op de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">AFM Leidraad Hypotheekadvisering (april 2026)</a> en, voor pensioenadvies aan werkgevers, de <a href="https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf" target="_blank" rel="noopener noreferrer">AFM Leidraad tweedepijler-pensioenadvies (2023)</a>. Een leidraad is een voorbeeld van hoe je kunt voldoen aan artikel 4:23 Wft en geen wet- of regelgeving; deze tool biedt geen garantie van compliance.</div>
 </main>
 
 <script>
@@ -1707,14 +1707,89 @@
       { t: 'Verduurzamingswensen geïnventariseerd', k: ['verduurzam', 'energielabel', 'zonnepanelen', 'isolatie'] },
       { t: 'Volgend contactmoment afgesproken', k: ['volgend jaar', 'jaarlijks', 'contactmoment'] }
     ]}
+    ,
+    // ---------- Leidraad tweedepijler-pensioenadvies (AFM, augustus 2023) ----------
+    { id: 'pens_basis', title: 'Uitgangspunten & scope', emoji: '🧭', q: 'Wat verwacht u precies van ons advies, en welke afspraken over pensioen zijn er al met uw werknemers of in de cao?', items: [
+      { t: 'Aard van de dienstverlening helder: advies in de zin van de Wft (nieuw af te sluiten pensioenproduct) of niet', k: ['advies in de zin', 'nieuw pensioenproduct', 'uitvoeringsovereenkomst', 'aard van de dienstverlening'] },
+      { t: 'Scope van het advies afgesproken: wat valt er wel en niet onder', k: ['scope', 'valt buiten', 'wel en niet', 'omvang van het advies'] },
+      { t: 'Verplichte aansluiting bij bedrijfstak- of beroepspensioenfonds onderzocht', k: ['verplichtstelling', 'bedrijfstakpensioenfonds', 'bpf!', 'beroepspensioenfonds', 'verplicht aangesloten'] },
+      { t: 'Cao-(minimum)vereisten en mogelijke vrijstelling onderzocht', k: ['cao!', 'vrijstelling', 'gelijkwaardigheidsverklaring'] },
+      { t: 'Bestaande arbeidsrechtelijke afspraken over pensioen meegenomen', k: ['pensioenovereenkomst', 'arbeidsvoorwaarden', 'arbeidsovereenkomst', 'afspraken met werknemers'] },
+      { t: 'Rol ondernemingsraad (instemmingsrecht) of personeelsvertegenwoordiging (adviesrecht) benoemd', k: ['ondernemingsraad', 'or!', 'instemmingsrecht', 'personeelsvertegenwoordiging', 'pvt!'] },
+      { t: 'Eerder ingewonnen informatie samen met werkgever getoetst op actualiteit', k: ['nog actueel', 'gewijzigd', 'veranderd sinds'] },
+      { t: 'Tegenstrijdigheden in klantprofiel werkgever besproken en wensen geprioriteerd', k: ['tegenstrijdig', 'budget', 'prioriteit'] },
+      { t: 'Belangen van werknemers en overige begunstigden meegewogen', k: ['werknemers', 'deelnemers', 'begunstigden', 'gewezen deelnemers'] }
+    ]},
+    { id: 'pens_product', title: 'Product, beleggingen & keuzes', emoji: '📊', q: 'Hoeveel zekerheid over het pensioenresultaat wilt u uw werknemers bieden, en welke keuzes moeten zij zelf kunnen maken?', items: [
+      { t: 'Gewenste contractduur en evaluatie- of beheerafspraken besproken', k: ['contractduur', 'contractperiode', 'vijf jaar', '5 jaar', 'beheerafspraak', 'evaluatie'] },
+      { t: 'Beleggingsbeleid en onzekerheid van de pensioenuitkering besproken (lifecycle, kostenstructuur)', k: ['beleggingsbeleid', 'lifecycle', 'beleggen', 'rendement', 'kostenstructuur'] },
+      { t: 'Gewenste mate van (on)zekerheid afgezet tegen risicohouding van de uitvoerder (risicopreferentieonderzoek)', k: ['risicohouding', 'risicopreferentie', 'zekerheid'] },
+      { t: 'Actief/passief beleggen en collectieve risicodeling besproken', k: ['actief beleggen', 'passief', 'collectieve risicodeling', 'solidariteit'] },
+      { t: 'Duurzaamheidswensen van werkgever en werknemers besproken (optioneel)', k: ['duurzaam', 'esg!', 'duurzaamheid'] },
+      { t: 'Keuzemogelijkheden voor deelnemers en kwaliteit van keuzebegeleiding meegenomen', k: ['keuzemogelijkheid', 'keuzebegeleiding', 'beleggingsvrijheid', 'vaste of variabele uitkering', 'variabele uitkering'] },
+      { t: 'Aanvullende vrijwillige regelingen besproken (nettopensioen, bijsparen)', k: ['nettopensioen', 'bijsparen', 'vrijwillig', 'aanvullend pensioen', 'derde pijler'] },
+      { t: 'Producten en kosten van meerdere pensioenuitvoerders vergeleken', k: ['uitvoerder', 'verzekeraar', 'ppi!', 'premiepensioeninstelling', 'vergelijk'] },
+      { t: 'Bij overstap: collectieve waardeoverdracht besproken (kosten, inspanning, communicatie, bezwaarrecht)', k: ['waardeoverdracht', 'overstap', 'bezwaar'] }
+    ]},
+    { id: 'pens_fin', title: 'Financiële positie werkgever', emoji: '💼', q: 'Welk budget kunt en wilt u de komende jaren structureel aan pensioen besteden, ook als het personeelsbestand groeit?', items: [
+      { t: 'Verwachte pensioenlasten voor de komende jaren in concrete euro\'s inzichtelijk gemaakt', k: ['pensioenlast', 'premielast', 'per jaar', 'euro'] },
+      { t: 'Kosten van productkenmerken besproken (los van de advieskosten)', k: ['kosten', 'administratiekosten', 'uitvoeringskosten'] },
+      { t: 'Verwachte ontwikkeling personeelsbestand en scenario\'s besproken (loon, leeftijd, groei, reorganisatie)', k: ['personeelsbestand', 'loonontwikkeling', 'nieuwe werknemers', 'reorganisatie', 'groei'] },
+      { t: 'Financiële ruimte voor de toekomst samen ingeschat (ondernemingsplan, ratio\'s, accountant)', k: ['ondernemingsplan', 'accountant', 'jaarrekening', 'financiële ruimte', 'ratio'] },
+      { t: 'Nieuwe pensioenlast afgezet tegen de financiële ruimte in het verleden', k: ['afgelopen jaren', 'in het verleden', 'historisch'] },
+      { t: 'Cijfermatig onderbouwd dat de pensioenlast nu en op lange termijn betaalbaar is', k: ['betaalbaar', 'doorgerekend', 'onderbouw'] },
+      { t: 'Effect van de premie-inleg op de pensioenuitkomst van werknemers besproken (risico beperkte opbouw)', k: ['pensioenuitkomst', 'fiscaal maximum', 'lagere opbouw', 'pensioenambitie', 'premie-inleg'] },
+      { t: 'Afgesproken wat de rol van de adviseur is bij het informeren van werknemers over hun verwachte pensioen', k: ['werknemers informeren', 'voorlichting', 'presentatie', 'communicatie naar werknemers'] }
+    ]},
+    { id: 'pens_kennis', title: 'Kennis & ervaring werkgever', emoji: '🎓', q: 'Hoe bekend bent u met de werking van de pensioenregeling en de keuzes die u daarin moet maken?', items: [
+      { t: 'Kennis en ervaring van de werkgever per productkenmerk vastgesteld en vastgelegd', k: ['kennis', 'ervaring', 'bekend met'] },
+      { t: 'Productkenmerken en gevolgen van keuzes zo uitgelegd dat de werkgever kan kiezen (voor- en nadelen)', k: ['voordelen', 'nadelen', 'gevolgen van', 'consequenties'] }
+    ]},
+    { id: 'pens_doel', title: 'Doelstellingen & risicobereidheid', emoji: '🎯', q: 'Wat wilt u met de regeling voor uw werknemers bereiken, en welke risico\'s vindt u voor hen en voor uzelf acceptabel?', items: [
+      { t: 'Behoeften die de werkgever voor zijn werknemers wil invullen geïnventariseerd', k: ['behoefte', 'doel', 'ambitie', 'goed werkgeverschap'] },
+      { t: 'Doelen voor productkenmerken: nabestaandenpensioen, ANW-hiaat, premievrijstelling bij AO', k: ['nabestaandenpensioen', 'partnerpensioen', 'anw-hiaat', 'anw!', 'premievrijstelling', 'arbeidsongeschikt'] },
+      { t: 'Keuze-opties voor werknemers en hun gevolgen besproken', k: ['keuze', 'vrij beleggen', 'aanvullend'] },
+      { t: 'Bestaande regeling als startpunt: wat handhaven, wat wijzigen en waarom; instemming werknemers', k: ['bestaande regeling', 'huidige regeling', 'handhaven', 'wijzigen', 'instemming'] },
+      { t: 'Doelstellingen ten aanzien van de beleggingen vastgesteld', k: ['beleggingen', 'beleggingsdoel'] },
+      { t: 'Benodigde premie bij de doelen inzichtelijk; fiscaal bovenmatig product voorkomen', k: ['fiscaal', 'bovenmatig', 'maximale premie', 'premie'] },
+      { t: 'Risico\'s die de werkgever zelf financieel kan en wil dragen vastgesteld', k: ['risico', 'dragen'] },
+      { t: 'Risico\'s die de werkgever voor werknemers acceptabel vindt vastgesteld (lagere uitkomst, dekking)', k: ['tegenvallend', 'lagere uitkomst', 'dekking', 'onzekerheid'] },
+      { t: 'Samenhang tussen doelstellingen en risicobereidheid besproken (bijv. nabestaanden- en AO-dekking)', k: ['samenhang', 'overlijden', 'nabestaanden'] }
+    ]},
+    { id: 'pens_transitie', title: 'Pensioentransitie (Wtp)', emoji: '🔀', q: 'Welke keuzes heeft u al gemaakt voor de overgang naar het nieuwe pensioenstelsel, en welke deadlines gelden voor uw regeling?', items: [
+      { t: 'Scope van het advies tijdens de transitie afgesproken', k: ['transitie', 'wtp!', 'nieuwe pensioenstelsel', 'wet toekomst pensioenen'] },
+      { t: 'Relevante wettelijke deadlines meegenomen (transitieplan, implementatie- en communicatieplan)', k: ['transitieplan', 'implementatieplan', 'communicatieplan', 'deadline'] },
+      { t: 'Bij een passieve werkgever: gewezen op de gevolgen van niet tijdig handelen', k: ['tijdig', 'beëindig', 'onderbrengingsplicht', 'te laat'] },
+      { t: 'Type premieovereenkomst uitgelegd (flexibele, solidaire of premie-uitkeringsregeling) met gevolgen', k: ['flexibele premieregeling', 'solidaire premieregeling', 'premie-uitkeringsovereenkomst', 'premieovereenkomst'] },
+      { t: 'Afschaffing doorsneesystematiek en overgang naar vlakke premie uitgelegd', k: ['doorsnee', 'vlakke premie', 'leeftijdsafhankelijk', 'staffel'] },
+      { t: 'Keuzes nabestaandenpensioen besproken (risicobasis, hoogte, uitloopperiode 3 of 6 maanden)', k: ['risicobasis', 'uitloop', 'wezenpensioen', 'nabestaandenpensioen'] },
+      { t: 'Bij geen nabestaandenpensioen: bewuste keuze werkgever en werknemers hierover geïnformeerd', k: ['geen nabestaandenpensioen', 'bewuste keuze'] },
+      { t: 'Invaren besproken (bij regeling bij pensioenfonds)', k: ['invaren'] },
+      { t: 'Premiehoogte cijfermatig uitgewerkt: budget of ambitie, inclusief premies voor risicodekkingen', k: ['premiehoogte', 'risicopremie', 'budget', 'ambitie'] },
+      { t: 'Eerbiedigende werking: lasten, voor- en nadelen en gevolgen voor groepen werknemers in kaart', k: ['eerbiedigende werking'] },
+      { t: 'Werkgever gewezen op mogelijke versobering bij baanwisseling', k: ['baanwisseling', 'versobering', 'van baan'] },
+      { t: 'Ondersteuning bij vaststellen van eventuele compensatie (tot 1 januari 2037)', k: ['compensatie', '2037'] }
+    ]},
+    { id: 'pens_dossier', title: 'Vastlegging & nazorg', emoji: '🗂️', q: 'Welke stukken en afspraken leggen we vast, en hoe houden we de regeling na afsluiten passend?', items: [
+      { t: 'Dossier reconstrueerbaar: klantprofiel, overwegingen, geadviseerd product en kenmerken', k: ['dossier', 'vastleggen', 'onderbouwing'] },
+      { t: 'Vastgelegd welke andere uitvoerders en producten zijn betrokken en waarom niet geadviseerd', k: ['waarom niet', 'alternatief', 'andere uitvoerder'] },
+      { t: 'Bedrijfsinformatie vastgelegd (personeelsbestand, financiële stukken, gelijkwaardigheidsverklaring)', k: ['personeelsbestand', 'financiële stukken', 'gelijkwaardigheidsverklaring', 'jaarrekening'] },
+      { t: 'Beheerwerkzaamheden en kosten van dienstverlening vastgelegd in een overeenkomst', k: ['beheerovereenkomst', 'beheer', 'nazorg', 'servicekosten'] },
+      { t: 'Bij bemiddeling: werkgever informeren over wezenlijke wijzigingen gedurende de looptijd (doorlopende zorgplicht)', k: ['wezenlijke wijziging', 'zorgplicht', 'looptijd'] },
+      { t: 'Uitkomsten van adviessoftware zelf gecontroleerd; adviseur blijft verantwoordelijk', k: ['software', 'rekentool'] }
+    ]}
   ];
 
   const TEMPLATES = {
     hypotheek:   { label: 'Hypotheekadvies (aankoop / doorstromer)', groups: ['kennismaking', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'verduurzaming', 'fiscaliteit', 'product', 'lifeevents', 'relatie', 'advies', 'nazorg'] },
     oversluiten: { label: 'Oversluiten / rente openbreken (Leidraad hfst. 10)', groups: ['oversluiten', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'fiscaliteit', 'product', 'lifeevents', 'advies'] },
     ebv:         { label: 'Aanvullende hypotheek verduurzaming (EBV)', groups: ['verduurzaming', 'woonlasten', 'advies'] },
-    onderhoud:   { label: 'Periodiek onderhoud / nazorggesprek', groups: ['onderhoud', 'lifeevents', 'woonlasten', 'relatie', 'nazorg'] }
+    onderhoud:   { label: 'Periodiek onderhoud / nazorggesprek', groups: ['onderhoud', 'lifeevents', 'woonlasten', 'relatie', 'nazorg'] },
+    pensioen:    { label: 'Pensioenadvies aan werkgever (tweede pijler)', groups: ['pens_basis', 'pens_fin', 'pens_kennis', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true },
+    pensioentr:  { label: 'Pensioentransitie Wtp: advies aan werkgever', groups: ['pens_transitie', 'pens_basis', 'pens_fin', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true }
   };
+  const SRC_HYP = { title: 'AFM Leidraad Hypotheekadvisering (april 2026)', url: 'https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering' };
+  function tplSource() { return TEMPLATES[currentTpl].source || SRC_HYP; }
   let currentTpl = 'hypotheek';
 
   function compileKw(list) {
@@ -2247,7 +2322,29 @@
   // AFM CONTROLE — Klembord + modal
   // ============================================================
 
+  function buildGenericPrompt() {
+    const src = tplSource();
+    const transcript = getCurrentTranscriptText();
+    let n = 0, subjects = '';
+    tplGroups().forEach((g, gi) => {
+      const L = String.fromCharCode(65 + gi);
+      subjects += '\n### ' + L + '. ' + g.title + '\n';
+      g.items.forEach((it, idx) => { subjects += '- **' + L + (idx + 1) + '.** ' + it.t + '\n'; n++; });
+    });
+    const warn = [];
+    tplGroups().forEach(g => g.items.forEach((it, idx) => { if (checklistState[g.id + '_' + idx] === 'warn') warn.push(g.title + ': ' + it.t); }));
+    return 'Je bent een compliance-expert voor financiële dienstverlening in Nederland. Je beoordeelt of een adviseur tijdens een gesprek heeft gehandeld in lijn met de **' + src.title + '**, gebaseerd op artikel 4:23 lid 1 Wft.\n\n' +
+      'Bron: ' + src.url + '\nAls de PDF van de leidraad als bijlage is meegestuurd, baseer je je oordeel primair op die tekst. De leidraad heeft niet de status van wet- en regelgeving.\n\n' +
+      '## OPDRACHT\n\nType gesprek: **' + TEMPLATES[currentTpl].label + '**. Beoordeel het transcript per onderwerp hieronder (' + n + ' punten), rekening houdend met de specifieke situatie van de klant (werkgever). Regels kunnen beginnen met een tijdstempel [mm:ss]; noem dat bij citaten.\n\n' +
+      'Statussen: ✅ BESPROKEN (citeer kort) · ⚠️ OPPERVLAKKIG (citeer, zeg wat ontbreekt) · ❌ ONTBREKEND (zeg waarom relevant) · ➖ N.V.T. (motiveer).\n\n## TE BEOORDELEN ONDERWERPEN\n' + subjects +
+      '\n## SLOTOORDEEL\n1. **Indicatieve dekkingsscore (1-10)**, met de expliciete vermelding dat dit geen oordeel is over compliance.\n2. **Top 3 verbeterpunten.**\n3. **Vastleggingstips** voor het adviesdossier (reconstrueerbaarheid).\n4. **Conceptverslag**: samenvatting in één zin, korte samenvatting, kernpunten met tijdstempel, afspraken en actiepunten, punten voor het vervolggesprek. Markeer als CONCEPT.\n\n' +
+      '## METADATA\n- Klant: ' + (customerName.value.trim() || '[niet ingevuld]') + (customerId.value.trim() ? ' (ID: ' + customerId.value.trim() + ')' : '') + '\n- Datum: ' + new Date().toLocaleDateString('nl-NL') + '\n- ' + consentLine() +
+      (notes.value.trim() ? '\n- Notities adviseur: ' + notes.value.trim() : '') + (warn.length ? '\n- Door adviseur als ⚠ gemarkeerd: ' + warn.join('; ') : '') +
+      '\n\n## TRANSCRIPTIE\n\n' + transcript;
+  }
+
   function buildAfmPrompt() {
+    if (TEMPLATES[currentTpl].generic) return buildGenericPrompt();
     const transcript = getCurrentTranscriptText();
     const klant = customerName.value.trim() || '[niet ingevuld]';
     const klantId = customerId.value.trim();
@@ -2532,9 +2629,9 @@ INSTRUCTIES:
 ------------
 1. Ga naar https://claude.ai/new (log in met je Claude-account)
 2. Sleep de bestanden 02, 03 en 04 tegelijk in het chatvenster
-3. (Optioneel) sleep ook de officiële AFM Leidraad Hypotheekadvisering (PDF)
+3. (Optioneel) sleep ook de officiële ${tplSource().title} (PDF)
    mee — download deze gratis van:
-   https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering
+   ${tplSource().url}
 4. Druk op Enter
 5. Claude geeft een gestructureerde analyse met per onderwerp:
    ✅ besproken / ⚠️ oppervlakkig / ❌ ontbrekend / ➖ n.v.t.
@@ -2933,7 +3030,7 @@ ${concept}
 ${body}
 <div class="footer">
   Gegenereerd via opnemengesprek.nl — ${now.toLocaleString('nl-NL')}<br>
-  Checklist gebaseerd op de AFM Leidraad Hypotheekadvisering (april 2026). Hulpmiddel voor de adviseur, geen garantie van compliance. Het adviesrapport en het klantdossier blijven leidend.
+  Checklist gebaseerd op de ${escapeHtmlAttr(tplSource().title)}. Hulpmiddel voor de adviseur, geen garantie van compliance. Het adviesrapport en het klantdossier blijven leidend.
 </div>
 </body>
 </html>`;
