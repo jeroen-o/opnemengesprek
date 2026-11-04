@@ -1,0 +1,33 @@
+# Opnemen gesprek en transcriptie voor de hypotheek- en financieel adviseur
+
+> Gratis webtool voor Nederlandse hypotheekadviseurs om klantgesprekken op te nemen, te transcriberen en vast te leggen met een checklist op basis van de AFM Leidraad Hypotheekadvisering (april 2026). Alles draait lokaal in de browser, zonder account.
+
+URL: https://www.opnemengesprek.nl/
+Taal: Nederlands
+Prijs: gratis
+Doelgroep: hypotheekadviseurs en financieel adviseurs in Nederland
+
+## Functies
+- Klantgesprek opnemen via de microfoon, of een Teams-/online gesprek via een gedeeld tabblad met geluid
+- Live transcriberen met tijdstempels (Chrome en Edge, via de spraakdienst van Google)
+- Transcript inlezen: .txt, .md, .vtt, .srt en Teams-transcript als .docx
+- Checklist met 116 aandachtspunten op basis van de AFM Leidraad Hypotheekadvisering (april 2026), inclusief verduurzaming, relatiebeëindiging en oversluiten
+- Typen gesprek: hypotheekadvies (aankoop/doorstromer), oversluiten/rente openbreken, aanvullende hypotheek verduurzaming, periodiek onderhoud
+- Herkenning van besproken onderwerpen in het transcript op trefwoorden, met fragment en tijdstip
+- Gespreksverslag (samenvatting, kernpunten, afspraken, afwijkingen van advies, aannames, adviseursnotitie) met goedkeuring door de adviseur; tot goedkeuring staat CONCEPT op het verslag
+- Concept-klantmail via Gmail, Outlook of eigen mailprogramma; contactmoment naar Google Agenda, Outlook-agenda of .ics
+- Samenvatting delen in een Teams-chat; export (PDF/HTML) met vaste bestandsnaam voor het eBlinqx-klantdossier
+- AFM-controlepakket: een kant-en-klare prompt, transcript en verslag om zelf in Claude.ai te laten beoordelen
+
+## Privacy
+- Er wordt geen ingevoerde informatie naar een server van Opnemen Gesprek gestuurd.
+- Uitzonderingen: live transcriberen en inspreken (spraakdienst van Google) en het AFM-controlepakket (alleen als de gebruiker het zelf naar Claude.ai uploadt).
+- Lokaal opslaan op het apparaat is opt-in.
+
+## Belangrijk
+- Opnemen Gesprek is niet verbonden aan de AFM.
+- De AFM Leidraad Hypotheekadvisering is een voorbeeld van hoe een adviseur kan voldoen aan artikel 4:23 Wft en geen wet- of regelgeving.
+- De tool is een hulpmiddel en biedt geen garantie van compliance; het adviesrapport en het klantdossier blijven leidend.
+
+## Bronnen
+- AFM Leidraad Hypotheekadvisering: https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering
