@@ -1,6 +1,6 @@
 # Opnemen gesprek en transcriptie voor de hypotheek- en financieel adviseur
 
-> Gratis webtool voor Nederlandse hypotheekadviseurs om klantgesprekken op te nemen, te transcriberen en vast te leggen met een checklist op basis van de AFM Leidraad Hypotheekadvisering (april 2026). Alles draait lokaal in de browser, zonder account.
+> Conceptversie (in ontwikkeling). Gratis webtool voor Nederlandse hypotheekadviseurs om klantgesprekken op te nemen, te transcriberen en vast te leggen met een checklist op basis van de AFM Leidraad Hypotheekadvisering (april 2026). Alles draait lokaal in de browser, zonder account.
 
 URL: https://www.opnemengesprek.nl/
 Taal: Nederlands
