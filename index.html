@@ -636,6 +636,18 @@
   .facts tr.conflict td { background: #fffbeb; }
   .badge-warn { display: inline-block; font-size: 10px; font-weight: 700; color: #92400e; background: #fef3c7; border-radius: 999px; padding: 1px 7px; margin-left: 6px; }
 
+  /* TYPE GESPREK (chips) */
+  .tpl-pick { border: 1px solid #bfdbfe; background: #f8fbff; border-radius: 10px; padding: 12px 14px; }
+  .tpl-pick .lbl { font-size: 13px; font-weight: 600; color: #0f172a; margin-bottom: 8px; display: block; }
+  .tpl-cat { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
+  .tpl-cat:last-child { margin-bottom: 0; }
+  .tpl-cat .cat { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: .05em; width: 82px; flex-shrink: 0; }
+  .tpl-chip { padding: 8px 12px; font-size: 13px; border-radius: 999px; background: #fff; color: #1e293b; border: 1px solid #cbd5e1; min-height: 36px; }
+  .tpl-chip:hover { border-color: #2563eb; }
+  .tpl-chip.on { background: #2563eb; color: #fff; border-color: #2563eb; }
+  .tpl-desc { font-size: 11px; color: #64748b; margin-top: 6px; }
+  @media (max-width: 520px) { .tpl-cat .cat { width: 100%; } .tpl-chip { flex: 1 1 auto; } }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -808,6 +820,13 @@
       <div class="full">
         <label>Notities (optioneel)</label>
         <textarea id="notes" rows="2" placeholder="Optionele context voor dit gesprek..."></textarea>
+      </div>
+      <div class="full">
+        <div class="tpl-pick">
+          <span class="lbl">Wat voor gesprek ga je voeren?</span>
+          <div id="tplChips"></div>
+          <div class="tpl-desc" id="tplDesc"></div>
+        </div>
       </div>
       <div class="full">
         <div class="consent-box" id="consentBox">
@@ -2002,14 +2021,15 @@
   ];
 
   const TEMPLATES = {
-    hypotheek:   { label: 'Hypotheekadvies (aankoop / doorstromer)', groups: ['kennismaking', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'verduurzaming', 'fiscaliteit', 'product', 'lifeevents', 'relatie', 'advies', 'nazorg'] },
-    oversluiten: { label: 'Oversluiten / rente openbreken (Leidraad hfst. 10)', groups: ['oversluiten', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'fiscaliteit', 'product', 'lifeevents', 'advies'] },
-    ebv:         { label: 'Aanvullende hypotheek verduurzaming (EBV)', groups: ['verduurzaming', 'woonlasten', 'advies'] },
-    onderhoud:   { label: 'Periodiek onderhoud / nazorggesprek', groups: ['onderhoud', 'lifeevents', 'woonlasten', 'relatie', 'nazorg'] },
-    pensioen:    { label: 'Pensioenadvies aan werkgever (tweede pijler)', groups: ['pens_basis', 'pens_fin', 'pens_kennis', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true },
-    particulier: { label: 'Klantinventarisatie particulier (volledig, incl. schade)', groups: ['inv_persoon', 'inv_inkomen', 'inv_pensioen', 'inv_nabest', 'inv_ao', 'inv_woning', 'inv_vermogen', 'inv_leven', 'inv_schade', 'inv_slot'], source: { title: 'kantoorformulier Inventarisatie Particulieren (aangevuld met een schadeonderdeel) en art. 4:23 Wft', url: '' }, generic: true },
-    schade:      { label: 'Schadeverzekeringen particulier', groups: ['inv_schade', 'inv_persoon', 'inv_slot'], source: { title: 'zorgplicht en adviesnorm (art. 4:23 Wft) en de eis om wensen en behoeften vast te stellen bij verzekeringsdistributie (IDD); er is geen AFM-leidraad voor schadeadvies', url: '' }, generic: true },
-    pensioentr:  { label: 'Pensioentransitie Wtp: advies aan werkgever', groups: ['pens_transitie', 'pens_basis', 'pens_fin', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true }
+    starter:     { label: 'Hypotheekadvies starter (eerste koopwoning)', chip: 'Starter', cat: 'Hypotheek', desc: 'Eerste koopwoning. Fiscale punten over hypotheekverleden staan op n.v.t.; zet ze terug als ze toch spelen.', autoNa: { fiscaliteit: [0, 1, 2, 3, 5, 6] }, groups: ['kennismaking', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'verduurzaming', 'fiscaliteit', 'product', 'lifeevents', 'relatie', 'advies', 'nazorg'] },
+    hypotheek:   { label: 'Hypotheekadvies doorstromer', chip: 'Doorstromer', cat: 'Hypotheek', desc: 'Klant met hypotheekverleden: volledige checklist inclusief fiscaal verleden.', groups: ['kennismaking', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'verduurzaming', 'fiscaliteit', 'product', 'lifeevents', 'relatie', 'advies', 'nazorg'] },
+    oversluiten: { label: 'Oversluiten / rente openbreken (Leidraad hfst. 10)', chip: 'Oversluiten', cat: 'Hypotheek', desc: 'Oversluiten of rente openbreken: nieuw adviesmoment volgens hoofdstuk 10 van de leidraad.', groups: ['oversluiten', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'fiscaliteit', 'product', 'lifeevents', 'advies'] },
+    ebv:         { label: 'Aanvullende hypotheek verduurzaming (EBV)', chip: 'Verduurzaming', cat: 'Hypotheek', desc: 'Aanvullende hypotheek voor energiebesparende voorzieningen.', groups: ['verduurzaming', 'woonlasten', 'advies'] },
+    onderhoud:   { label: 'Periodiek onderhoud / nazorggesprek', chip: 'Onderhoud', cat: 'Hypotheek', desc: 'Periodiek gesprek over een lopende hypotheek.', groups: ['onderhoud', 'lifeevents', 'woonlasten', 'relatie', 'nazorg'] },
+    pensioen:    { label: 'Pensioenadvies aan werkgever (tweede pijler)', chip: 'Pensioen werkgever', cat: 'Pensioen', desc: 'Advies aan een werkgever over een nieuw of te verlengen pensioenproduct.', groups: ['pens_basis', 'pens_fin', 'pens_kennis', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true },
+    particulier: { label: 'Klantinventarisatie particulier (volledig, incl. schade)', chip: 'Inventarisatie', cat: 'Particulier', desc: 'Volledige financiële inventarisatie van een particulier, inclusief schadeverzekeringen.', groups: ['inv_persoon', 'inv_inkomen', 'inv_pensioen', 'inv_nabest', 'inv_ao', 'inv_woning', 'inv_vermogen', 'inv_leven', 'inv_schade', 'inv_slot'], source: { title: 'kantoorformulier Inventarisatie Particulieren (aangevuld met een schadeonderdeel) en art. 4:23 Wft', url: '' }, generic: true },
+    schade:      { label: 'Schadeverzekeringen particulier', chip: 'Schadeverzekeringen', cat: 'Particulier', desc: 'Opstal, inboedel, aansprakelijkheid, rechtsbijstand, auto en reis. Geen AFM-leidraad; gebaseerd op zorgplicht en wensen en behoeften.', groups: ['inv_schade', 'inv_persoon', 'inv_slot'], source: { title: 'zorgplicht en adviesnorm (art. 4:23 Wft) en de eis om wensen en behoeften vast te stellen bij verzekeringsdistributie (IDD); er is geen AFM-leidraad voor schadeadvies', url: '' }, generic: true },
+    pensioentr:  { label: 'Pensioentransitie Wtp: advies aan werkgever', chip: 'Pensioentransitie', cat: 'Pensioen', desc: 'Werkgever overzetten naar het nieuwe pensioenstelsel (Wtp).', groups: ['pens_transitie', 'pens_basis', 'pens_fin', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true }
   };
   const SRC_HYP = { title: 'AFM Leidraad Hypotheekadvisering (april 2026)', url: 'https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering' };
   function tplSource() { return TEMPLATES[currentTpl].source || SRC_HYP; }
@@ -2149,6 +2169,7 @@
     consentCheck.checked = !!consentAt;
     renderConsent();
     tplSelect.value = currentTpl;
+    renderTplChips();
     if (stored === null && (Object.keys(checklistState).length || consentAt)) saveState();
   }
 
@@ -2326,7 +2347,7 @@
     updateSteps();
   }
 
-  tplSelect.addEventListener('change', () => { currentTpl = tplSelect.value; saveState(); renderChecklist(); });
+  tplSelect.addEventListener('change', () => setTemplate(tplSelect.value));
   analyseBtn.addEventListener('click', () => {
     const n = analyseTranscript();
     renderChecklist();
@@ -3981,6 +4002,33 @@ self.onmessage = async (e) => {
     installEvt = null; installBtn.style.display = 'none';
   });
   window.addEventListener('appinstalled', () => { installBtn.style.display = 'none'; showStatus('success', '<div>Opnemen Gesprek is geïnstalleerd als app.</div>'); });
+
+  // ============================================================
+  // TYPE GESPREK KIEZEN (bovenaan, ook op mobiel)
+  // ============================================================
+  function renderTplChips() {
+    const box = document.getElementById('tplChips');
+    if (!box) return;
+    const cats = {};
+    Object.keys(TEMPLATES).forEach(k => { const t = TEMPLATES[k]; (cats[t.cat || 'Overig'] = cats[t.cat || 'Overig'] || []).push(k); });
+    box.innerHTML = Object.keys(cats).map(c => `<div class="tpl-cat"><span class="cat">${escapeHtml(c)}</span>` +
+      cats[c].map(k => `<button type="button" class="tpl-chip ${k === currentTpl ? 'on' : ''}" data-tpl="${k}" aria-pressed="${k === currentTpl}">${escapeHtml(TEMPLATES[k].chip || TEMPLATES[k].label)}</button>`).join('') + '</div>').join('');
+    box.querySelectorAll('.tpl-chip').forEach(b => b.addEventListener('click', () => setTemplate(b.dataset.tpl)));
+    document.getElementById('tplDesc').textContent = TEMPLATES[currentTpl].desc || TEMPLATES[currentTpl].label;
+  }
+  function setTemplate(key) {
+    if (!TEMPLATES[key]) return;
+    currentTpl = key;
+    tplSelect.value = key;
+    const na = TEMPLATES[key].autoNa || {};
+    Object.keys(na).forEach(g => na[g].forEach(idx => { const id = g + '_' + idx; if (!checklistState[id]) checklistState[id] = 'na'; }));
+    saveState();
+    analyseTranscript();
+    renderChecklist();
+    renderTplChips();
+    updateButtons();
+  }
+  renderTplChips();
 
   checkPermissionStatus();
   updateButtons();

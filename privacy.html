@@ -94,10 +94,10 @@
 <footer>opnemengesprek.nl</footer>
 <script>
   // Vul hier de gegevens van de aanbieder in; zolang 'naam' leeg is, blijft het blok verborgen.
-  const AANBIEDER = { naam: '', kvk: '', adres: '', email: '', website: 'https://www.opnemengesprek.nl' };
+  const AANBIEDER = { naam: 'opnemengesprek.nl', status: 'Concept in ontwikkeling. Nog niet ingeschreven bij de Kamer van Koophandel; de bedrijfsgegevens worden hier vermeld zodra de inschrijving rond is.', kvk: '', adres: '', email: '', website: 'https://www.opnemengesprek.nl' };
   if (AANBIEDER.naam) {
     const dl = document.getElementById('aanbiederGegevens');
-    [['Naam', AANBIEDER.naam], ['KvK-nummer', AANBIEDER.kvk], ['Adres', AANBIEDER.adres], ['E-mail', AANBIEDER.email], ['Website', AANBIEDER.website]]
+    [['Naam', AANBIEDER.naam], ['Status', AANBIEDER.status], ['KvK-nummer', AANBIEDER.kvk], ['Adres', AANBIEDER.adres], ['E-mail', AANBIEDER.email], ['Website', AANBIEDER.website]]
       .filter(([, v]) => v).forEach(([k, v]) => {
         const dt = document.createElement('dt'); dt.textContent = k;
         const dd = document.createElement('dd');
