@@ -439,6 +439,15 @@
   .topics-legend .l-open::before { background: #cbd5e1; } .topics-legend .l-hit::before { background: #2563eb; }
   .topics-legend .l-done::before { background: #16a34a; } .topics-legend .l-warn::before { background: #d97706; }
 
+  /* KOPPELINGEN */
+  .share-box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; }
+  .share-box h4 { font-size: 12px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
+  .share-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .share-row:last-child { margin-bottom: 0; }
+  .share-row .lbl { font-size: 12px; color: #64748b; width: 92px; flex-shrink: 0; }
+  .share-row input[type="time"] { padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 13px; }
+  .screen-rec { margin-top: 18px; padding-top: 16px; border-top: 1px dashed #e2e8f0; }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -603,7 +612,7 @@
         <input type="text" id="customerName" placeholder="Bijv. Jan de Vries">
       </div>
       <div>
-        <label>Klant-ID (optioneel)</label>
+        <label>Klant-ID / eBlinqx-relatienummer (optioneel)</label>
         <input type="text" id="customerId" placeholder="CRM referentie">
       </div>
       <div class="full">
@@ -686,6 +695,13 @@
           </button>
         </div>
         <div class="hint">De opname blijft volledig lokaal in je browser.</div>
+        <div class="screen-rec" id="screenRecWrap">
+          <button class="btn-secondary" id="screenRecBtn">
+            <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Teams- of online gesprek opnemen
+          </button>
+          <div class="hint" style="margin-top:8px;">Neemt het geluid van de klant (gedeeld tabblad of scherm) en je eigen microfoon samen op. Kies in Chrome of Edge het Teams-tabblad of het scherm en zet <strong>"Ook geluid delen"</strong> aan. Alleen geluid wordt bewaard, geen beeld.</div>
+        </div>
       </div>
 
       <div id="previewView" class="recording-preview" style="display:none;">
@@ -761,8 +777,8 @@
     <div class="tab-content" id="tab-transcript">
       <label class="upload-zone" for="fileInput">
         <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <span id="uploadLabel">Klik om een bestand te kiezen (.txt, .md, .vtt, .srt)</span>
-        <input type="file" id="fileInput" accept=".txt,.md,.vtt,.srt,text/plain">
+        <span id="uploadLabel">Klik om een bestand te kiezen (.txt, .md, .vtt, .srt, .docx)</span>
+        <input type="file" id="fileInput" accept=".txt,.md,.vtt,.srt,.docx,text/plain">
       </label>
       <div class="divider"><div class="line"></div><div class="text">of plak handmatig</div><div class="line"></div></div>
       <label>Transcriptie</label>
@@ -849,17 +865,36 @@
           <textarea id="vAdvisorNote" rows="3" placeholder="Eigen observaties na het gesprek. Inspreken werkt in Chrome/Edge via de spraakdienst van Google."></textarea>
         </div>
         <div class="form-grid span2">
-          <div><label for="vNextContact">Volgend contactmoment / nabellen</label><input type="date" id="vNextContact"></div>
+          <div><label for="vNextContact">Volgend contactmoment / nabellen</label><div style="display:flex; gap:8px;"><input type="date" id="vNextContact"><input type="time" id="vNextTime" value="10:00" style="width:auto; padding:9px 10px; border:1px solid #cbd5e1; border-radius:8px; font-family:inherit;"></div></div>
           <div><label for="vMailTo">E-mailadres klant (voor conceptmail)</label><input type="email" id="vMailTo" placeholder="naam@voorbeeld.nl"></div>
         </div>
         <label class="inline-check span2" style="font-size:13px; align-items:flex-start;"><input type="checkbox" id="vApproved" style="margin-top:3px;"> Verslag gecontroleerd en goedgekeurd door de adviseur. Zolang dit niet is aangevinkt, staat er CONCEPT op het verslag.</label>
         <hr class="section-sep span2">
-        <div class="btn-row span2" style="justify-content:flex-start;">
-          <button class="btn-secondary" id="vMailBtn">✉ Concept-klantmail openen</button>
-          <button class="btn-secondary" id="vCopyMailBtn">Kopieer mailtekst</button>
-          <button class="btn-secondary" id="vPrepBtn">📋 Voorbereiding vervolggesprek</button>
+        <div class="share-box span2">
+          <h4>Delen &amp; koppelingen</h4>
+          <div class="share-row"><span class="lbl">Klantmail</span>
+            <button class="btn-secondary btn-sm" id="vGmailBtn">Gmail</button>
+            <button class="btn-secondary btn-sm" id="vOutlookBtn">Outlook (web)</button>
+            <button class="btn-secondary btn-sm" id="vMailBtn">Mailprogramma</button>
+            <button class="btn-secondary btn-sm" id="vCopyMailBtn">Kopieer tekst</button>
+          </div>
+          <div class="share-row"><span class="lbl">Agenda</span>
+            <button class="btn-secondary btn-sm" id="vGcalBtn">Google Agenda</button>
+            <button class="btn-secondary btn-sm" id="vOcalBtn">Outlook-agenda</button>
+            <button class="btn-secondary btn-sm" id="vIcsBtn">.ics-bestand</button>
+          </div>
+          <div class="share-row"><span class="lbl">Teams</span>
+            <button class="btn-secondary btn-sm" id="vTeamsBtn">Deel samenvatting in Teams-chat</button>
+          </div>
+          <div class="share-row"><span class="lbl">eBlinqx</span>
+            <button class="btn-secondary btn-sm" id="vDossierPdfBtn">PDF voor dossier</button>
+            <button class="btn-secondary btn-sm" id="vDossierHtmlBtn">HTML voor dossier</button>
+          </div>
+          <div class="share-row"><span class="lbl">Vervolg</span>
+            <button class="btn-secondary btn-sm" id="vPrepBtn">📋 Voorbereiding vervolggesprek</button>
+          </div>
         </div>
-        <div class="hint span2" style="margin-top:0;">De conceptmail opent in je eigen mailprogramma; jij controleert en verstuurt. Het adviesrapport blijft leidend.</div>
+        <div class="hint span2" style="margin-top:0;">Alles opent in je eigen programma (Gmail, Outlook, Teams); deze tool verstuurt zelf niets. Jij controleert en verstuurt. Het adviesrapport blijft leidend. Voor eBlinqx: kies bij "PDF voor dossier" de optie <em>Opslaan als PDF</em> en upload het bestand in het klantdossier.</div>
       </div>
     </div>
 
@@ -902,6 +937,15 @@
         <details class="guide-faq">
           <summary>Checklist</summary>
           <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming of periodiek onderhoud); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
+        </details>
+        <details class="guide-faq">
+          <summary>Koppelingen: Gmail, Outlook, Teams en eBlinqx</summary>
+          <div class="faq-content">De koppelingen werken zonder account en zonder API: de tool opent een kant-en-klaar concept in jouw eigen programma, en jij controleert en verstuurt.<br><br>
+          <strong>Gmail / Outlook:</strong> concept-klantmail in de webversie, of via je eigen mailprogramma.<br>
+          <strong>Agenda:</strong> het volgende contactmoment in Google Agenda of de Outlook-agenda, of als .ics-bestand voor elke agenda.<br>
+          <strong>Teams:</strong> deel de samenvatting en actiepunten in een Teams-chat; je kiest daar zelf de ontvanger. Lees het transcript van een Teams-vergadering in (.vtt of .docx via "Bestand inlezen"), of neem een online gesprek op met "Teams- of online gesprek opnemen".<br>
+          <strong>eBlinqx:</strong> sla het verslag op als PDF of HTML met een vaste bestandsnaam (relatienummer, datum, klant) en upload het in het klantdossier. Een directe koppeling met eBlinqx vraagt een partnerovereenkomst met Blinqx en een server; die is er niet.<br><br>
+          <em>Let op:</em> gebruik voor klantgegevens een zakelijk account (Google Workspace of Microsoft 365) met een verwerkersovereenkomst, geen privé-Gmail.</div>
         </details>
         <details class="guide-faq">
           <summary>Tijdstempels &amp; herkenning van onderwerpen</summary>
@@ -977,7 +1021,8 @@
             <tr><td>Opnemen (audio)</td><td>In je browser</td><td>Alleen in het geheugen, tot jij downloadt</td></tr>
             <tr><td>Live transcriberen, inspreken</td><td>Spraakdienst van Google (via Chrome/Edge)</td><td>Tekst in je browser; audioverwerking valt onder de voorwaarden van Google</td></tr>
             <tr><td>Bestand inlezen, checklist, herkenning, verslag</td><td>In je browser</td><td>In het geheugen; op dit apparaat alleen als "onthouden" aanstaat</td></tr>
-            <tr><td>Concept-klantmail</td><td>Je eigen mailprogramma</td><td>Pas verstuurd als jij op verzenden klikt</td></tr>
+            <tr><td>Concept-klantmail, agenda, Teams-chat</td><td>Je eigen Gmail, Outlook of Teams (de tekst gaat mee in de link)</td><td>Pas opgeslagen of verstuurd als jij dat daar doet; valt onder je eigen account</td></tr>
+            <tr><td>Teams- of online gesprek opnemen</td><td>In je browser (gedeeld tabblad + microfoon)</td><td>Alleen in het geheugen, tot jij downloadt</td></tr>
             <tr><td>AFM-controlepakket</td><td>Downloads op je apparaat; Claude.ai alleen als jij uploadt</td><td>Volgens je Claude-account en de voorwaarden van Anthropic</td></tr>
             <tr><td>Website zelf</td><td>GitHub Pages levert alleen de pagina</td><td>Er wordt geen ingevoerde informatie naar een server gestuurd</td></tr>
           </table>
@@ -1848,37 +1893,88 @@
     });
   });
 
+  let recCleanup = null;
+  function beginRecording(stream, cleanup) {
+    audioChunks = [];
+    recCleanup = cleanup || null;
+    let mimeType = 'audio/webm';
+    if (!MediaRecorder.isTypeSupported(mimeType)) { mimeType = 'audio/mp4'; if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = ''; }
+    mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
+    mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.onstop = () => {
+      audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
+      audioUrl = URL.createObjectURL(audioBlob);
+      audioPlayer.src = audioUrl;
+      previewMeta.textContent = 'Duur: ' + formatTime(seconds);
+      recordView.style.display = 'none';
+      previewView.style.display = 'block';
+      stream.getTracks().forEach(t => t.stop());
+      if (recCleanup) { try { recCleanup(); } catch (e) {} recCleanup = null; }
+      setMicStatus('ready');
+      updateButtons();
+    };
+    mediaRecorder.start(1000);
+    isRecording = true; isPaused = false; seconds = 0;
+    timerEl.textContent = '00:00';
+    setMicStatus('recording');
+    hideBanner();
+    timerInterval = setInterval(() => { seconds++; timerEl.textContent = formatTime(seconds); }, 1000);
+    renderRecordControls();
+  }
+  function stopRecording() {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      isRecording = false; isPaused = false;
+      clearInterval(timerInterval);
+      renderRecordControls();
+    }
+  }
+
   startBtn.addEventListener('click', async () => {
     if (!ensureConsent()) return;
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      audioChunks = [];
-      let mimeType = 'audio/webm';
-      if (!MediaRecorder.isTypeSupported(mimeType)) { mimeType = 'audio/mp4'; if (!MediaRecorder.isTypeSupported(mimeType)) mimeType = ''; }
-      mediaRecorder = mimeType ? new MediaRecorder(stream, { mimeType }) : new MediaRecorder(stream);
-      mediaRecorder.ondataavailable = e => { if (e.data.size > 0) audioChunks.push(e.data); };
-      mediaRecorder.onstop = () => {
-        audioBlob = new Blob(audioChunks, { type: mediaRecorder.mimeType || 'audio/webm' });
-        audioUrl = URL.createObjectURL(audioBlob);
-        audioPlayer.src = audioUrl;
-        previewMeta.textContent = 'Duur: ' + formatTime(seconds);
-        recordView.style.display = 'none';
-        previewView.style.display = 'block';
-        stream.getTracks().forEach(t => t.stop());
-        setMicStatus('ready');
-        updateButtons();
-      };
-      mediaRecorder.start();
-      isRecording = true; isPaused = false; seconds = 0;
-      timerEl.textContent = '00:00';
-      setMicStatus('recording');
-      hideBanner();
-      timerInterval = setInterval(() => { seconds++; timerEl.textContent = formatTime(seconds); }, 1000);
-      renderRecordControls();
+      beginRecording(stream);
     } catch (err) { handlePermissionError(err); }
   });
 
+  // Teams-/online gesprek: geluid van gedeeld tabblad/scherm + eigen microfoon mixen
+  const screenRecBtn = document.getElementById('screenRecBtn');
+  const screenRecWrap = document.getElementById('screenRecWrap');
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getDisplayMedia) screenRecWrap.style.display = 'none';
+  screenRecBtn.addEventListener('click', async () => {
+    if (!ensureConsent()) return;
+    let disp = null, mic = null, ac = null;
+    try {
+      disp = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false } });
+    } catch (err) {
+      if (err.name !== 'NotAllowedError') showStatus('error', '<div>Delen niet gelukt: ' + escapeHtml(err.message || err.name) + '</div>');
+      return;
+    }
+    if (!disp.getAudioTracks().length) {
+      disp.getTracks().forEach(t => t.stop());
+      showStatus('error', '<div>Er wordt geen geluid gedeeld. Kies het Teams-tabblad of het scherm en zet <strong>"Ook geluid delen"</strong> aan. Op Mac kan Chrome alleen het geluid van een tabblad delen: gebruik dan Teams in de browser.</div>');
+      return;
+    }
+    try { mic = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+    catch (e) { showStatus('info', '<div>Geen microfoon: alleen het geluid van het gedeelde gesprek wordt opgenomen.</div>'); }
+    const AC = window.AudioContext || window.webkitAudioContext;
+    ac = new AC();
+    const dest = ac.createMediaStreamDestination();
+    ac.createMediaStreamSource(new MediaStream(disp.getAudioTracks())).connect(dest);
+    if (mic) ac.createMediaStreamSource(mic).connect(dest);
+    const vt = disp.getVideoTracks()[0];
+    if (vt) vt.addEventListener('ended', stopRecording);
+    beginRecording(dest.stream, () => {
+      disp.getTracks().forEach(t => t.stop());
+      if (mic) mic.getTracks().forEach(t => t.stop());
+      ac.close();
+    });
+  });
+
   function renderRecordControls() {
+    const sw = document.getElementById('screenRecWrap');
+    if (sw && navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia) sw.style.display = isRecording ? 'none' : '';
     if (!isRecording) {
       recordControls.innerHTML = '';
       recordControls.appendChild(startBtn);
@@ -1897,14 +1993,7 @@
       isPaused = !isPaused;
       renderRecordControls();
     });
-    document.getElementById('stopBtn').addEventListener('click', () => {
-      if (mediaRecorder && isRecording) {
-        mediaRecorder.stop();
-        isRecording = false; isPaused = false;
-        clearInterval(timerInterval);
-        renderRecordControls();
-      }
-    });
+    document.getElementById('stopBtn').addEventListener('click', stopRecording);
   }
 
   deleteBtn.addEventListener('click', () => {
@@ -1920,13 +2009,22 @@
     const file = e.target.files[0];
     if (!file) return;
     uploadLabel.textContent = file.name;
+    const apply = txt => {
+      transcriptText.value = txt; transcriptSource = 'transcript';
+      refreshTopics();
+      updateCharCount(); updateButtons();
+    };
+    if (/\.docx$/i.test(file.name)) {
+      file.arrayBuffer().then(readDocxTranscript).then(apply).catch(err => {
+        showStatus('error', '<div>Word-bestand kon niet worden gelezen (' + escapeHtml(err.message || String(err)) + '). Exporteer het Teams-transcript als .vtt of plak de tekst.</div>');
+      });
+      return;
+    }
     const reader = new FileReader();
     reader.onload = ev => {
       let txt = ev.target.result;
       if (/\.(vtt|srt)$/i.test(file.name)) txt = parseSubtitles(txt);
-      transcriptText.value = txt; transcriptSource = 'transcript';
-      refreshTopics();
-      updateCharCount(); updateButtons();
+      apply(txt);
     };
     reader.readAsText(file);
   });
@@ -2452,7 +2550,7 @@ ${transcript ? `<h2>Volledige transcriptie</h2><div class="transcript">${escapeH
   // Ondertitelbestanden (.vtt/.srt) omzetten naar regels met [mm:ss]
   function parseSubtitles(raw) {
     const out = [];
-    const tRe = /(?:(\d{1,2}):)?(\d{1,2}):(\d{2})[.,]\d{1,3}\s*-->/;
+    const tRe = /(?:(\d{1,2}):)?(\d{1,2}):(\d{1,2})[.,]\d{1,3}\s*-->/;
     raw.replace(/\r/g, '').split(/\n\s*\n/).forEach(block => {
       const lines = block.split('\n');
       const ti = lines.findIndex(l => tRe.test(l));
@@ -2777,6 +2875,180 @@ ${body}
   }));
   document.getElementById('vApproved').addEventListener('change', updateSteps);
   renderTopics();
+
+  // ============================================================
+  // LICHTE KOPPELINGEN: Gmail, Outlook, agenda, Teams, eBlinqx-dossier, .docx
+  // Geen API's: alles opent in het eigen programma van de adviseur.
+  // ============================================================
+  vEl.vNextTime = document.getElementById('vNextTime');
+  vEl.vNextTime.addEventListener('input', saveStateSoon);
+  const _readV = readVerslagFields;
+  readVerslagFields = function () { _readV(); verslagState.vNextTime = vEl.vNextTime.value; };
+  const _writeV = writeVerslagFields;
+  writeVerslagFields = function () { _writeV(); vEl.vNextTime.value = verslagState.vNextTime || '10:00'; };
+
+  function openExternal(url) {
+    const w = window.open(url, '_blank', 'noopener');
+    if (!w) showStatus('info', '<div>Pop-up geblokkeerd. Sta pop-ups toe voor deze site en probeer opnieuw.</div>');
+  }
+  function mailSubject() { return 'Samenvatting van ons gesprek' + (officeName.value.trim() ? ' – ' + officeName.value.trim() : ''); }
+  function approvedOrConfirm() {
+    return vApproved.checked || confirm('Het verslag is nog niet als gecontroleerd goedgekeurd. Toch doorgaan?');
+  }
+  let gmailWarned = false;
+  document.getElementById('vGmailBtn').addEventListener('click', () => {
+    if (!approvedOrConfirm()) return;
+    if (!gmailWarned && !confirm('Gebruik je een zakelijk Google Workspace-account met verwerkersovereenkomst?\nEen privé-Gmail-account is niet geschikt voor klantgegevens.\n\nDoorgaan naar Gmail?')) return;
+    gmailWarned = true;
+    const to = vEl.vMailTo.value.replace(/\s/g, '');
+    openExternal('https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to) + '&su=' + encodeURIComponent(mailSubject()) + '&body=' + encodeURIComponent(buildMailText()));
+  });
+  document.getElementById('vOutlookBtn').addEventListener('click', () => {
+    if (!approvedOrConfirm()) return;
+    const to = vEl.vMailTo.value.replace(/\s/g, '');
+    openExternal('https://outlook.office.com/mail/deeplink/compose?to=' + encodeURIComponent(to) + '&subject=' + encodeURIComponent(mailSubject()) + '&body=' + encodeURIComponent(buildMailText()));
+  });
+
+  // Agenda
+  function eventInfo() {
+    readVerslagFields();
+    const v = verslagState;
+    if (!v.vNextContact) { showStatus('error', '<div>Vul eerst een datum in bij "Volgend contactmoment / nabellen".</div>'); vEl.vNextContact.focus(); return null; }
+    const [hh, mm] = (v.vNextTime || '10:00').split(':').map(n => parseInt(n, 10) || 0);
+    const start = new Date(v.vNextContact + 'T00:00:00');
+    start.setHours(hh, mm, 0, 0);
+    const end = new Date(start.getTime() + 30 * 60000);
+    const naam = customerName.value.trim() || 'klant';
+    const title = 'Contact ' + naam + ' – opvolging gesprek';
+    const acts = (v.vActions || '').split('\n').map(x => x.trim().replace(/^[-•*]\s*/, '')).filter(Boolean);
+    let details = 'Opvolging van het gesprek van ' + new Date().toLocaleDateString('nl-NL') + '.';
+    if (customerId.value.trim()) details += '\nKlant-ID: ' + customerId.value.trim();
+    if (acts.length) details += '\n\nActiepunten:\n' + acts.map(a => '- ' + a).join('\n');
+    details += '\n\nTip: maak in opnemengesprek.nl de "Voorbereiding vervolggesprek".';
+    return { start, end, title, details };
+  }
+  const pad = n => String(n).padStart(2, '0');
+  const utcStamp = d => d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + 'Z';
+  document.getElementById('vGcalBtn').addEventListener('click', () => {
+    const e = eventInfo(); if (!e) return;
+    openExternal('https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(e.title) + '&dates=' + utcStamp(e.start) + '/' + utcStamp(e.end) + '&details=' + encodeURIComponent(e.details));
+  });
+  document.getElementById('vOcalBtn').addEventListener('click', () => {
+    const e = eventInfo(); if (!e) return;
+    openExternal('https://outlook.office.com/calendar/deeplink/compose?path=%2Fcalendar%2Faction%2Fcompose&rru=addevent&subject=' + encodeURIComponent(e.title) + '&startdt=' + encodeURIComponent(e.start.toISOString()) + '&enddt=' + encodeURIComponent(e.end.toISOString()) + '&body=' + encodeURIComponent(e.details));
+  });
+  document.getElementById('vIcsBtn').addEventListener('click', () => {
+    const e = eventInfo(); if (!e) return;
+    const esc = t => String(t).replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+    const fold = line => { const out = []; while (line.length > 74) { out.push(line.slice(0, 74)); line = ' ' + line.slice(74); } out.push(line); return out.join('\r\n'); };
+    const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//opnemengesprek.nl//NL', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+      'UID:' + Date.now() + '-' + Math.random().toString(36).slice(2) + '@opnemengesprek.nl',
+      'DTSTAMP:' + utcStamp(new Date()), 'DTSTART:' + utcStamp(e.start), 'DTEND:' + utcStamp(e.end),
+      'SUMMARY:' + esc(e.title), 'DESCRIPTION:' + esc(e.details),
+      'BEGIN:VALARM', 'TRIGGER:-PT15M', 'ACTION:DISPLAY', 'DESCRIPTION:' + esc(e.title), 'END:VALARM',
+      'END:VEVENT', 'END:VCALENDAR'].map(fold).join('\r\n') + '\r\n';
+    downloadTextFile(ics, 'contactmoment-' + sanitizeFilename(customerName.value.trim()) + '.ics', 'text/calendar');
+    showStatus('success', '<div>Agenda-bestand gedownload. Open het om de afspraak toe te voegen.</div>');
+  });
+
+  // Teams-chat (ontvanger kies je zelf in Teams)
+  document.getElementById('vTeamsBtn').addEventListener('click', async () => {
+    if (!approvedOrConfirm()) return;
+    readVerslagFields();
+    const v = verslagState;
+    const acts = (v.vActions || '').split('\n').map(x => x.trim().replace(/^[-•*]\s*/, '')).filter(Boolean);
+    let msg = 'Gesprek ' + (customerName.value.trim() || 'klant') + (customerId.value.trim() ? ' (' + customerId.value.trim() + ')' : '') + ' – ' + new Date().toLocaleDateString('nl-NL') + '\n';
+    const sum = (v.vOneLiner || '').trim() || (v.vSummary || '').trim();
+    if (sum) msg += sum + '\n';
+    if (acts.length) msg += '\nActiepunten:\n' + acts.map(a => '- ' + a).join('\n') + '\n';
+    if (v.vNextContact) msg += '\nVolgend contact: ' + fmtDateNl(v.vNextContact) + (v.vNextTime ? ' ' + v.vNextTime : '');
+    let text = msg;
+    if (text.length > 1500) {
+      await copyText(msg);
+      text = text.slice(0, 1400) + '…\n[volledige tekst staat op je klembord]';
+      showStatus('info', '<div>De tekst is lang; de volledige versie staat op je klembord.</div>');
+    }
+    openExternal('https://teams.microsoft.com/share?href=' + encodeURIComponent('https://www.opnemengesprek.nl/') + '&preview=false&msgText=' + encodeURIComponent(text));
+  });
+
+  // eBlinqx-dossier: vaste bestandsnaam (relatienummer_datum_klant)
+  function dossierName() {
+    const d = new Date(), stamp = d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+    const rel = customerId.value.trim().replace(/[^a-z0-9\-_]/gi, '');
+    return (rel ? rel + '_' : '') + stamp + '_gespreksverslag_' + sanitizeFilename(customerName.value.trim());
+  }
+  document.getElementById('vDossierPdfBtn').addEventListener('click', () => {
+    if (!customerName.value.trim()) { showStatus('error', '<div>Vul eerst de klantnaam in.</div>'); return; }
+    if (!approvedOrConfirm()) return;
+    const html = buildAdviceReportHtml().replace(/<title>[\s\S]*?<\/title>/, '<title>' + escapeHtmlAttr(dossierName()) + '</title>');
+    openPrintWindow(html, dossierName() + '.html');
+    showStatus('info', '<div>Kies in het printvenster <strong>Opslaan als PDF</strong>; de bestandsnaam staat al klaar. Upload de PDF daarna in het klantdossier in eBlinqx.</div>');
+  });
+  document.getElementById('vDossierHtmlBtn').addEventListener('click', () => {
+    if (!customerName.value.trim()) { showStatus('error', '<div>Vul eerst de klantnaam in.</div>'); return; }
+    if (!approvedOrConfirm()) return;
+    downloadTextFile(buildAdviceReportHtml(), dossierName() + '.html', 'text/html');
+    showStatus('success', '<div>Verslag gedownload als ' + escapeHtml(dossierName()) + '.html</div>');
+  });
+
+  // Teams-transcript (.docx) lezen zonder bibliotheek: zip + DecompressionStream
+  async function unzipEntry(buf, name) {
+    const dv = new DataView(buf), u8 = new Uint8Array(buf);
+    let eocd = -1;
+    for (let i = buf.byteLength - 22; i >= Math.max(0, buf.byteLength - 66000); i--) { if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; } }
+    if (eocd < 0) throw new Error('geen geldig Word-bestand');
+    const count = dv.getUint16(eocd + 10, true);
+    let off = dv.getUint32(eocd + 16, true);
+    const dec = new TextDecoder();
+    for (let n = 0; n < count; n++) {
+      if (dv.getUint32(off, true) !== 0x02014b50) break;
+      const method = dv.getUint16(off + 10, true), csize = dv.getUint32(off + 20, true);
+      const nlen = dv.getUint16(off + 28, true), elen = dv.getUint16(off + 30, true), clen = dv.getUint16(off + 32, true);
+      const local = dv.getUint32(off + 42, true);
+      const fname = dec.decode(u8.subarray(off + 46, off + 46 + nlen));
+      if (fname === name) {
+        const lstart = local + 30 + dv.getUint16(local + 26, true) + dv.getUint16(local + 28, true);
+        const data = u8.subarray(lstart, lstart + csize);
+        if (method === 0) return dec.decode(data);
+        if (method !== 8 || typeof DecompressionStream === 'undefined') throw new Error('compressie niet ondersteund in deze browser');
+        const ds = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+        return await new Response(ds).text();
+      }
+      off += 46 + nlen + elen + clen;
+    }
+    throw new Error('document.xml niet gevonden');
+  }
+  async function readDocxTranscript(buf) {
+    const xml = await unzipEntry(buf, 'word/document.xml');
+    const doc = new DOMParser().parseFromString(xml, 'application/xml');
+    const W = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main';
+    const paras = Array.from(doc.getElementsByTagNameNS(W, 'p')).map(p => {
+      let t = '';
+      p.querySelectorAll('*').forEach(el => {
+        if (el.localName === 't') t += el.textContent;
+        else if (el.localName === 'tab') t += '\t';
+        else if (el.localName === 'br') t += '\n';
+      });
+      return t.trim();
+    }).filter(Boolean);
+    // Teams-indeling: "Naam   0:03" (of 00:00:03) gevolgd door de tekst; of "0:0:3.4 --> 0:0:7.1" blokken
+    const toTs = str => { const parts = str.split(':').map(x => parseFloat(x) || 0); let sec = 0; parts.forEach(v => { sec = sec * 60 + v; }); return fmtTs(sec); };
+    const out = [];
+    let pending = null;
+    const headRe = /^(.{1,80}?)\s+((?:\d{1,2}:)?\d{1,2}:\d{2})(?:\.\d+)?$/;
+    const cueRe = /^((?:\d{1,2}:)?\d{1,2}:\d{1,2})(?:[.,]\d+)?\s*-->/;
+    paras.forEach(line => {
+      let m;
+      if ((m = line.match(cueRe))) { pending = { ts: toTs(m[1]), sp: '' }; return; }
+      if ((m = line.match(headRe)) && !/[.!?]$/.test(m[1])) { pending = { ts: toTs(m[2]), sp: m[1].trim() }; return; }
+      if (pending) {
+        const sp = pending.sp;
+        out.push('[' + pending.ts + '] ' + (sp ? sp + ': ' : '') + line);
+        pending = null;
+      } else out.push(line);
+    });
+    return out.join('\n');
+  }
 
   checkPermissionStatus();
   updateButtons();
