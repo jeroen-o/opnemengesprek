@@ -1193,7 +1193,7 @@
         </details>
         <details class="guide-faq">
           <summary>Checklist</summary>
-          <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming, periodiek onderhoud, of pensioenadvies aan een werkgever en de pensioentransitie op basis van de <em>AFM Leidraad tweedepijler-pensioenadvies</em>, of een volledige klantinventarisatie particulier inclusief schadeverzekeringen); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
+          <div class="faq-content">116 aandachtspunten (98 bij een aankoopadvies) uit de <strong>AFM Leidraad Hypotheekadvisering (april 2026)</strong>, inclusief het nieuwe hoofdstuk Oversluiten. Kies bovenaan het <strong>type gesprek</strong> (aankoop, oversluiten, aanvullende hypotheek verduurzaming, periodiek onderhoud, of pensioenadvies aan een werkgever en de pensioentransitie op basis van de <em>AFM Leidraad tweedepijler-pensioenadvies</em>, een volledige klantinventarisatie particulier inclusief schadeverzekeringen, uitkopen van een partner bij scheiding, of een seniorenhypotheek); je ziet dan alleen de relevante onderdelen. Per onderdeel staat een openingsvraag. Vink af: <strong>✓</strong> = besproken, <strong>⚠</strong> = aandacht nodig, <strong>—</strong> = niet van toepassing. Standaard blijft alles alleen in het geheugen van dit tabblad. Zet "Voortgang op dit apparaat onthouden" aan als je wilt dat vinkjes en verslag per klantnaam bewaard blijven.</div>
         </details>
         <details class="guide-faq">
           <summary>Koppelingen: Gmail, Outlook, Teams en eBlinqx</summary>
@@ -1411,7 +1411,7 @@
         <ul>
           <li>Gesprek opnemen via de microfoon of een Teams-/online gesprek</li>
           <li>Live transcriberen met tijdstempels, of een transcript inlezen (.txt, .vtt, .srt, .docx)</li>
-          <li>Checklist per type gesprek: hypotheek (116 punten: aankoop, oversluiten, verduurzaming, onderhoud), pensioenadvies aan werkgevers inclusief pensioentransitie, en een klantinventarisatie particulier inclusief schadeverzekeringen</li>
+          <li>Checklist per type gesprek: hypotheek (starter, doorstromer, oversluiten, verduurzaming, onderhoud, uitkopen partner, senioren), pensioenadvies aan werkgevers inclusief pensioentransitie, en een klantinventarisatie particulier inclusief schadeverzekeringen</li>
           <li>Gespreksverslag met kernpunten, afspraken, afwijkingen van advies en aannames</li>
           <li>Concept-klantmail via Gmail of Outlook, contactmoment in je agenda</li>
           <li>Voorbereiding van het vervolggesprek en export voor het eBlinqx-dossier</li>
@@ -2018,12 +2018,87 @@
       { t: 'Informatiebehoefte (naadje van de kous, globaal, geen details)', k: ['details', 'globaal', 'naadje van de kous'] },
       { t: 'Klant heeft de geïnventariseerde gegevens gecontroleerd en bevestigd (ondertekening)', k: ['ondertekenen', 'handtekening', 'klopt dat', 'akkoord', 'controleren'] }
     ]}
+    ,
+    // ---------- Uitkopen partner bij relatiebeëindiging ----------
+    { id: 'uitk_basis', title: 'Situatie, afspraken & rol adviseur', emoji: '⚖️', q: 'Hoe staat het met de scheiding, welke afspraken liggen er al, en voor wie van u beiden adviseer ik?', items: [
+      { t: 'Vastgesteld voor wie de adviseur adviseert (blijvende partner, beide partners) en mogelijke belangentegenstelling besproken', k: ['voor wie', 'belang', 'allebei', 'beide partners', 'onafhankelijk'] },
+      { t: 'Stand van de scheiding: datum, convenant of scheidingsafspraken, mediator of advocaat betrokken', k: ['convenant', 'echtscheidingsconvenant', 'mediator', 'advocaat', 'scheiding', 'uit elkaar'] },
+      { t: 'Relatievorm en vermogensregime (gemeenschap van goederen, huwelijkse voorwaarden, samenlevingscontract)', k: ['gemeenschap van goederen', 'huwelijkse voorwaarden', 'samenlevingscontract', 'geregistreerd partner', 'getrouwd'] },
+      { t: 'Kinderen, ouderschapsplan en woonsituatie kinderen besproken', k: ['ouderschapsplan', 'kinderen', 'co-ouderschap', 'zorgregeling'] },
+      { t: 'Alimentatie (partner- en kinderalimentatie): hoogte, duur en ingangsdatum', k: ['alimentatie', 'partneralimentatie', 'kinderalimentatie'] },
+      { t: 'Overige gezamenlijke schulden en bezittingen in kaart (leningen, spaargeld, beleggingen)', k: ['gezamenlijke schuld', 'lening', 'spaargeld', 'verdeling', 'gezamenlijke rekening'] }
+    ]},
+    { id: 'uitk_woning', title: 'Woning & uitkoopsom', emoji: '🏠', q: 'Wat is de woning nu waard, wat blijft er na aftrek van de hypotheek over, en hoe verdelen jullie dat?', items: [
+      { t: 'Actuele marktwaarde bepaald (taxatie) en datum van waardering afgesproken', k: ['taxatie', 'marktwaarde', 'getaxeerd', 'woz'] },
+      { t: 'Overwaarde of onderwaarde berekend (waarde minus hypotheek en eventuele boete)', k: ['overwaarde', 'onderwaarde', 'restschuld', 'boeterente'] },
+      { t: 'Eigendomsverhouding en verdeling van de overwaarde volgens regime of afspraken', k: ['eigendom', '50/50', 'de helft', 'verdeling', 'aandeel'] },
+      { t: 'Hoogte van de uitkoopsom vastgesteld en onderbouwd', k: ['uitkoopsom', 'uitkopen', 'uitkoop'] },
+      { t: 'Bijkomende kosten in kaart (notaris, taxatie, advies, eventuele boeterente)', k: ['notaris', 'notariskosten', 'taxatiekosten', 'advieskosten'] },
+      { t: 'Opbouwproducten en polissen bij de hypotheek: waarde en verdeling (KEW, SEW, BEW, beleggingsdepot)', k: ['kew!', 'sew!', 'bew!', 'spaardeel', 'beleggingsdepot', 'kapitaalverzekering', 'afkoopwaarde'] }
+    ]},
+    { id: 'uitk_fin', title: 'Financiering blijvende partner', emoji: '💶', q: 'Kunt u de woning alleen betalen, ook als er straks iets verandert in werk, inkomen of gezin?', items: [
+      { t: 'Inkomen blijvende partner alleen beoordeeld, incl. ontvangen partneralimentatie (kinderalimentatie telt niet mee voor de toets)', k: ['eigen inkomen', 'alleen', 'partneralimentatie', 'inkomen'] },
+      { t: 'Betaalbaarheid op basis van werkelijke uitgaven als alleenstaande (eventueel met kinderen) doorgerekend', k: ['betaalbaar', 'alleen betalen', 'maandlasten', 'budget', 'uitgaven'] },
+      { t: 'Bestaande hypotheek overnemen (rente meenemen) versus nieuwe hypotheek vergeleken', k: ['overnemen', 'hypotheek overnemen', 'rente meenemen', 'nieuwe hypotheek', 'oversluiten'] },
+      { t: 'Ontslag uit hoofdelijke aansprakelijkheid voor de vertrekkende partner aangevraagd en besproken', k: ['hoofdelijk', 'ontslag uit', 'aansprakelijkheid', 'vrijstelling'] },
+      { t: 'Benodigde verhoging voor uitkoopsom en kosten berekend; past binnen leennormen en persoonlijke situatie', k: ['verhoging', 'extra lenen', 'bijlenen', 'leennorm'] },
+      { t: 'Alternatieven besproken als uitkopen niet past (verkopen, tijdelijk samen eigenaar blijven, ouders/familielening)', k: ['verkopen', 'samen eigenaar', 'familielening', 'ouders', 'alternatief'] }
+    ]},
+    { id: 'uitk_fis', title: 'Fiscale gevolgen uitkoop', emoji: '🧾', q: 'Welk deel van de schuld is straks aftrekbaar, en wat betekent de uitkoop fiscaal voor u allebei?', items: [
+      { t: 'Hypotheekverleden en bestaande eigenwoningschuld van beide partners vastgesteld', k: ['eigenwoningschuld', 'hypotheekverleden', 'aangifte', 'aanslag'] },
+      { t: 'Fiscale behandeling van het uitkoopdeel en eigenwoningreserve van de vertrekkende partner besproken', k: ['eigenwoningreserve', 'bijleenregeling', 'uitkoopdeel', 'box 1', 'box 3'] },
+      { t: 'Fiscale gevolgen voor de vertrekkende partner benoemd (tijdelijke renteaftrek bij scheiding, nieuwe woning)', k: ['renteaftrek', 'aftrekbaar', 'twee jaar', 'tijdelijk'] },
+      { t: 'Gevolgen voor opbouwproducten en overgangsrecht besproken; zo nodig fiscalist ingeschakeld', k: ['overgangsrecht', 'fiscalist', 'belastingadviseur', 'vrijstelling'] }
+    ]},
+    { id: 'uitk_risico', title: 'Risico\'s & aanpassingen na scheiding', emoji: '🛡️', q: 'Wat gebeurt er met de woning als u alleen bent en ziek wordt, uw baan verliest of overlijdt?', items: [
+      { t: 'Arbeidsongeschiktheid en werkloosheid als alleenverdiener doorgerekend', k: ['arbeidsongeschikt', 'werkloos', 'ziek', 'alleenverdiener'] },
+      { t: 'Overlijdensrisicoverzekering aangepast (verzekerde, begunstigde, bedrag) en kinderen meegenomen', k: ['overlijdensrisicoverzekering', 'orv!', 'begunstig', 'verzekerd bedrag'] },
+      { t: 'Pensioen: verevening, partnerpensioen en afmelden van ex-partner besproken', k: ['verevening', 'partnerpensioen', 'pensioen', 'bijzonder partnerpensioen'] },
+      { t: 'Testament, levenstestament en begunstigingen aanpassen aanbevolen', k: ['testament', 'levenstestament', 'begunstiging'] },
+      { t: 'Overige verzekeringen op naam aangepast (opstal, inboedel, aansprakelijkheid, woonlasten)', k: ['opstal', 'inboedel', 'aansprakelijkheid', 'woonlastenverzekering', 'polis'] }
+    ]},
+    // ---------- Seniorenhypotheek / verzilveren ----------
+    { id: 'sen_situatie', title: 'Doel, gezondheid & betrokkenen', emoji: '👵', q: 'Waarvoor wilt u de waarde van uw woning gebruiken, en hoe lang wilt en kunt u hier blijven wonen?', items: [
+      { t: 'Doel van de financiering vastgesteld (verbouwen, levensloopbestendig of duurzaam maken, inkomensaanvulling, schenken, aflossen)', k: ['verbouwen', 'levensloopbestendig', 'aanvulling', 'schenken', 'aflossen', 'verduurzamen', 'doel'] },
+      { t: 'Woonwensen en gezondheid besproken: hoe lang blijven wonen, kans op verhuizing naar zorg', k: ['blijven wonen', 'gezondheid', 'zorg', 'verpleeghuis', 'verhuizen', 'traplift'] },
+      { t: 'Partner betrokken en, met toestemming van de klant, kinderen of vertrouwenspersoon', k: ['kinderen', 'zoon', 'dochter', 'vertrouwenspersoon', 'erbij'] },
+      { t: 'Begrip van de klant gecontroleerd; extra aandacht en tijd waar nodig (kwetsbaarheid, geheugen)', k: ['begrijpt u', 'duidelijk', 'nog eens', 'samenvatten'] },
+      { t: 'Levenstestament of volmacht aanwezig, voor het geval de klant later niet meer zelf kan beslissen', k: ['levenstestament', 'volmacht', 'wilsonbekwaam', 'curator', 'bewindvoerder'] }
+    ]},
+    { id: 'sen_inkomen', title: 'Inkomen, vermogen & lasten', emoji: '💰', q: 'Wat is uw inkomen nu, wat blijft er over als een van u beiden overlijdt, en welke kosten komen er nog aan?', items: [
+      { t: 'Inkomen in kaart: AOW, pensioenen, lijfrentes en overig inkomen', k: ['aow!', 'pensioen', 'lijfrente', 'uitkering', 'inkomen'] },
+      { t: 'Inkomen na overlijden van een van de partners doorgerekend (nabestaandenpensioen, AOW alleenstaande)', k: ['overlijden', 'nabestaandenpensioen', 'partnerpensioen', 'alleenstaande'] },
+      { t: 'Vermogen, spaargeld en bestaande hypotheek in kaart (waarde woning, restschuld, aflossingsvrij deel)', k: ['spaargeld', 'vermogen', 'restschuld', 'aflossingsvrij', 'woz', 'waarde'] },
+      { t: 'Vaste lasten en verwachte zorgkosten besproken (eigen bijdrage Wmo/Wlz, aanpassingen woning)', k: ['eigen bijdrage', 'wmo!', 'wlz!', 'zorgkosten', 'thuiszorg'] },
+      { t: 'Betaalbaarheid van rente (en eventuele aflossing) op basis van het pensioeninkomen beoordeeld', k: ['betaalbaar', 'maandlasten', 'rente betalen', 'pensioeninkomen'] }
+    ]},
+    { id: 'sen_product', title: 'Productkeuze & werking', emoji: '🏦', q: 'Weet u hoe de schuld zich ontwikkelt, en wat er gebeurt bij verkoop, verhuizing of overlijden?', items: [
+      { t: 'Vormen uitgelegd: seniorenhypotheek met rentebetaling versus verzilver-/opeethypotheek met bijschrijving van rente', k: ['verzilver', 'opeethypotheek', 'seniorenhypotheek', 'rente bijschrijven', 'bijgeschreven', 'aflossingsvrij'] },
+      { t: 'Groei van de schuld bij bijschrijven van rente over 10, 15 en 20 jaar doorgerekend', k: ['schuld groeit', 'rente op rente', 'over tien jaar', 'over twintig jaar', 'doorgerekend'] },
+      { t: 'Maximale opname en verhouding tot de woningwaarde besproken (ook bij lagere woningwaarde)', k: ['maximaal', 'percentage van de waarde', 'woningwaarde', 'waardedaling'] },
+      { t: 'Opname ineens of in termijnen, kosten en mogelijkheden tot (boetevrij) aflossen besproken', k: ['ineens', 'termijnen', 'periodiek', 'kosten', 'boetevrij', 'aflossen'] },
+      { t: 'Afwikkeling bij overlijden, verkoop of verhuizing naar zorg uitgelegd, inclusief mogelijke restschuld', k: ['bij overlijden', 'verkoop', 'restschuld', 'afwikkeling', 'erfgenamen'] },
+      { t: 'Alternatieven besproken: verkopen en huren, kleiner wonen, familiehypotheek, schenken, Warmtefonds', k: ['huren', 'kleiner wonen', 'familiehypotheek', 'warmtefonds', 'alternatief', 'verkopen'] }
+    ]},
+    { id: 'sen_fis', title: 'Fiscaal & erfrecht', emoji: '📜', q: 'Wat betekent deze lening voor uw belastingaangifte en voor wat uw erfgenamen straks krijgen?', items: [
+      { t: 'Fiscale positie: box 1 (besteding aan de woning) of box 3 (consumptief/inkomensaanvulling) toegelicht', k: ['box 1', 'box 3', 'aftrekbaar', 'renteaftrek'] },
+      { t: 'Gevolgen voor de nalatenschap, erfbelasting en eventuele schenkingen aan kinderen besproken', k: ['nalatenschap', 'erfenis', 'erfbelasting', 'schenking', 'schenkbelasting', 'erven'] },
+      { t: 'Effect op inkomensafhankelijke regelingen (zorgtoeslag, eigen bijdrage Wlz door vermogen) benoemd', k: ['zorgtoeslag', 'eigen bijdrage', 'vermogensinkomensbijtelling', 'toeslag'] }
+    ]},
+    { id: 'sen_risico', title: 'Risico\'s op lange termijn', emoji: '⏳', q: 'Wat als u langer leeft dan verwacht, de rente stijgt of de woning minder waard wordt?', items: [
+      { t: 'Langlevenrisico besproken: schuld en lasten blijven ook betaalbaar als de klant heel oud wordt', k: ['langer leven', 'heel oud', 'levensverwachting', 'langleven'] },
+      { t: 'Renterisico en rentevastperiode afgestemd op leeftijd en betaalbaarheid', k: ['rentevast', 'rentestijging', 'rente stijgt'] },
+      { t: 'Risico van waardedaling van de woning en gevolgen voor overwaarde en erfgenamen', k: ['waardedaling', 'minder waard', 'huizenprijzen'] },
+      { t: 'Scenario opname in zorginstelling of overlijden partner en wat dan met de woning gebeurt', k: ['zorginstelling', 'verpleeghuis', 'overlijden', 'achterblijvende'] }
+    ]}
   ];
 
   const TEMPLATES = {
     starter:     { label: 'Hypotheekadvies starter (eerste koopwoning)', chip: 'Starter', cat: 'Hypotheek', desc: 'Eerste koopwoning. Fiscale punten over hypotheekverleden staan op n.v.t.; zet ze terug als ze toch spelen.', autoNa: { fiscaliteit: [0, 1, 2, 3, 5, 6] }, groups: ['kennismaking', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'verduurzaming', 'fiscaliteit', 'product', 'lifeevents', 'relatie', 'advies', 'nazorg'] },
     hypotheek:   { label: 'Hypotheekadvies doorstromer', chip: 'Doorstromer', cat: 'Hypotheek', desc: 'Klant met hypotheekverleden: volledige checklist inclusief fiscaal verleden.', groups: ['kennismaking', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'verduurzaming', 'fiscaliteit', 'product', 'lifeevents', 'relatie', 'advies', 'nazorg'] },
     oversluiten: { label: 'Oversluiten / rente openbreken (Leidraad hfst. 10)', chip: 'Oversluiten', cat: 'Hypotheek', desc: 'Oversluiten of rente openbreken: nieuw adviesmoment volgens hoofdstuk 10 van de leidraad.', groups: ['oversluiten', 'inventarisatie', 'woonlasten', 'rentevastperiode', 'fiscaliteit', 'product', 'lifeevents', 'advies'] },
+    uitkopen:    { label: 'Uitkopen partner bij relatiebeëindiging', chip: 'Uitkopen partner', cat: 'Hypotheek', desc: 'Een van de partners blijft in de woning en koopt de ander uit. Leg vast voor wie je adviseert.', groups: ['uitk_basis', 'uitk_woning', 'uitk_fin', 'uitk_fis', 'uitk_risico', 'advies', 'nazorg'], source: { title: 'AFM Leidraad Hypotheekadvisering (april 2026: relatiebeëindiging, fiscaliteit, woonlasten), aangevuld met eigen aandachtspunten voor uitkoop', url: 'https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering' }, generic: true },
+    senioren:    { label: 'Seniorenhypotheek / overwaarde verzilveren', chip: 'Senioren', cat: 'Hypotheek', desc: 'Senioren die de overwaarde willen gebruiken: rentebetalende seniorenhypotheek of verzilverhypotheek.', groups: ['sen_situatie', 'sen_inkomen', 'sen_product', 'sen_fis', 'sen_risico', 'verduurzaming', 'advies', 'nazorg'], source: { title: 'AFM Leidraad Hypotheekadvisering (april 2026: woonlasten na pensionering, life events, fiscaliteit), aangevuld met eigen aandachtspunten voor seniorenhypotheken', url: 'https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering' }, generic: true },
     ebv:         { label: 'Aanvullende hypotheek verduurzaming (EBV)', chip: 'Verduurzaming', cat: 'Hypotheek', desc: 'Aanvullende hypotheek voor energiebesparende voorzieningen.', groups: ['verduurzaming', 'woonlasten', 'advies'] },
     onderhoud:   { label: 'Periodiek onderhoud / nazorggesprek', chip: 'Onderhoud', cat: 'Hypotheek', desc: 'Periodiek gesprek over een lopende hypotheek.', groups: ['onderhoud', 'lifeevents', 'woonlasten', 'relatie', 'nazorg'] },
     pensioen:    { label: 'Pensioenadvies aan werkgever (tweede pijler)', chip: 'Pensioen werkgever', cat: 'Pensioen', desc: 'Advies aan een werkgever over een nieuw of te verlengen pensioenproduct.', groups: ['pens_basis', 'pens_fin', 'pens_kennis', 'pens_doel', 'pens_product', 'pens_dossier'], source: { title: 'AFM Leidraad tweedepijler-pensioenadvies (augustus 2023)', url: 'https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf' }, generic: true },
