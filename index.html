@@ -609,6 +609,15 @@
   .spk button { padding: 4px 10px; font-size: 12px; border-radius: 999px; background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
   .spk button.on { background: #2563eb; color: #fff; border-color: #2563eb; }
 
+  /* WHISPER */
+  .whisper-box { margin-top: 16px; border: 1px solid #e2e8f0; border-radius: 10px; padding: 14px; background: #f8fafc; text-align: left; }
+  .whisper-box h4 { font-size: 13px; margin-bottom: 8px; color: #0f172a; }
+  .w-float { position: fixed; right: 16px; bottom: 16px; z-index: 50; width: min(360px, calc(100vw - 32px)); background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; box-shadow: 0 12px 32px rgba(15,23,42,.18); padding: 14px; font-size: 12px; color: #334155; display: none; }
+  .w-float strong { display: block; font-size: 13px; color: #0f172a; margin-bottom: 6px; }
+  .w-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin: 8px 0; }
+  .w-bar > div { height: 100%; width: 0%; background: #2563eb; transition: width .3s; }
+  .w-float .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -880,6 +889,18 @@
           </button>
         </div>
         <audio id="audioPlayer" controls></audio>
+        <div class="whisper-box">
+          <h4>Opname uitschrijven, lokaal op dit apparaat</h4>
+          <div class="share-row">
+            <select id="wModel" class="std" style="width:auto;">
+              <option value="Xenova/whisper-tiny">Snel: tiny (± 40 MB)</option>
+              <option value="Xenova/whisper-base" selected>Standaard: base (± 80 MB)</option>
+              <option value="Xenova/whisper-small">Nauwkeurig: small (± 250 MB)</option>
+            </select>
+            <button class="btn-primary btn-sm" id="wBtn">Uitschrijven</button>
+          </div>
+          <div class="hint" style="margin-top:6px;">Met het spraakmodel Whisper, in je browser. Het model wordt eenmalig gedownload (Hugging Face) en daarna bewaard; de audio verlaat je apparaat niet. Duurt ongeveer 0,3 tot 2 keer de gespreksduur, afhankelijk van je computer. Taal: zoals ingesteld bij Live transcriberen.</div>
+        </div>
       </div>
     </div>
 
@@ -942,9 +963,15 @@
     <div class="tab-content" id="tab-transcript">
       <label class="upload-zone" for="fileInput">
         <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-        <span id="uploadLabel">Klik om een bestand te kiezen (.txt, .md, .vtt, .srt, .docx)</span>
-        <input type="file" id="fileInput" accept=".txt,.md,.vtt,.srt,.docx,text/plain">
+        <span id="uploadLabel">Klik om een bestand te kiezen: transcript (.txt, .vtt, .srt, .docx) of audio (.mp3, .m4a, .wav, .webm, .mp4)</span>
+        <input type="file" id="fileInput" accept=".txt,.md,.vtt,.srt,.docx,text/plain,audio/*,video/mp4,.m4a,.mp3,.wav,.webm,.ogg,.mp4">
       </label>
+      <div class="hint" style="margin-top:8px;">Audio wordt lokaal uitgeschreven met Whisper, model:
+        <select id="wModel2" class="std" style="width:auto; padding:4px 8px; font-size:12px;">
+          <option value="Xenova/whisper-tiny">Snel: tiny (± 40 MB)</option>
+          <option value="Xenova/whisper-base" selected>Standaard: base (± 80 MB)</option>
+          <option value="Xenova/whisper-small">Nauwkeurig: small (± 250 MB)</option>
+        </select></div>
       <div class="divider"><div class="line"></div><div class="text">of plak handmatig</div><div class="line"></div></div>
       <label>Transcriptie</label>
       <textarea id="transcriptText" rows="10" placeholder="Plak hier de transcriptie van het klantgesprek..."></textarea>
@@ -1121,6 +1148,10 @@
           <em>Let op:</em> gebruik voor klantgegevens een zakelijk account (Google Workspace of Microsoft 365) met een verwerkersovereenkomst, geen privé-Gmail.</div>
         </details>
         <details class="guide-faq">
+          <summary>Opname uitschrijven zonder Google (Whisper)</summary>
+          <div class="faq-content">Na een opname (of bij "Bestand inlezen" met een audiobestand zoals .mp3, .m4a of een Teams-opname) kun je het gesprek <strong>lokaal laten uitschrijven</strong> met het spraakmodel Whisper. De audio verlaat je apparaat niet; alleen het model wordt eenmalig gedownload. Kies "tiny" voor snelheid of "small" voor nauwkeurigheid. Het resultaat krijgt tijdstempels per zin en komt in "Bestand inlezen". Controleer namen en bedragen altijd zelf.</div>
+        </details>
+        <details class="guide-faq">
           <summary>Wat heeft de adviseur gemist?</summary>
           <div class="faq-content">Bij elk type gesprek toont de checklist bovenaan <strong>"Mogelijk gemist"</strong>: alle punten die je niet hebt afgevinkt én die niet in het transcript zijn herkend, plus punten met ⚠. Na het stoppen van een live transcriptie krijg je direct een melding met het aantal. Klik op een punt om ernaar te springen. Dezelfde lijst staat in het verslag en in de voorbereiding voor het vervolggesprek, zodat de inventarisatie compleet wordt. Wil je een inhoudelijk oordeel (ook over hoe grondig iets is besproken), gebruik dan het AFM-controlepakket.</div>
         </details>
@@ -1199,6 +1230,7 @@
             <tr><td>Live transcriberen, inspreken</td><td>Spraakdienst van Google (via Chrome/Edge)</td><td>Tekst in je browser; audioverwerking valt onder de voorwaarden van Google</td></tr>
             <tr><td>Bestand inlezen, checklist, herkenning, verslag</td><td>In je browser</td><td>In het geheugen; op dit apparaat alleen als "onthouden" aanstaat</td></tr>
             <tr><td>Concept-klantmail, agenda, Teams-chat</td><td>Je eigen Gmail, Outlook of Teams (de tekst gaat mee in de link)</td><td>Pas opgeslagen of verstuurd als jij dat daar doet; valt onder je eigen account</td></tr>
+            <tr><td>Opname of audiobestand uitschrijven (Whisper)</td><td>In je browser; het spraakmodel wordt eenmalig gedownload van Hugging Face, de bibliotheek van jsDelivr</td><td>Audio en tekst blijven op je apparaat; model in de browsercache</td></tr>
             <tr><td>Teams- of online gesprek opnemen</td><td>In je browser (gedeeld tabblad + microfoon)</td><td>Alleen in het geheugen, tot jij downloadt</td></tr>
             <tr><td>AFM-controlepakket</td><td>Downloads op je apparaat; Claude.ai alleen als jij uploadt</td><td>Volgens je Claude-account en de voorwaarden van Anthropic</td></tr>
             <tr><td>Website zelf</td><td>GitHub Pages levert alleen de pagina</td><td>Er wordt geen ingevoerde informatie naar een server gestuurd</td></tr>
@@ -1360,6 +1392,12 @@
 
   <div class="footer">Alles draait lokaal in je browser. Uitzonderingen: live transcriberen en inspreken (spraakdienst van Google) en het AFM-controlepakket, alleen als jij het zelf naar Claude.ai stuurt.<br>
     Checklist gebaseerd op de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">AFM Leidraad Hypotheekadvisering (april 2026)</a> en, voor pensioenadvies aan werkgevers, de <a href="https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf" target="_blank" rel="noopener noreferrer">AFM Leidraad tweedepijler-pensioenadvies (2023)</a>. Een leidraad is een voorbeeld van hoe je kunt voldoen aan artikel 4:23 Wft en geen wet- of regelgeving; deze tool biedt geen garantie van compliance.</div>
+  <div class="w-float" id="wFloat" role="status" aria-live="polite">
+    <strong id="wTitle">Uitschrijven</strong>
+    <div id="wText">Voorbereiden…</div>
+    <div class="w-bar"><div id="wBar"></div></div>
+    <div class="row"><span id="wEta"></span><button class="btn-secondary btn-sm" id="wCancel">Stoppen</button></div>
+  </div>
 </main>
 
 <script>
@@ -2450,6 +2488,10 @@
       refreshTopics();
       updateCharCount(); updateButtons();
     };
+    if (/^(audio|video)\//.test(file.type) || /\.(mp3|m4a|wav|webm|ogg|mp4|aac)$/i.test(file.name)) {
+      if (confirm('Audiobestand "' + file.name + '" lokaal uitschrijven met Whisper (' + wModel.options[wModel.selectedIndex].text + ')?\nDe audio verlaat je apparaat niet.')) transcribeBlob(file, file.name);
+      return;
+    }
     if (/\.docx$/i.test(file.name)) {
       file.arrayBuffer().then(readDocxTranscript).then(apply).catch(err => {
         showStatus('error', '<div>Word-bestand kon niet worden gelezen (' + escapeHtml(err.message || String(err)) + '). Exporteer het Teams-transcript als .vtt of plak de tekst.</div>');
@@ -3560,10 +3602,10 @@ ${body}
       el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1800);
     }));
   }
-  function notifyMissing() {
+  function notifyMissing(prefix) {
     if (!getCurrentTranscriptText()) return;
     const n = missingItems().reduce((a, x) => a + x.items.filter(i => i.kind === 'missing').length, 0);
-    if (n > 0) showStatus('info', '<div>Gesprek gestopt. <strong>' + n + ' punten</strong> uit de checklist zijn mogelijk nog niet besproken. <button class="btn-secondary btn-sm" onclick="goTab(\'checklist\'); document.getElementById(\'missingBox\').open = true;">Bekijk wat ontbreekt</button></div>');
+    if (n > 0) showStatus('info', '<div>' + escapeHtml(prefix || 'Gesprek gestopt.') + ' <strong>' + n + ' punten</strong> uit de checklist zijn mogelijk nog niet besproken. <button class="btn-secondary btn-sm" onclick="goTab(\'checklist\'); document.getElementById(\'missingBox\').open = true;">Bekijk wat ontbreekt</button></div>');
   }
   function missingHtml() {
     const list = missingItems();
@@ -3622,6 +3664,117 @@ ${body}
     sub(/\b[A-Z][a-zà-ÿ]+(?:straat|laan|weg|plein|singel|gracht|kade|dreef|hof|park|dijk|steeg|pad|baan|veld)\s+\d{1,4}[a-zA-Z]?\b/g, '[ADRES]');
     return t;
   }
+
+  // ============================================================
+  // LOKAAL UITSCHRIJVEN MET WHISPER (transformers.js in een Web Worker)
+  // ============================================================
+  const wModel = document.getElementById('wModel');
+  const wModel2 = document.getElementById('wModel2');
+  wModel.addEventListener('change', () => { wModel2.value = wModel.value; });
+  wModel2.addEventListener('change', () => { wModel.value = wModel2.value; });
+  const wFloat = document.getElementById('wFloat'), wTitle = document.getElementById('wTitle'), wText = document.getElementById('wText');
+  const wBar = document.getElementById('wBar'), wEta = document.getElementById('wEta');
+  const W_SRC = `
+import { pipeline, env } from 'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.2';
+env.allowLocalModels = false;
+let asr = null, cur = null, device = 'wasm';
+self.onmessage = async (e) => {
+  const { audio, model, language } = e.data;
+  try {
+    if (!asr || cur !== model) {
+      try { if (self.navigator && navigator.gpu && await navigator.gpu.requestAdapter()) device = 'webgpu'; } catch (_) { device = 'wasm'; }
+      const opts = { device, progress_callback: p => self.postMessage({ type: 'load', p }) };
+      opts.dtype = device === 'webgpu' ? { encoder_model: 'fp32', decoder_model_merged: 'q4' } : 'q8';
+      try { asr = await pipeline('automatic-speech-recognition', model, opts); }
+      catch (err) { device = 'wasm'; asr = await pipeline('automatic-speech-recognition', model, { device: 'wasm', dtype: 'q8', progress_callback: opts.progress_callback }); }
+      cur = model;
+    }
+    const SR = 16000, WIN = 30 * SR, n = Math.ceil(audio.length / WIN);
+    self.postMessage({ type: 'start', n, device });
+    for (let i = 0; i < n; i++) {
+      const part = audio.subarray(i * WIN, Math.min(audio.length, (i + 1) * WIN));
+      let rms = 0; for (let k = 0; k < part.length; k += 160) rms += part[k] * part[k];
+      rms = Math.sqrt(rms / Math.max(1, part.length / 160));
+      let chunks = [];
+      if (rms > 0.002) {
+        const out = await asr(part, { language, task: 'transcribe', return_timestamps: true });
+        chunks = (out.chunks && out.chunks.length ? out.chunks : [{ text: out.text, timestamp: [0, part.length / SR] }])
+          .map(c => ({ text: (c.text || '').trim(), start: i * 30 + ((c.timestamp && c.timestamp[0]) || 0) }))
+          .filter(c => c.text && !/^\\[.*\\]$|^\\(.*\\)$|^\\*.*\\*$|^♪/.test(c.text));
+      }
+      self.postMessage({ type: 'chunk', i, n, chunks });
+    }
+    self.postMessage({ type: 'done' });
+  } catch (err) { self.postMessage({ type: 'error', message: (err && err.message) || String(err) }); }
+};`;
+  let wWorker = null, wBusy = false;
+  function wLang() { const l = (liveLanguage.value || 'nl-NL').slice(0, 2); return { nl: 'dutch', en: 'english', de: 'german', fr: 'french' }[l] || 'dutch'; }
+  function wShow(title, text, pct, eta) {
+    wFloat.style.display = 'block'; wTitle.textContent = title; wText.textContent = text;
+    wBar.style.width = Math.max(0, Math.min(100, pct || 0)) + '%'; wEta.textContent = eta || '';
+  }
+  document.getElementById('wCancel').addEventListener('click', () => {
+    if (wWorker) { wWorker.terminate(); wWorker = null; }
+    wBusy = false; wFloat.style.display = 'none';
+    showStatus('info', '<div>Uitschrijven gestopt. Het deel dat al klaar was staat bij "Bestand inlezen".</div>');
+  });
+  async function decodeTo16k(blob) {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AC();
+    const ab = await ctx.decodeAudioData(await blob.arrayBuffer());
+    ctx.close();
+    const off = new OfflineAudioContext(1, Math.ceil(ab.duration * 16000), 16000);
+    const src = off.createBufferSource(); src.buffer = ab; src.connect(off.destination); src.start();
+    const rendered = await off.startRendering();
+    return rendered.getChannelData(0);
+  }
+  async function transcribeBlob(blob, label) {
+    if (wBusy) { showStatus('error', '<div>Er loopt al een uitschrijving.</div>'); return; }
+    if (!window.Worker || !window.OfflineAudioContext) { showStatus('error', '<div>Deze browser ondersteunt lokaal uitschrijven niet. Gebruik een recente Chrome, Edge of Safari.</div>'); return; }
+    wBusy = true;
+    wShow('Uitschrijven: ' + (label || 'opname'), 'Audio voorbereiden…', 2);
+    let audio;
+    try { audio = await decodeTo16k(blob); }
+    catch (e) { wBusy = false; wFloat.style.display = 'none'; showStatus('error', '<div>Audio kon niet worden gelezen (' + escapeHtml(e.message || String(e)) + ').</div>'); return; }
+    const durSec = audio.length / 16000;
+    if (!wWorker) wWorker = new Worker(URL.createObjectURL(new Blob([W_SRC], { type: 'text/javascript' })), { type: 'module' });
+    const lines = [];
+    const header = transcriptText.value.trim() ? transcriptText.value.replace(/\s+$/, '') + '\n\n--- ' + (label || 'opname') + ' (Whisper) ---\n' : '';
+    let t0 = 0, loadFiles = {}, lastW = null;
+    goTab('transcript');
+    wWorker.onmessage = e => {
+      const m = e.data;
+      if (m.type === 'load') {
+        const p = m.p || {};
+        if (p.file && typeof p.progress === 'number') loadFiles[p.file] = p.progress;
+        const vals = Object.values(loadFiles); const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
+        wShow('Spraakmodel laden', p.status === 'ready' ? 'Model klaar' : 'Eenmalig downloaden: ' + (p.file || '…'), avg * 0.3);
+      } else if (m.type === 'start') {
+        t0 = Date.now();
+        wShow('Uitschrijven: ' + (label || 'opname'), 'Bezig (' + fmtTs(durSec) + ' audio, ' + (m.device === 'webgpu' ? 'grafische kaart' : 'processor') + ')…', 30);
+      } else if (m.type === 'chunk') {
+        m.chunks.forEach(c => { if (c.text !== lastW) lines.push('[' + fmtTs(c.start) + '] ' + c.text); lastW = c.text; });
+        transcriptText.value = header + lines.join('\n');
+        transcriptSource = 'transcript'; updateCharCount(); updateButtons();
+        const done = (m.i + 1) / m.n, el = (Date.now() - t0) / 1000;
+        const rest = done > 0 ? el / done - el : 0;
+        wShow('Uitschrijven: ' + (label || 'opname'), (m.i + 1) + ' van ' + m.n + ' delen klaar', 30 + done * 70, rest > 5 ? 'nog ± ' + fmtTs(rest) : '');
+      } else if (m.type === 'done') {
+        wBusy = false; wFloat.style.display = 'none';
+        refreshTopics();
+        showStatus('success', '<div>Uitschrijven klaar: ' + lines.length + ' regels met tijdstempels. Controleer de tekst; Whisper kan namen en bedragen verkeerd verstaan.</div>');
+        setTimeout(() => notifyMissing('Uitschrijven klaar (' + lines.length + ' regels).'), 2500);
+      } else if (m.type === 'error') {
+        wBusy = false; wFloat.style.display = 'none';
+        showStatus('error', '<div>Uitschrijven mislukt: ' + escapeHtml(m.message) + '. Probeer het kleinere model of een andere browser.</div>');
+      }
+    };
+    wWorker.postMessage({ audio, model: wModel.value, language: wLang() }, [audio.buffer]);
+  }
+  document.getElementById('wBtn').addEventListener('click', () => {
+    if (!audioBlob) { showStatus('error', '<div>Er is nog geen opname.</div>'); return; }
+    transcribeBlob(audioBlob, 'opname ' + formatTime(seconds));
+  });
 
   checkPermissionStatus();
   updateButtons();
