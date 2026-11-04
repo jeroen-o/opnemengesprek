@@ -401,6 +401,37 @@
   .dp-table th { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
   .dp-wrap { overflow-x: auto; }
 
+  /* STAPPEN & DISCUSSIEPUNTEN */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
+  .step { background: none; border: none; border-right: 1px solid #e2e8f0; border-radius: 0; padding: 12px 12px; display: flex; gap: 10px; align-items: flex-start; text-align: left; cursor: pointer; font-family: inherit; }
+  .step:last-child { border-right: none; }
+  .step:hover { background: #f8fafc; }
+  .step .num { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #cbd5e1; color: #64748b; font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .step .st-title, .step .st-sub { display: block; }
+  .step .st-title { font-size: 13px; font-weight: 600; color: #0f172a; line-height: 1.3; }
+  .step .st-sub { font-size: 11px; color: #64748b; line-height: 1.35; margin-top: 2px; }
+  .step.done .num { background: #16a34a; border-color: #16a34a; color: white; }
+  .step.current { background: #eff6ff; }
+  .step.current .num { border-color: #2563eb; color: #2563eb; }
+  .step.current.done .num { background: #16a34a; border-color: #16a34a; color: white; }
+  @media (max-width: 620px) { .steps { grid-template-columns: 1fr 1fr; } .step:nth-child(2) { border-right: none; } .step:nth-child(-n+2) { border-bottom: 1px solid #e2e8f0; } .step .st-sub { display: none; } }
+  .topics-panel { margin-top: 16px; border: 1px solid #e2e8f0; border-radius: 10px; overflow: hidden; }
+  .topics-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 10px 14px; background: #f8fafc; border-bottom: 1px solid #e2e8f0; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #334155; }
+  .topics-time { font-weight: 500; letter-spacing: 0; text-transform: none; color: #64748b; }
+  .topics-list { display: grid; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 520px) { .topics-list { grid-template-columns: 1fr; } }
+  .topic { display: flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 13px; color: #334155; background: none; border: none; border-bottom: 1px solid #f1f5f9; border-radius: 0; text-align: left; cursor: pointer; font-family: inherit; }
+  .topic:hover { background: #f8fafc; }
+  .topic .dot { width: 9px; height: 9px; border-radius: 50%; background: #cbd5e1; flex-shrink: 0; }
+  .topic.hit .dot { background: #2563eb; }
+  .topic.done .dot { background: #16a34a; }
+  .topic.warn .dot { background: #d97706; }
+  .topic .cnt { margin-left: auto; font-size: 11px; color: #94a3b8; font-variant-numeric: tabular-nums; }
+  .topics-legend { padding: 8px 14px; font-size: 11px; color: #64748b; display: flex; gap: 12px; flex-wrap: wrap; }
+  .topics-legend span::before { content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: 0; }
+  .topics-legend .l-open::before { background: #cbd5e1; } .topics-legend .l-hit::before { background: #2563eb; }
+  .topics-legend .l-done::before { background: #16a34a; } .topics-legend .l-warn::before { background: #d97706; }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -596,6 +627,13 @@
     </div>
   </div>
 
+  <div class="steps" id="steps">
+    <button class="step" data-go="live"><span class="num">1</span><span><span class="st-title">Gesprek</span><span class="st-sub">Opnemen, live uitschrijven of bestand inlezen</span></span></button>
+    <button class="step" data-go="checklist"><span class="num">2</span><span><span class="st-title">Checklist</span><span class="st-sub" id="stepCheckSub">AFM Leidraad 2026</span></span></button>
+    <button class="step" data-go="verslag"><span class="num">3</span><span><span class="st-title">Verslag</span><span class="st-sub">Kernpunten met het moment in het gesprek</span></span></button>
+    <button class="step" data-go="rapport"><span class="num">4</span><span><span class="st-title">Rapport</span><span class="st-sub" id="stepReportSub">In je eigen huisstijl. Jij keurt goed.</span></span></button>
+  </div>
+
   <div class="card">
     <div class="tabs">
       <button class="tab" data-tab="record">
@@ -704,6 +742,11 @@
         </div>
         <div class="live-transcript-area" id="liveTranscript" contenteditable="true"></div>
         <div class="char-count" id="liveCharCount" style="display:none; margin-top:8px;"></div>
+        <div class="topics-panel">
+          <div class="topics-head"><span>Discussiepunten</span><span class="topics-time">Nog niet geanalyseerd</span></div>
+          <div class="topics-list"></div>
+          <div class="topics-legend"><span class="l-open">nog niet</span><span class="l-hit">genoemd in gesprek</span><span class="l-done">afgevinkt</span><span class="l-warn">aandacht</span></div>
+        </div>
         <div class="hint" style="margin-top:16px; text-align:center;">Tip: je kunt de tekst hierboven aanpassen na het stoppen.</div>
       </div>
     </div>
@@ -718,6 +761,11 @@
       <label>Transcriptie</label>
       <textarea id="transcriptText" rows="10" placeholder="Plak hier de transcriptie van het klantgesprek..."></textarea>
       <div class="char-count" id="charCount" style="display:none;"></div>
+      <div class="topics-panel">
+        <div class="topics-head"><span>Discussiepunten</span><span class="topics-time">Nog niet geanalyseerd</span></div>
+        <div class="topics-list"></div>
+        <div class="topics-legend"><span class="l-open">nog niet</span><span class="l-hit">genoemd in gesprek</span><span class="l-done">afgevinkt</span><span class="l-warn">aandacht</span></div>
+      </div>
     </div>
 
     <div class="tab-content" id="tab-checklist">
@@ -1212,6 +1260,8 @@
     if (!recognition) { if (!initSpeechRecognition()) return; }
     recognition.lang = liveLanguage.value;
     liveStartedAt = Date.now(); segStartMs = null;
+    clearInterval(topicTimer);
+    topicTimer = setInterval(refreshTopics, 15000);
     try { recognition.start(); }
     catch (e) { recognition.stop(); setTimeout(() => { try { recognition.start(); } catch (e2) {} }, 200); }
   }
@@ -1219,6 +1269,8 @@
   function stopLiveTranscription() {
     isListening = false;
     if (liveStartedAt) { liveAccumMs += Date.now() - liveStartedAt; liveStartedAt = null; }
+    clearInterval(topicTimer);
+    setTimeout(refreshTopics, 50);
     segStartMs = null;
     if (recognition) { try { recognition.stop(); } catch (e) {} }
     liveMicCircle.classList.remove('listening');
@@ -1695,6 +1747,8 @@
     checkCountEl.textContent = done;
     checkTotalEl.textContent = '/ ' + total + ' afgerond';
     checkBarEl.style.width = total > 0 ? (done / total * 100) + '%' : '0%';
+    renderTopics();
+    updateSteps();
   }
 
   tplSelect.addEventListener('change', () => { currentTpl = tplSelect.value; saveState(); renderChecklist(); });
@@ -1770,6 +1824,7 @@
     // AFM-knop: zodra er een transcript is, ook zonder klantnaam
     afmCheckBtn.disabled = !hasText;
     afmCheckBtn.style.display = docTab ? 'inline-flex' : 'none';
+    updateSteps();
   }
 
   document.querySelectorAll('.tab').forEach(btn => {
@@ -1862,6 +1917,7 @@
       let txt = ev.target.result;
       if (/\.(vtt|srt)$/i.test(file.name)) txt = parseSubtitles(txt);
       transcriptText.value = txt; transcriptSource = 'transcript';
+      refreshTopics();
       updateCharCount(); updateButtons();
     };
     reader.readAsText(file);
@@ -1876,7 +1932,7 @@
     } else charCount.style.display = 'none';
   }
 
-  transcriptText.addEventListener('input', () => { updateCharCount(); updateButtons(); });
+  transcriptText.addEventListener('input', () => { updateCharCount(); updateButtons(); clearTimeout(topicDebounce); topicDebounce = setTimeout(refreshTopics, 1200); });
   customerName.addEventListener('input', updateButtons);
   customerId.addEventListener('input', updateButtons);
 
@@ -2647,6 +2703,72 @@ ${body}
   [calcConv, calcMin, calcRate].forEach(el => el.addEventListener('input', runCalc));
   calcRate.addEventListener('blur', () => { calcRate.value = parseNl(calcRate.value).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); });
   runCalc();
+
+  // ============================================================
+  // STAPPEN & DISCUSSIEPUNTEN (live analyse)
+  // ============================================================
+  var topicTimer = null, topicDebounce = null, lastAnalysedAt = null;
+  function refreshTopics() {
+    analyseTranscript();
+    lastAnalysedAt = getCurrentTranscriptText() ? new Date() : null;
+    renderTopics();
+    if (activeTab === 'checklist') renderChecklist();
+  }
+  function renderTopics() {
+    const lists = document.querySelectorAll('.topics-list');
+    if (!lists.length || typeof tplGroups !== 'function') return;
+    const html = tplGroups().map(g => {
+      let hits = 0, done = 0, warn = 0;
+      g.items.forEach((_, idx) => {
+        const id = g.id + '_' + idx, st = checklistState[id];
+        if (suggestions[id]) hits++;
+        if (st === 'done' || st === 'na') done++;
+        if (st === 'warn') warn++;
+      });
+      const cls = warn ? 'warn' : (done === g.items.length ? 'done' : (hits || done ? 'hit' : ''));
+      return `<button class="topic ${cls}" data-group="${g.id}"><span class="dot"></span>${escapeHtml(g.title)}<span class="cnt">${Math.max(hits, done)}/${g.items.length}</span></button>`;
+    }).join('');
+    lists.forEach(l => { l.innerHTML = html; });
+    const t = lastAnalysedAt ? 'Laatst geanalyseerd om ' + lastAnalysedAt.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) : 'Nog niet geanalyseerd';
+    document.querySelectorAll('.topics-time').forEach(el => { el.textContent = t; });
+    document.querySelectorAll('.topic').forEach(btn => btn.addEventListener('click', () => {
+      goTab('checklist');
+      const items = checklistContainer.querySelector('.checklist-items[data-group="' + btn.dataset.group + '"]');
+      if (items) {
+        items.classList.remove('hidden');
+        const h = checklistContainer.querySelector('.checklist-group-header[data-group="' + btn.dataset.group + '"]');
+        if (h) { h.classList.remove('collapsed'); h.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      }
+    }));
+  }
+  function goTab(name) {
+    const t = document.querySelector('.tab[data-tab="' + name + '"]');
+    if (t) t.click();
+  }
+  function updateSteps() {
+    const steps = document.querySelectorAll('#steps .step');
+    if (!steps.length || typeof tplGroups !== 'function') return;
+    const hasConv = !!getCurrentTranscriptText() || audioBlob !== null || !!liveTranscript.innerText.trim() || !!transcriptText.value.trim();
+    let total = 0, done = 0;
+    tplGroups().forEach(g => g.items.forEach((_, idx) => { total++; const st = checklistState[g.id + '_' + idx]; if (st === 'done' || st === 'na') done++; }));
+    const vOk = typeof hasVerslag === 'function' && hasVerslag();
+    const approved = document.getElementById('vApproved').checked;
+    const state = [hasConv, done > 0, vOk, approved];
+    const cur = { record: 0, live: 0, transcript: 0, checklist: 1, verslag: 2 }[activeTab];
+    steps.forEach((el, i) => { el.classList.toggle('done', state[i]); el.classList.toggle('current', i === cur); });
+    document.getElementById('stepCheckSub').textContent = done + ' van ' + total + ' punten afgerond';
+    document.getElementById('stepReportSub').textContent = approved ? 'Goedgekeurd. Klaar om te printen.' : 'In je eigen huisstijl. Jij keurt goed.';
+  }
+  document.querySelectorAll('#steps .step').forEach(el => el.addEventListener('click', () => {
+    const go = el.dataset.go;
+    if (go === 'live') goTab(transcriptSource === 'transcript' ? 'transcript' : (audioBlob ? 'record' : 'live'));
+    else if (go === 'rapport') {
+      goTab('verslag');
+      document.getElementById('vApproved').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    } else goTab(go);
+  }));
+  document.getElementById('vApproved').addEventListener('change', updateSteps);
+  renderTopics();
 
   checkPermissionStatus();
   updateButtons();
