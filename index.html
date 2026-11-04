@@ -618,6 +618,21 @@
   .w-bar > div { height: 100%; width: 0%; background: #2563eb; transition: width .3s; }
   .w-float .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 
+  /* DOCUMENTEN */
+  .doc-list { display: grid; gap: 6px; margin: 12px 0; }
+  .doc-item { display: flex; justify-content: space-between; gap: 10px; align-items: center; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 12px; background: #fff; }
+  .doc-item .dt { font-weight: 600; color: #0f172a; }
+  .doc-item .dm { color: #64748b; }
+  .facts-wrap { overflow-x: auto; }
+  .facts { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .facts th, .facts td { text-align: left; padding: 7px 9px; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  .facts th { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
+  .facts td.v { font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .facts td.src { color: #64748b; }
+  .facts td.src em { display: block; font-size: 11px; color: #94a3b8; }
+  .facts tr.conflict td { background: #fffbeb; }
+  .badge-warn { display: inline-block; font-size: 10px; font-weight: 700; color: #92400e; background: #fef3c7; border-radius: 999px; padding: 1px 7px; margin-left: 6px; }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -839,6 +854,10 @@
         <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
         Checklist
       </button>
+      <button class="tab" data-tab="docs">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="13" y2="17"/></svg>
+        Documenten
+      </button>
       <button class="tab" data-tab="verslag">
         <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
         Verslag
@@ -1034,6 +1053,21 @@
       <div id="checklistContainer"></div>
     </div>
 
+    <div class="tab-content" id="tab-docs">
+      <label class="upload-zone" for="docInput">
+        <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Kies klantdocumenten (pdf): werkgeversverklaring, loonstrook, jaaropgave, WOZ-beschikking, hypotheekoverzicht, pensioenoverzicht, koopovereenkomst, taxatierapport</span>
+        <input type="file" id="docInput" accept="application/pdf,.pdf,.txt" multiple>
+      </label>
+      <div class="hint" style="margin-top:8px;">Documenten worden alleen in je browser gelezen en niet opgeslagen. Gescande pdf's zonder tekstlaag kunnen niet worden gelezen (geen tekstherkenning). Controleer gevonden gegevens altijd met het originele document.</div>
+      <div class="doc-list" id="docList"></div>
+      <div id="factsBox" style="display:none;">
+        <div class="field-head"><h4 style="font-size:13px;">Gevonden gegevens <span id="factsConflicts"></span></h4>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;"><button class="btn-secondary btn-sm" id="factsToVerslag">Zet in kernpunten</button><button class="btn-ghost btn-sm" id="factsClear">Wis documenten</button></div></div>
+        <div class="facts-wrap"><table class="facts" id="factsTable"></table></div>
+      </div>
+    </div>
+
     <div class="tab-content" id="tab-verslag">
       <div class="verslag-grid">
         <div class="span2">
@@ -1148,6 +1182,10 @@
           <em>Let op:</em> gebruik voor klantgegevens een zakelijk account (Google Workspace of Microsoft 365) met een verwerkersovereenkomst, geen privé-Gmail.</div>
         </details>
         <details class="guide-faq">
+          <summary>Documenten inlezen (dossier)</summary>
+          <div class="faq-content">In het tabblad <strong>Documenten</strong> lees je pdf's van de klant in, zoals een werkgeversverklaring, loonstrook, jaaropgave, WOZ-beschikking, hypotheekoverzicht, pensioenoverzicht of koopovereenkomst. De tool herkent het soort document en zoekt gegevens als salaris, vakantiegeld, WOZ-waarde, koopsom, restschuld, rente, einde rentevast, pensioen en energielabel, met <strong>bestand en paginanummer</strong> als bron. Verschillen tussen documenten worden gemarkeerd. Met één klik zet je de gegevens in de kernpunten; ze komen ook in het verslag. Gescande pdf's zonder tekstlaag worden niet gelezen. Controleer gegevens altijd met het origineel.</div>
+        </details>
+        <details class="guide-faq">
           <summary>Opname uitschrijven zonder Google (Whisper)</summary>
           <div class="faq-content">Na een opname (of bij "Bestand inlezen" met een audiobestand zoals .mp3, .m4a of een Teams-opname) kun je het gesprek <strong>lokaal laten uitschrijven</strong> met het spraakmodel Whisper. De audio verlaat je apparaat niet; alleen het model wordt eenmalig gedownload. Kies "tiny" voor snelheid of "small" voor nauwkeurigheid. Het resultaat krijgt tijdstempels per zin en komt in "Bestand inlezen". Controleer namen en bedragen altijd zelf.</div>
         </details>
@@ -1230,6 +1268,7 @@
             <tr><td>Live transcriberen, inspreken</td><td>Spraakdienst van Google (via Chrome/Edge)</td><td>Tekst in je browser; audioverwerking valt onder de voorwaarden van Google</td></tr>
             <tr><td>Bestand inlezen, checklist, herkenning, verslag</td><td>In je browser</td><td>In het geheugen; op dit apparaat alleen als "onthouden" aanstaat</td></tr>
             <tr><td>Concept-klantmail, agenda, Teams-chat</td><td>Je eigen Gmail, Outlook of Teams (de tekst gaat mee in de link)</td><td>Pas opgeslagen of verstuurd als jij dat daar doet; valt onder je eigen account</td></tr>
+            <tr><td>Documenten inlezen</td><td>In je browser; de pdf-lezer (pdf.js) komt van cdnjs</td><td>Niet opgeslagen; weg bij sluiten van het tabblad</td></tr>
             <tr><td>Opname of audiobestand uitschrijven (Whisper)</td><td>In je browser; het spraakmodel wordt eenmalig gedownload van Hugging Face, de bibliotheek van jsDelivr</td><td>Audio en tekst blijven op je apparaat; model in de browsercache</td></tr>
             <tr><td>Teams- of online gesprek opnemen</td><td>In je browser (gedeeld tabblad + microfoon)</td><td>Alleen in het geheugen, tot jij downloadt</td></tr>
             <tr><td>AFM-controlepakket</td><td>Downloads op je apparaat; Claude.ai alleen als jij uploadt</td><td>Volgens je Claude-account en de voorwaarden van Anthropic</td></tr>
@@ -2344,7 +2383,7 @@
     downloadBtn.disabled = !(hasCustomer && hasContent);
     downloadBtn.style.display = isActionTab ? 'inline-flex' : 'none';
 
-    const docTab = ['live', 'transcript', 'checklist', 'verslag'].includes(activeTab);
+    const docTab = ['live', 'transcript', 'checklist', 'verslag', 'docs'].includes(activeTab);
     printBtn.disabled = !(hasCustomer && (hasText || hasVerslag()));
     printBtn.style.display = docTab ? 'inline-flex' : 'none';
 
@@ -2805,7 +2844,7 @@ Sluit af met:
 - Klant: ${klant}${klantId ? ' (ID: ' + klantId + ')' : ''}
 - Datum gesprek: ${datum}${notitie ? '\n- Notities adviseur: ' + notitie : ''}
 - Type gesprek: ${tplLabel}
-- ${consentLine()}${warnItems.length ? '\n- Door adviseur als ⚠ aandacht gemarkeerd: ' + warnItems.join('; ') : ''}${verslagMeta ? '\n' + verslagMeta : ''}
+- ${consentLine()}${dossierFacts.length ? '\n- Gegevens uit klantdocumenten (automatisch gelezen; controleer op tegenstrijdigheden met het gesprek): ' + dossierFacts.map(x => x.f + ' ' + x.value + ' [' + x.doc + ' p.' + x.page + ']').join('; ') : ''}${warnItems.length ? '\n- Door adviseur als ⚠ aandacht gemarkeerd: ' + warnItems.join('; ') : ''}${verslagMeta ? '\n' + verslagMeta : ''}
 
 ## TRANSCRIPTIE
 
@@ -2884,7 +2923,7 @@ Gegenereerd via opnemengesprek.nl
     });
     const scorePct = totalItems > 0 ? Math.round(((doneItems + naItems) / totalItems) * 100) : 0;
 
-    const body = verslagHtml() + `
+    const body = verslagHtml() + dossierHtml() + `
 <h2>Overzicht AFM-checklist</h2>
 <div class="summary-box">
   <div class="cell done"><div class="num">${doneItems}</div><div class="lbl">Besproken</div></div>
@@ -3775,6 +3814,147 @@ self.onmessage = async (e) => {
     if (!audioBlob) { showStatus('error', '<div>Er is nog geen opname.</div>'); return; }
     transcribeBlob(audioBlob, 'opname ' + formatTime(seconds));
   });
+
+  // ============================================================
+  // DOCUMENTEN INLEZEN (pdf.js, lokaal) — gegevens met bron en pagina
+  // ============================================================
+  const docInput = document.getElementById('docInput');
+  let dossierDocs = [], dossierFacts = [], pdfjsReady = null;
+  function loadPdfJs() {
+    if (pdfjsReady) return pdfjsReady;
+    pdfjsReady = new Promise((res, rej) => {
+      const sc = document.createElement('script');
+      sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      sc.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js'; res(window.pdfjsLib); };
+      sc.onerror = () => { pdfjsReady = null; rej(new Error('pdf-lezer kon niet worden geladen')); };
+      document.head.appendChild(sc);
+    });
+    return pdfjsReady;
+  }
+  async function pdfPages(file) {
+    const lib = await loadPdfJs();
+    const pdf = await lib.getDocument({ data: new Uint8Array(await file.arrayBuffer()) }).promise;
+    const pages = [];
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const tc = await (await pdf.getPage(i)).getTextContent();
+      let txt = '';
+      tc.items.forEach(it => { txt += it.str + (it.hasEOL ? '\n' : ' '); });
+      pages.push(txt.replace(/[ \t]+/g, ' '));
+    }
+    return pages;
+  }
+  const DOC_TYPES = [
+    ['Werkgeversverklaring', /werkgeversverklaring/i], ['Loonstrook', /loonstrook|salarisstrook|salarisspecificatie|loonspecificatie/i],
+    ['Jaaropgave', /jaaropgave/i], ['WOZ-beschikking', /woz[-\s]?beschikking|beschikking.*woz/i],
+    ['Hypotheekoverzicht', /jaaroverzicht hypotheek|hypotheekoverzicht|overzicht van uw hypotheek|jaaropgaaf hypotheek/i],
+    ['Pensioenoverzicht', /uniform pensioenoverzicht|pensioenoverzicht|\bupo\b/i], ['Koopovereenkomst', /koopovereenkomst|koopakte/i],
+    ['Taxatierapport', /taxatierapport|marktwaarde/i], ['Energielabel', /energielabel|energie-index/i],
+    ['Offerte hypotheek', /offerte|renteaanbod/i], ['Aangifte / aanslag IB', /aangifte inkomstenbelasting|aanslag inkomstenbelasting|definitieve aanslag/i],
+    ['Arbeidsovereenkomst', /arbeidsovereenkomst/i]
+  ];
+  const AMT = /(?:€\s?|eur\s?)?(\d{1,3}(?:\.\d{3})+(?:,\d{2})?|\d+,\d{2})(?!\s?%)/i;
+  const PCT = /(\d{1,2}[,.]\d{1,3})\s?%/;
+  const DATE = /(\d{1,2}[-\/.]\d{1,2}[-\/.](?:19|20)\d{2}|\d{1,2}\s+(?:januari|februari|maart|april|mei|juni|juli|augustus|september|oktober|november|december)\s+(?:19|20)\d{2})/i;
+  const FACTS = [
+    { f: 'Bruto jaarsalaris', re: /bruto\s*jaar(?:salaris|inkomen|loon)|jaarsalaris|bruto\s*salaris\s*per\s*jaar/i, v: AMT },
+    { f: 'Bruto maandsalaris', re: /bruto\s*(?:maand)?salaris(?!\s*per\s*jaar)|salaris\s*per\s*maand|bruto\s*loon/i, v: AMT },
+    { f: 'Vakantiegeld', re: /vakantiegeld|vakantietoeslag/i, v: AMT },
+    { f: 'Eindejaarsuitkering / 13e maand', re: /eindejaarsuitkering|13e\s*maand|dertiende\s*maand/i, v: AMT },
+    { f: 'Vaste toeslagen / overwerk', re: /onregelmatigheidstoeslag|ort\b|structureel\s*overwerk|vaste\s*toelage/i, v: AMT },
+    { f: 'Fiscaal loon (jaaropgave)', re: /fiscaal\s*loon|loon\s*loonheffing|loon\s*voor\s*de\s*loonbelasting/i, v: AMT },
+    { f: 'Datum in dienst', re: /in\s*dienst\s*(?:sinds|per|vanaf)|datum\s*(?:van\s*)?indiensttreding|aanvang\s*dienstverband/i, v: DATE },
+    { f: 'Dienstverband', re: /(onbepaalde\s*tijd|bepaalde\s*tijd|vast\s*dienstverband|tijdelijk\s*dienstverband)/i, v: /(onbepaalde\s*tijd|bepaalde\s*tijd|vast|tijdelijk)/i, textual: true },
+    { f: 'Intentieverklaring', re: /intentie(?:verklaring)?/i, v: /\b(ja|nee|n\.v\.t\.?|niet van toepassing)(?![\p{L}])/iu },
+    { f: 'Proeftijd', re: /proeftijd/i, v: /\b(ja|nee|verstreken)\b/i },
+    { f: 'WOZ-waarde', re: /woz[-\s]?waarde|vastgestelde\s*waarde/i, v: AMT },
+    { f: 'Peildatum WOZ', re: /waardepeildatum|peildatum/i, v: DATE },
+    { f: 'Koopsom', re: /koopsom|koopprijs/i, v: AMT },
+    { f: 'Marktwaarde', re: /marktwaarde(?!\s*na)/i, v: AMT },
+    { f: 'Marktwaarde na verbouwing', re: /marktwaarde\s*na\s*verbouwing|waarde\s*na\s*verbouwing/i, v: AMT },
+    { f: 'Restschuld / hoofdsom hypotheek', re: /restschuld|hoofdsom|openstaande?\s*(?:schuld|hypotheek)|uitstaand\s*bedrag/i, v: AMT },
+    { f: 'Hypotheekrente', re: /rente(?:percentage)?|debetrente/i, v: PCT },
+    { f: 'Einde rentevaste periode', re: /einde\s*rentevast|rentevast\w*\s*(?:tot|t\/m)|renteherziening(?:sdatum)?|einddatum\s*rente/i, v: DATE },
+    { f: 'Ouderdomspensioen per jaar', re: /ouderdomspensioen/i, v: AMT },
+    { f: 'Partner-/nabestaandenpensioen', re: /partnerpensioen|nabestaandenpensioen/i, v: AMT },
+    { f: 'Pensioendatum', re: /pensioendatum|pensioenleeftijd/i, v: DATE },
+    { f: 'Energielabel', re: /energielabel|energieklasse/i, v: /\b(A\+{1,4}|[A-G])\b/ },
+    { f: 'Passeerdatum / leveringsdatum', re: /passeerdatum|datum\s*(?:van\s*)?(?:levering|transport)|leveringsdatum/i, v: DATE },
+    { f: 'Ontbindende voorwaarde financiering', re: /ontbindende\s*voorwaarde|financieringsvoorbehoud/i, v: DATE },
+    { f: 'Verzamelinkomen / belastbaar inkomen', re: /verzamelinkomen|belastbaar\s*inkomen\s*uit\s*werk/i, v: AMT }
+  ];
+  function extractFacts(docName, pages) {
+    const out = [];
+    pages.forEach((txt, pi) => {
+      const lines = txt.split('\n').map(l => l.trim()).filter(Boolean);
+      lines.forEach((line, li) => {
+        FACTS.forEach(F => {
+          const m = line.match(F.re); if (!m) return;
+          if (/(excl|exclusief|incl|inclusief|zonder|exclusive)\.?\s*$/i.test(line.slice(Math.max(0, m.index - 14), m.index))) return;
+          const after = line.slice(m.index + m[0].length) + ' ' + (lines[li + 1] || '');
+          let vm = (F.textual ? line.slice(m.index).match(F.v) : null) || after.match(F.v);
+          if (!vm) return;
+          let val = (vm[1] || vm[0]).trim();
+          if (F.v === AMT) val = '€ ' + val.replace(/^€\s?/, '');
+          if (F.v === PCT) val = val.replace('.', ',') + '%';
+          if (out.some(o => o.f === F.f && o.value === val && o.doc === docName)) return;
+          if (out.filter(o => o.f === F.f && o.doc === docName).length >= 3) return;
+          out.push({ f: F.f, value: val, doc: docName, page: pi + 1, line: line.length > 140 ? line.slice(0, 140) + '…' : line });
+        });
+      });
+    });
+    return out;
+  }
+  function factConflicts() {
+    const by = {};
+    dossierFacts.forEach(x => { (by[x.f] = by[x.f] || new Set()).add(x.value); });
+    return new Set(Object.keys(by).filter(k => by[k].size > 1 && !/rente|pensioen/i.test(k)));
+  }
+  function renderDocs() {
+    document.getElementById('docList').innerHTML = dossierDocs.map(d => `<div class="doc-item"><span><span class="dt">${escapeHtml(d.type)}</span> · ${escapeHtml(d.name)}</span><span class="dm">${d.error ? '⚠ ' + escapeHtml(d.error) : d.pages + ' pagina' + (d.pages === 1 ? '' : "'s") + ' · ' + d.n + ' gegevens'}</span></div>`).join('');
+    const box = document.getElementById('factsBox');
+    if (!dossierFacts.length) { box.style.display = dossierDocs.length ? 'block' : 'none'; document.getElementById('factsTable').innerHTML = dossierDocs.length ? '<tr><td>Geen herkenbare gegevens gevonden.</td></tr>' : ''; return; }
+    box.style.display = 'block';
+    const conf = factConflicts();
+    document.getElementById('factsConflicts').innerHTML = conf.size ? `<span class="badge-warn">${conf.size} afwijking${conf.size === 1 ? '' : 'en'} tussen documenten</span>` : '';
+    const order = FACTS.map(F => F.f);
+    const sorted = dossierFacts.slice().sort((a, b) => order.indexOf(a.f) - order.indexOf(b.f));
+    document.getElementById('factsTable').innerHTML = '<tr><th>Gegeven</th><th>Waarde</th><th>Bron</th></tr>' + sorted.map(x =>
+      `<tr class="${conf.has(x.f) ? 'conflict' : ''}"><td>${escapeHtml(x.f)}${conf.has(x.f) ? '<span class="badge-warn">afwijkend</span>' : ''}</td><td class="v">${escapeHtml(x.value)}</td><td class="src">${escapeHtml(x.doc)}, p. ${x.page}<em>"${escapeHtml(x.line)}"</em></td></tr>`).join('');
+  }
+  docInput.addEventListener('change', async e => {
+    const files = Array.from(e.target.files || []);
+    docInput.value = '';
+    for (const file of files) {
+      const d = { name: file.name, type: 'Document', pages: 0, n: 0 };
+      dossierDocs.push(d); renderDocs();
+      try {
+        const pages = /\.txt$/i.test(file.name) ? [await file.text()] : await pdfPages(file);
+        d.pages = pages.length;
+        const all = pages.join('\n');
+        if (all.replace(/\s/g, '').length < 30) throw new Error('geen tekst gevonden (scan?)');
+        const t = DOC_TYPES.find(([, re]) => re.test(all)); if (t) d.type = t[0];
+        const facts = extractFacts(file.name, pages);
+        d.n = facts.length; dossierFacts.push(...facts);
+      } catch (err) { d.error = err.message || String(err); }
+      renderDocs();
+    }
+    updateButtons();
+  });
+  document.getElementById('factsClear').addEventListener('click', () => { dossierDocs = []; dossierFacts = []; renderDocs(); });
+  document.getElementById('factsToVerslag').addEventListener('click', () => {
+    if (!dossierFacts.length) return;
+    const conf = factConflicts();
+    const lines = ['Dossiergegevens (uit documenten, te controleren):'].concat(dossierFacts.map(x => '- ' + x.f + ': ' + x.value + ' (' + x.doc + ', p. ' + x.page + ')' + (conf.has(x.f) ? ' ⚠ afwijkend' : '')));
+    vEl.vKeyPoints.value = (vEl.vKeyPoints.value.trim() ? vEl.vKeyPoints.value.replace(/\s+$/, '') + '\n\n' : '') + lines.join('\n');
+    vApproved.checked = false; saveState(); updateButtons();
+    showStatus('success', '<div>Gegevens toegevoegd aan de kernpunten in het tabblad Verslag.</div>');
+  });
+  function dossierHtml() {
+    if (!dossierFacts.length) return '';
+    const conf = factConflicts();
+    return '<h2>Dossiergegevens uit documenten</h2><p style="font-size:12px; color:#64748b;">Automatisch gelezen uit de aangeleverde documenten; gecontroleerd door de adviseur voor zover het verslag is goedgekeurd.</p><table class="checklist-table"><tr><td><strong>Gegeven</strong></td><td><strong>Waarde</strong></td><td><strong>Bron</strong></td></tr>' +
+      dossierFacts.map(x => `<tr><td class="cl-item">${escapeHtmlAttr(x.f)}${conf.has(x.f) ? ' <span class="st-warn">⚠ afwijkend</span>' : ''}</td><td>${escapeHtmlAttr(x.value)}</td><td class="cl-item">${escapeHtmlAttr(x.doc)}, p. ${x.page}</td></tr>`).join('') + '</table>';
+  }
 
   checkPermissionStatus();
   updateButtons();
