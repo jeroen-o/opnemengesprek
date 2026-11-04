@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacyverklaring en colofon | opnemengesprek.nl</title>
+<meta name="description" content="Hoe Opnemen gesprek en transcriptie omgaat met gegevens: alles draait lokaal in je browser, zonder account en zonder opslag op een server.">
+<link rel="canonical" href="https://www.opnemengesprek.nl/privacy.html">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#1e40af">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.6; padding: 20px 16px; }
+  main { max-width: 860px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 28px; }
+  a { color: #2563eb; }
+  .back { display: inline-block; font-size: 13px; margin-bottom: 18px; text-decoration: none; }
+  h1 { font-size: 24px; margin-bottom: 6px; }
+  .meta { font-size: 12px; color: #64748b; margin-bottom: 22px; }
+  h2 { font-size: 17px; margin: 26px 0 8px; color: #0f172a; }
+  p, li { font-size: 14px; color: #334155; }
+  ul { padding-left: 20px; margin: 6px 0; }
+  li { margin: 3px 0; }
+  .box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 16px; margin: 14px 0; }
+  .wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  th { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
+  #aanbieder dl { display: grid; grid-template-columns: 140px 1fr; gap: 4px 12px; font-size: 14px; }
+  #aanbieder dt { color: #64748b; }
+  footer { max-width: 860px; margin: 16px auto 0; font-size: 11px; color: #94a3b8; text-align: center; }
+  @media (max-width: 560px) { main { padding: 20px 16px; } #aanbieder dl { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<main>
+  <a class="back" href="./">← Terug naar de tool</a>
+  <h1>Privacyverklaring en colofon</h1>
+  <div class="meta">Opnemen gesprek en transcriptie voor de hypotheek- en financieel adviseur · laatst bijgewerkt op 4 november 2026</div>
+
+  <div class="box">
+    <strong>In het kort:</strong> de tool draait volledig in je eigen browser. Er is geen account en er wordt geen ingevoerde informatie naar een server van opnemengesprek.nl gestuurd. Alleen als je zelf een dienst van een derde gebruikt (zoals live transcriberen via Google of het uploaden van het AFM-controlepakket naar Claude.ai) gaan er gegevens naar die partij.
+  </div>
+
+  <section id="aanbieder" hidden>
+    <h2>Wie biedt de tool aan</h2>
+    <dl id="aanbiederGegevens"></dl>
+  </section>
+
+  <h2>Rollen volgens de AVG</h2>
+  <p>De adviseur die de tool gebruikt, bepaalt welke klantgegevens worden vastgelegd en waarvoor. De adviseur (of het advieskantoor) is daarom <strong>verwerkingsverantwoordelijke</strong> voor die klantgegevens. De aanbieder van opnemengesprek.nl ontvangt deze gegevens niet en verwerkt ze niet.</p>
+
+  <h2>Welke gegevens, waar en hoe lang</h2>
+  <div class="wrap">
+  <table>
+    <tr><th>Functie</th><th>Waar verwerkt</th><th>Opslag</th></tr>
+    <tr><td>Opnemen (microfoon of online gesprek)</td><td>In je browser</td><td>Alleen in het werkgeheugen van het tabblad, tot je downloadt of het tabblad sluit</td></tr>
+    <tr><td>Opname of audiobestand uitschrijven (Whisper)</td><td>In je browser. Het spraakmodel wordt eenmalig gedownload van Hugging Face en de bibliotheek van jsDelivr</td><td>Audio en tekst blijven op je apparaat; het model staat in de browsercache</td></tr>
+    <tr><td>Live transcriberen en inspreken</td><td>Spraakdienst van Google, via Chrome of Edge</td><td>Tekst in je browser; de audioverwerking valt onder de voorwaarden van Google</td></tr>
+    <tr><td>Bestand en documenten inlezen</td><td>In je browser; de pdf-lezer (pdf.js) komt van cdnjs</td><td>Niet opgeslagen</td></tr>
+    <tr><td>Checklist, verslag, kantoorgegevens</td><td>In je browser</td><td>In het werkgeheugen. Alleen als je "Voortgang op dit apparaat onthouden" aanzet, in de browseropslag (localStorage) van dat apparaat, met een instelbare bewaartermijn (1, 7, 30 of 90 dagen) en een wisknop</td></tr>
+    <tr><td>Concept-klantmail, agenda, Teams-chat</td><td>Je eigen Gmail-, Outlook- of Teams-account</td><td>Pas opgeslagen of verstuurd als jij dat in dat programma doet</td></tr>
+    <tr><td>AFM-controlepakket</td><td>Downloads op je apparaat; Claude.ai (Anthropic) alleen als jij de bestanden daar uploadt</td><td>Volgens je Claude-account en de voorwaarden van Anthropic. Standaard wordt het pakket geanonimiseerd</td></tr>
+    <tr><td>Website laden</td><td>GitHub Pages (GitHub Inc.)</td><td>GitHub kan technische gegevens zoals je IP-adres in serverlogs bewaren voor beveiliging. Zie de <a href="https://docs.github.com/nl/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">privacyverklaring van GitHub</a></td></tr>
+  </table>
+  </div>
+
+  <h2>Cookies en analyse</h2>
+  <p>De site plaatst geen cookies en gebruikt geen analyse- of trackingdiensten. Browseropslag wordt alleen gebruikt als je daar zelf voor kiest (zie hierboven). Om de site als app te kunnen gebruiken, bewaart de browser een kopie van de pagina zelf; daarin staan geen klantgegevens.</p>
+
+  <h2>Externe partijen bij het laden van onderdelen</h2>
+  <p>Bij het gebruik van sommige functies laadt je browser onderdelen van een externe server. Die partij ziet daarbij je IP-adres, maar geen klantgegevens:</p>
+  <ul>
+    <li><strong>jsDelivr</strong> en <strong>Hugging Face</strong>: bibliotheek en spraakmodel voor lokaal uitschrijven (alleen als je die functie gebruikt);</li>
+    <li><strong>cdnjs (Cloudflare)</strong>: pdf-lezer voor het inlezen van documenten (alleen als je die functie gebruikt);</li>
+    <li><strong>Google</strong>: spraakdienst voor live transcriberen en inspreken in Chrome of Edge (alleen als je die functie gebruikt).</li>
+  </ul>
+
+  <h2>Tips voor de adviseur</h2>
+  <ul>
+    <li>Informeer de klant vooraf over de opname, het doel en de bewaartermijn. De tool heeft daarvoor een voorleestekst en legt het tijdstip van akkoord vast.</li>
+    <li>Gebruik zakelijke accounts (Google Workspace, Microsoft 365, Claude voor Zakelijk) met een verwerkersovereenkomst; geen privé-accounts.</li>
+    <li>Leg in je eigen privacybeleid vast waar je opnames, transcripties en verslagen bewaart en hoe lang.</li>
+    <li>Zet "onthouden" niet aan op een gedeelde computer.</li>
+    <li>Controleer een geanonimiseerd AFM-controlepakket zelf vóór uploaden; automatische herkenning is niet volledig.</li>
+  </ul>
+
+  <h2>Je rechten</h2>
+  <p>Omdat de aanbieder geen klantgegevens ontvangt, kan de aanbieder die ook niet inzien, wijzigen of verwijderen. Klanten die hun rechten willen uitoefenen (inzage, correctie, verwijdering), wenden zich tot hun adviseur. Je kunt ook een klacht indienen bij de <a href="https://autoriteitpersoonsgegevens.nl" target="_blank" rel="noopener noreferrer">Autoriteit Persoonsgegevens</a>.</p>
+
+  <h2>Disclaimer</h2>
+  <p>De tool is een hulpmiddel voor de adviseur en biedt geen garantie van compliance. De checklists zijn gebaseerd op de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">AFM Leidraad Hypotheekadvisering (april 2026)</a> en de <a href="https://www.afm.nl/~/profmedia/files/wet-regelgeving/beleidsuitingen/leidraden/leidraad-tweedepijler-pensioenadvies-2023.pdf" target="_blank" rel="noopener noreferrer">AFM Leidraad tweedepijler-pensioenadvies (2023)</a>. Een leidraad heeft niet de status van wet- en regelgeving. Opnemengesprek.nl is niet verbonden aan de AFM. Het adviesrapport en het klantdossier blijven leidend. Deze privacyverklaring is geen juridisch advies.</p>
+</main>
+<footer>opnemengesprek.nl</footer>
+<script>
+  // Vul hier de gegevens van de aanbieder in; zolang 'naam' leeg is, blijft het blok verborgen.
+  const AANBIEDER = { naam: '', kvk: '', adres: '', email: '', website: 'https://www.opnemengesprek.nl' };
+  if (AANBIEDER.naam) {
+    const dl = document.getElementById('aanbiederGegevens');
+    [['Naam', AANBIEDER.naam], ['KvK-nummer', AANBIEDER.kvk], ['Adres', AANBIEDER.adres], ['E-mail', AANBIEDER.email], ['Website', AANBIEDER.website]]
+      .filter(([, v]) => v).forEach(([k, v]) => {
+        const dt = document.createElement('dt'); dt.textContent = k;
+        const dd = document.createElement('dd');
+        if (k === 'E-mail') { const a = document.createElement('a'); a.href = 'mailto:' + v; a.textContent = v; dd.appendChild(a); } else dd.textContent = v;
+        dl.append(dt, dd);
+      });
+    document.getElementById('aanbieder').hidden = false;
+  }
+</script>
+</body>
+</html>

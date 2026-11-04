@@ -23,7 +23,8 @@ Doelgroep: hypotheekadviseurs en financieel adviseurs in Nederland
 ## Privacy
 - Er wordt geen ingevoerde informatie naar een server van Opnemen Gesprek gestuurd.
 - Uitzonderingen: live transcriberen en inspreken (spraakdienst van Google) en het AFM-controlepakket (alleen als de gebruiker het zelf naar Claude.ai uploadt).
-- Lokaal opslaan op het apparaat is opt-in.
+- Lokaal opslaan op het apparaat is opt-in, met instelbare bewaartermijn; AFM-controlepakket wordt standaard geanonimiseerd.
+- Privacyverklaring: https://www.opnemengesprek.nl/privacy.html
 
 ## Belangrijk
 - Opnemen Gesprek is niet verbonden aan de AFM.
