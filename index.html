@@ -8,7 +8,13 @@
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #0f172a; line-height: 1.5; padding: 20px; }
-  .container { max-width: 720px; margin: 0 auto; }
+  .container { max-width: 1200px; margin: 0 auto; }
+  @media (min-width: 1000px) {
+    .topics-list { grid-template-columns: repeat(3, 1fr); }
+    .live-transcript-area { max-height: 560px; min-height: 280px; }
+    .verslag-grid { grid-template-columns: 1fr 1fr; }
+    .verslag-grid > .span2 { grid-column: 1 / -1; }
+  }
 
   .header { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
   .logo { width: 44px; height: 44px; background: linear-gradient(135deg, #2563eb, #1e40af); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 16px; }
@@ -401,7 +407,7 @@
   .dp-table th { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .04em; }
   .dp-wrap { overflow-x: auto; }
 
-  /* STAPPEN & DISCUSSIEPUNTEN */
+  /* STAPPEN & ONDERWERPEN */
   .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; background: white; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 20px; }
   .step { background: none; border: none; border-right: 1px solid #e2e8f0; border-radius: 0; padding: 12px 12px; display: flex; gap: 10px; align-items: flex-start; text-align: left; cursor: pointer; font-family: inherit; }
   .step:last-child { border-right: none; }
@@ -630,8 +636,8 @@
   <div class="steps" id="steps">
     <button class="step" data-go="live"><span class="num">1</span><span><span class="st-title">Gesprek</span><span class="st-sub">Opnemen, live uitschrijven of bestand inlezen</span></span></button>
     <button class="step" data-go="checklist"><span class="num">2</span><span><span class="st-title">Checklist</span><span class="st-sub" id="stepCheckSub">AFM Leidraad 2026</span></span></button>
-    <button class="step" data-go="verslag"><span class="num">3</span><span><span class="st-title">Verslag</span><span class="st-sub">Kernpunten met het moment in het gesprek</span></span></button>
-    <button class="step" data-go="rapport"><span class="num">4</span><span><span class="st-title">Rapport</span><span class="st-sub" id="stepReportSub">In je eigen huisstijl. Jij keurt goed.</span></span></button>
+    <button class="step" data-go="verslag"><span class="num">3</span><span><span class="st-title">Verslag</span><span class="st-sub">Samenvatting, afspraken en tijdstempels</span></span></button>
+    <button class="step" data-go="rapport"><span class="num">4</span><span><span class="st-title">Rapport</span><span class="st-sub" id="stepReportSub">Controleren, goedkeuren en printen</span></span></button>
   </div>
 
   <div class="card">
@@ -743,7 +749,7 @@
         <div class="live-transcript-area" id="liveTranscript" contenteditable="true"></div>
         <div class="char-count" id="liveCharCount" style="display:none; margin-top:8px;"></div>
         <div class="topics-panel">
-          <div class="topics-head"><span>Discussiepunten</span><span class="topics-time">Nog niet geanalyseerd</span></div>
+          <div class="topics-head"><span>Onderwerpen in dit gesprek</span><span class="topics-time">Nog niet bijgewerkt</span></div>
           <div class="topics-list"></div>
           <div class="topics-legend"><span class="l-open">nog niet</span><span class="l-hit">genoemd in gesprek</span><span class="l-done">afgevinkt</span><span class="l-warn">aandacht</span></div>
         </div>
@@ -762,7 +768,7 @@
       <textarea id="transcriptText" rows="10" placeholder="Plak hier de transcriptie van het klantgesprek..."></textarea>
       <div class="char-count" id="charCount" style="display:none;"></div>
       <div class="topics-panel">
-        <div class="topics-head"><span>Discussiepunten</span><span class="topics-time">Nog niet geanalyseerd</span></div>
+        <div class="topics-head"><span>Onderwerpen in dit gesprek</span><span class="topics-time">Nog niet bijgewerkt</span></div>
         <div class="topics-list"></div>
         <div class="topics-legend"><span class="l-open">nog niet</span><span class="l-hit">genoemd in gesprek</span><span class="l-done">afgevinkt</span><span class="l-warn">aandacht</span></div>
       </div>
@@ -813,7 +819,7 @@
 
     <div class="tab-content" id="tab-verslag">
       <div class="verslag-grid">
-        <div>
+        <div class="span2">
           <label for="vOneLiner">Samenvatting in één zin</label>
           <input type="text" id="vOneLiner" placeholder="Bijv. Starters oriënteren zich op eerste koopwoning tot € 425.000; kinderwens binnen 2 jaar.">
         </div>
@@ -822,7 +828,7 @@
           <textarea id="vSummary" rows="4" placeholder="Situatie, wensen en belangrijkste uitkomsten van het gesprek..."></textarea>
         </div>
         <div>
-          <div class="field-head"><label for="vKeyPoints">Kernpunten (met moment in het gesprek)</label><button class="btn-secondary btn-sm" id="vFillBtn">Vul uit transcript</button></div>
+          <div class="field-head"><label for="vKeyPoints">Kernpunten (met tijdstempel)</label><button class="btn-secondary btn-sm" id="vFillBtn">Vul uit transcript</button></div>
           <textarea id="vKeyPoints" rows="6" placeholder="- Inkomen: vast contract, € 4.250 bruto per maand [04:12]"></textarea>
         </div>
         <div>
@@ -841,18 +847,18 @@
           <div class="field-head"><label for="vAdvisorNote">Adviseursnotitie</label><button class="btn-secondary btn-sm" id="vDictateBtn">🎙 Inspreken</button></div>
           <textarea id="vAdvisorNote" rows="3" placeholder="Eigen observaties na het gesprek. Inspreken werkt in Chrome/Edge via de spraakdienst van Google."></textarea>
         </div>
-        <div class="form-grid">
+        <div class="form-grid span2">
           <div><label for="vNextContact">Volgend contactmoment / nabellen</label><input type="date" id="vNextContact"></div>
           <div><label for="vMailTo">E-mailadres klant (voor conceptmail)</label><input type="email" id="vMailTo" placeholder="naam@voorbeeld.nl"></div>
         </div>
-        <label class="inline-check" style="font-size:13px; align-items:flex-start;"><input type="checkbox" id="vApproved" style="margin-top:3px;"> Verslag gecontroleerd en goedgekeurd door de adviseur. Zolang dit niet is aangevinkt, staat er CONCEPT op het verslag.</label>
-        <hr class="section-sep">
-        <div class="btn-row" style="justify-content:flex-start;">
+        <label class="inline-check span2" style="font-size:13px; align-items:flex-start;"><input type="checkbox" id="vApproved" style="margin-top:3px;"> Verslag gecontroleerd en goedgekeurd door de adviseur. Zolang dit niet is aangevinkt, staat er CONCEPT op het verslag.</label>
+        <hr class="section-sep span2">
+        <div class="btn-row span2" style="justify-content:flex-start;">
           <button class="btn-secondary" id="vMailBtn">✉ Concept-klantmail openen</button>
           <button class="btn-secondary" id="vCopyMailBtn">Kopieer mailtekst</button>
           <button class="btn-secondary" id="vPrepBtn">📋 Voorbereiding vervolggesprek</button>
         </div>
-        <div class="hint" style="margin-top:0;">De conceptmail opent in je eigen mailprogramma; jij controleert en verstuurt. Het adviesrapport blijft leidend.</div>
+        <div class="hint span2" style="margin-top:0;">De conceptmail opent in je eigen mailprogramma; jij controleert en verstuurt. Het adviesrapport blijft leidend.</div>
       </div>
     </div>
 
@@ -2705,7 +2711,7 @@ ${body}
   runCalc();
 
   // ============================================================
-  // STAPPEN & DISCUSSIEPUNTEN (live analyse)
+  // STAPPEN & ONDERWERPEN (live analyse)
   // ============================================================
   var topicTimer = null, topicDebounce = null, lastAnalysedAt = null;
   function refreshTopics() {
@@ -2729,7 +2735,7 @@ ${body}
       return `<button class="topic ${cls}" data-group="${g.id}"><span class="dot"></span>${escapeHtml(g.title)}<span class="cnt">${Math.max(hits, done)}/${g.items.length}</span></button>`;
     }).join('');
     lists.forEach(l => { l.innerHTML = html; });
-    const t = lastAnalysedAt ? 'Laatst geanalyseerd om ' + lastAnalysedAt.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) : 'Nog niet geanalyseerd';
+    const t = lastAnalysedAt ? 'Bijgewerkt om ' + lastAnalysedAt.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' }) : 'Nog niet bijgewerkt';
     document.querySelectorAll('.topics-time').forEach(el => { el.textContent = t; });
     document.querySelectorAll('.topic').forEach(btn => btn.addEventListener('click', () => {
       goTab('checklist');
@@ -2757,7 +2763,7 @@ ${body}
     const cur = { record: 0, live: 0, transcript: 0, checklist: 1, verslag: 2 }[activeTab];
     steps.forEach((el, i) => { el.classList.toggle('done', state[i]); el.classList.toggle('current', i === cur); });
     document.getElementById('stepCheckSub').textContent = done + ' van ' + total + ' punten afgerond';
-    document.getElementById('stepReportSub').textContent = approved ? 'Goedgekeurd. Klaar om te printen.' : 'In je eigen huisstijl. Jij keurt goed.';
+    document.getElementById('stepReportSub').textContent = approved ? 'Goedgekeurd, klaar om te printen' : 'Controleren, goedkeuren en printen';
   }
   document.querySelectorAll('#steps .step').forEach(el => el.addEventListener('click', () => {
     const go = el.dataset.go;
