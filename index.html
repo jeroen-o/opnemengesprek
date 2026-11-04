@@ -255,7 +255,7 @@
   .live-status .dot { width: 8px; height: 8px; background: #16a34a; border-radius: 50%; animation: blink 1s infinite; }
   @keyframes blink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0.3; } }
 
-  .lang-selector { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .lang-selector { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
   .lang-selector select { padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; background: white; font-family: inherit; }
 
   /* AFM Modal */
@@ -604,6 +604,11 @@
   .missing-list button.lnk:hover { text-decoration: underline; }
   .checklist-item.flash { box-shadow: inset 3px 0 0 #dc2626; background: #fef2f2; }
 
+  /* SPREKER */
+  .spk { display: inline-flex; align-items: center; gap: 4px; margin-left: 10px; font-size: 12px; color: #334155; flex-wrap: wrap; }
+  .spk button { padding: 4px 10px; font-size: 12px; border-radius: 999px; background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0; }
+  .spk button.on { background: #2563eb; color: #fff; border-color: #2563eb; }
+
   /* HANDLEIDING */
   .guide-section { margin-bottom: 22px; }
   .guide-section h3 {
@@ -897,6 +902,9 @@
             <option value="fr-FR">Frans</option>
           </select>
           <label class="inline-check" style="margin-left:10px;"><input type="checkbox" id="liveTimestamps" checked> Tijdstempels</label>
+          <span class="spk" id="spkGroup" title="Sneltoetsen: Alt+1 Adviseur · Alt+2 Klant · Alt+3 Partner · Alt+0 geen">Spreker:
+            <button data-spk="" class="on">geen</button><button data-spk="Adviseur">Adviseur</button><button data-spk="Klant">Klant</button><button data-spk="Partner">Partner</button>
+          </span>
         </div>
         <div class="record-area" style="padding: 16px 0;">
           <div class="mic-circle" id="liveMicCircle">
@@ -982,6 +990,10 @@
       <div class="checklist-actions">
         <button class="btn-secondary" id="analyseBtn">🔍 Transcript analyseren</button>
         <label class="inline-check"><input type="checkbox" id="rememberCheck"> Voortgang op dit apparaat onthouden</label>
+        <label class="inline-check" title="Lokaal opgeslagen klantgegevens worden na deze termijn automatisch gewist">Bewaren:
+          <select id="retentionSel" class="std" style="width:auto; padding:5px 8px; font-size:12px;">
+            <option value="1">1 dag</option><option value="7">7 dagen</option><option value="30" selected>30 dagen</option><option value="90">90 dagen</option><option value="0">tot ik wis</option>
+          </select></label>
         <button class="btn-ghost btn-sm" id="wipeStoredBtn" title="Wis alle lokaal opgeslagen checklists en verslagen">Wis opgeslagen gegevens</button>
       </div>
       <div class="suggest-bar" id="suggestBar">
@@ -1220,6 +1232,7 @@
   <div id="status" class="status" style="display:none;"></div>
 
   <div class="actions">
+    <label class="inline-check" id="anonWrap" title="Vervangt klantnaam, sprekersnamen, e-mail, telefoon, IBAN, BSN, postcode, adres en geboortedatum in het AFM-controlepakket"><input type="checkbox" id="anonCheck" checked> Anonimiseren voor AI</label>
     <button class="btn-outline" id="afmCheckBtn" disabled>
       <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/><path d="M9 12l2 2 4-4"/></svg>
       Download AFM-controlepakket
@@ -1270,6 +1283,8 @@
       <div class="afm-tip">
         <strong>💡 Extra diepgang:</strong> sleep ook de <a href="https://www.afm.nl/nl-nl/sector/themas/leennormen-en-leidraden/leidraad-hypotheekadvisering" target="_blank" rel="noopener noreferrer">officiële AFM Leidraad PDF</a> mee — Claude baseert het oordeel dan op de exacte tekst van de leidraad.
       </div>
+
+      <div class="afm-tip" id="anonInfo" style="display:none;"></div>
 
       <div class="afm-warning">
         <strong>⚠️ Privacy-let op:</strong> Je verstuurt klantgegevens naar Claude.ai (Anthropic). Zorg dat dit past binnen je AVG-afspraken en verwerkersovereenkomst. Voor zeer gevoelige gegevens: anonimiseer de transcriptie eerst, of gebruik Claude voor Zakelijk met Zero Data Retention.
@@ -1353,6 +1368,7 @@
   let recognition = null, isListening = false, finalTranscript = '';
   let activeTab = 'live';
   let transcriptSource = 'live', liveAccumMs = 0, liveStartedAt = null, segStartMs = null;
+  let liveSpeaker = '', lastSpeakerWritten = null;
 
   const customerName = document.getElementById('customerName');
   const customerId = document.getElementById('customerId');
@@ -1487,10 +1503,15 @@
         if (event.results[i].isFinal) {
           const clean = t.trim();
           if (clean) {
+            const who = liveSpeaker ? liveSpeaker + ': ' : '';
             if (liveTimestamps.checked) {
               if (finalTranscript && !/\n$/.test(finalTranscript)) finalTranscript = finalTranscript.replace(/\s+$/, '') + '\n';
-              finalTranscript += '[' + fmtTs(segStartMs / 1000) + '] ' + clean + '\n';
+              finalTranscript += '[' + fmtTs(segStartMs / 1000) + '] ' + who + clean + '\n';
+            } else if (liveSpeaker) {
+              if (liveSpeaker !== lastSpeakerWritten || !finalTranscript) finalTranscript = finalTranscript.replace(/\s+$/, '') + (finalTranscript ? '\n' : '') + who;
+              finalTranscript += clean + ' ';
             } else finalTranscript += clean + ' ';
+            lastSpeakerWritten = liveSpeaker;
           }
           segStartMs = null;
         } else interim += t;
@@ -1968,6 +1989,30 @@
   } catch (e) { rememberOn = false; }
   rememberCheck.checked = rememberOn;
 
+  // Bewaartermijn: lokaal opgeslagen klantgegevens automatisch wissen
+  const retentionSel = document.getElementById('retentionSel');
+  try { const r = localStorage.getItem('og_retention'); if (r !== null) retentionSel.value = r; } catch (e) {}
+  retentionSel.disabled = !rememberOn;
+  function purgeExpired() {
+    const days = parseInt(retentionSel.value, 10);
+    let n = 0;
+    try {
+      Object.keys(localStorage).filter(k => k.startsWith('checklist_')).forEach(k => {
+        let o = null; try { o = JSON.parse(localStorage.getItem(k)); } catch (e) {}
+        if (!o || typeof o !== 'object') return;
+        if (!o.savedAt) { o.savedAt = Date.now(); localStorage.setItem(k, JSON.stringify(o)); return; }
+        if (days > 0 && Date.now() - o.savedAt > days * 86400000) { localStorage.removeItem(k); n++; }
+      });
+    } catch (e) {}
+    return n;
+  }
+  retentionSel.addEventListener('change', () => {
+    try { localStorage.setItem('og_retention', retentionSel.value); } catch (e) {}
+    const n = purgeExpired();
+    if (n) showStatus('success', '<div>' + n + ' verlopen klantdossier(s) van dit apparaat gewist.</div>');
+  });
+  setTimeout(() => { const n = purgeExpired(); if (n) showStatus('info', '<div>' + n + ' lokaal opgeslagen klantdossier(s) waren ouder dan de bewaartermijn en zijn gewist.</div>'); }, 0);
+
   const memStore = {};
   let stateKey = null;
   let checklistState = {};   // itemId -> 'done' | 'warn' | 'na'
@@ -1981,6 +2026,7 @@
     return memStore[key] || null;
   }
   function writeStore(key, obj) {
+    obj.savedAt = Date.now();
     memStore[key] = obj;
     if (rememberOn) { try { localStorage.setItem(key, JSON.stringify(obj)); } catch (e) {} }
   }
@@ -2026,6 +2072,7 @@
   }
   rememberCheck.addEventListener('change', () => {
     rememberOn = rememberCheck.checked;
+    retentionSel.disabled = !rememberOn;
     try { localStorage.setItem('og_remember', rememberOn ? '1' : '0'); } catch (e) {}
     if (rememberOn) { saveState(); saveOffice(); }
     else if (confirm('Wil je ook alle eerder op dit apparaat opgeslagen checklists en verslagen wissen?')) wipeStored();
@@ -2838,20 +2885,28 @@ ${transcript ? `<h2>Volledige transcriptie</h2><div class="transcript">${escapeH
   }
 
   function downloadAfmPackage() {
-    const naam = sanitizeFilename(customerName.value.trim());
+    const anon = document.getElementById('anonCheck').checked;
+    const st = { n: 0 }, dummy = { n: 0 };
+    const A = (txt, stats) => anon ? anonymizeText(txt, stats || dummy) : txt;
+    const naam = anon ? 'klant' : sanitizeFilename(customerName.value.trim());
     const datumStamp = new Date().toISOString().split('T')[0];
-    const transcript = getCurrentTranscriptText();
+    const transcript = A(getCurrentTranscriptText(), st);
     const klant = customerName.value.trim() || '[niet ingevuld]';
     const klantId = customerId.value.trim();
     const notitie = notes.value.trim();
     const datumNL = new Date().toLocaleDateString('nl-NL');
+    const info = document.getElementById('anonInfo');
+    info.style.display = 'block';
+    info.innerHTML = anon
+      ? '<strong>🔒 Geanonimiseerd:</strong> ' + st.n + ' vervanging(en) in het transcript (klantnaam, sprekers, contact- en identificatiegegevens). Automatische herkenning is niet volledig: controleer het transcript-bestand vóór je het uploadt.'
+      : '<strong>Niet geanonimiseerd:</strong> het pakket bevat herkenbare klantgegevens.';
 
     // 1. README
-    downloadTextFile(buildReadmeFile(), '01-LEES-EERST.txt');
+    downloadTextFile(A(buildReadmeFile()), '01-LEES-EERST.txt');
 
     // 2. Prompt
     setTimeout(() => {
-      downloadTextFile(buildAfmPrompt(), '02-prompt-voor-claude.txt');
+      downloadTextFile(A(buildAfmPrompt()), '02-prompt-voor-claude.txt');
     }, 200);
 
     // 3. Transcriptie
@@ -2861,12 +2916,13 @@ ${transcript ? `<h2>Volledige transcriptie</h2><div class="transcript">${escapeH
                      'Datum: ' + datumNL + '\n' + consentLine() + '\n' +
                      (notitie ? 'Notities adviseur: ' + notitie + '\n' : '') +
                      '\n' + '='.repeat(60) + '\nTRANSCRIPTIE\n' + '='.repeat(60) + '\n\n';
-      downloadTextFile(header + transcript, '03-transcriptie-' + naam + '-' + datumStamp + '.txt');
+      downloadTextFile(A(header) + transcript, '03-transcriptie-' + naam + '-' + datumStamp + '.txt');
     }, 400);
 
     // 4. Adviessamenvatting (HTML printbaar)
     setTimeout(() => {
-      downloadTextFile(buildAdviceReportHtml(), '04-adviessamenvatting-' + naam + '-' + datumStamp + '.html', 'text/html');
+      const rep = buildAdviceReportHtml();
+      downloadTextFile(anon ? A(rep.replace(/<img class="logo"[^>]*>/, '')) : rep, '04-adviessamenvatting-' + naam + '-' + datumStamp + '.html', 'text/html');
     }, 600);
   }
 
@@ -3514,6 +3570,57 @@ ${body}
     if (!list.length) return '';
     return '<h2>Mogelijk gemist of nog open</h2><p style="font-size:12px; color:#64748b;">Punten die niet zijn afgevinkt en niet in het transcript zijn herkend, plus punten met aandacht. Zo nodig aanvullen of inplannen voor het vervolggesprek.</p>' +
       list.map(x => `<h3>${x.g.emoji} ${escapeHtmlAttr(x.g.title)}</h3><ul style="font-size:12px; margin:0 0 8px 0;">` + x.items.map(i => `<li>${i.kind === 'warn' ? '⚠ ' : ''}${escapeHtmlAttr(i.t)}</li>`).join('') + '</ul>').join('');
+  }
+
+  // ============================================================
+  // SPREKER-KEUZE (live transcriptie)
+  // ============================================================
+  function setSpeaker(v) {
+    liveSpeaker = v;
+    document.querySelectorAll('#spkGroup button').forEach(b => b.classList.toggle('on', b.dataset.spk === v));
+  }
+  document.querySelectorAll('#spkGroup button').forEach(b => b.addEventListener('click', () => setSpeaker(b.dataset.spk)));
+  document.addEventListener('keydown', e => {
+    if (!e.altKey || e.ctrlKey || e.metaKey) return;
+    const map = { '0': '', '1': 'Adviseur', '2': 'Klant', '3': 'Partner' };
+    if (e.key in map) { e.preventDefault(); setSpeaker(map[e.key]); }
+  });
+
+  // ============================================================
+  // ANONIMISEREN (AFM-controlepakket)
+  // ============================================================
+  const NAME_SKIP = new Set(['de', 'van', 'der', 'den', 'het', 'ter', 'ten', 'te', 'in', 'op', 'du', 'da', 'di', 'la', 'le', "'t", 'en', 'fam', 'familie', 'dhr', 'mevr', 'mw', 'mr', 'bv', 'b.v', 'vof', 'holding', 'klant']);
+  const reEsc = x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const wordRe = w => { try { return new RegExp('(?<![\\p{L}\\p{N}])' + reEsc(w) + '(?![\\p{L}\\p{N}])', 'giu'); } catch (e) { return new RegExp('\\b' + reEsc(w) + '\\b', 'gi'); } };
+  function nameParts(str) {
+    return String(str || '').replace(/[.,()]/g, ' ').split(/[\s&/+]+/).map(x => x.trim()).filter(x => x.length >= 3 && !NAME_SKIP.has(x.toLowerCase()));
+  }
+  function elfProef(n) { if (!/^\d{9}$/.test(n)) return false; let sum = 0; for (let i = 0; i < 8; i++) sum += parseInt(n[i], 10) * (9 - i); sum -= parseInt(n[8], 10); return sum % 11 === 0 && sum !== 0; }
+  function anonymizeText(text, stats) {
+    let t = String(text);
+    const sub = (re, rep) => { t = t.replace(re, (...m) => { const r = typeof rep === 'function' ? rep(...m) : rep; if (r !== m[0]) stats.n++; return r; }); };
+    const adv = advisorName.value.trim().toLowerCase();
+    const spkMap = {}; let spkN = 0;
+    t = t.replace(/^(\[(?:\d{1,2}:)?\d{1,2}:\d{2}\]\s*)([^:\n\[\]]{2,60}):/gm, (m, ts, name) => {
+      const nm = name.trim();
+      if (/^(adviseur|klant|partner|werkgever|spreker \d+)$/i.test(nm)) return m;
+      if (adv && nm.toLowerCase() === adv) return ts + 'Adviseur:';
+      if (!spkMap[nm]) spkMap[nm] = 'Spreker ' + (++spkN);
+      stats.n++; return ts + spkMap[nm] + ':';
+    });
+    if (vEl.vMailTo && vEl.vMailTo.value.trim()) sub(new RegExp(reEsc(vEl.vMailTo.value.trim()), 'gi'), '[E-MAIL]');
+    sub(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[E-MAIL]');
+    const advParts = new Set(nameParts(advisorName.value).map(x => x.toLowerCase()));
+    Object.keys(spkMap).forEach(nm => nameParts(nm).filter(x => !advParts.has(x.toLowerCase())).forEach(x => sub(wordRe(x), '[NAAM]')));
+    nameParts(customerName.value).forEach(x => sub(wordRe(x), '[KLANT]'));
+    if (customerId.value.trim()) sub(new RegExp(reEsc(customerId.value.trim()), 'g'), '[KLANT-ID]');
+    sub(/\b[A-Z]{2}\d{2}[ ]?[A-Z]{4}(?:[ ]?\d){10}\b/gi, '[IBAN]');
+    sub(/(?:\+31[\s-]?|0031[\s-]?|\b0)(?:6(?:[\s-]?\d){8}|[1-9](?:[\s-]?\d){8})(?!\d)/g, '[TELEFOON]');
+    sub(/\b\d{9}\b/g, m => elfProef(m) ? '[BSN]' : m);
+    sub(/\b[1-9]\d{3}[ ]?(?!SA|SD|SS)[A-Z]{2}\b/g, '[POSTCODE]');
+    sub(/(geboren\s+(?:op\s+)?)(\d{1,2}[-\/. ]\d{1,2}[-\/. ]\d{2,4}|\d{1,2}\s+[a-z]+\s+\d{4})/gi, (m, a) => a + '[GEBOORTEDATUM]');
+    sub(/\b[A-Z][a-zà-ÿ]+(?:straat|laan|weg|plein|singel|gracht|kade|dreef|hof|park|dijk|steeg|pad|baan|veld)\s+\d{1,4}[a-zA-Z]?\b/g, '[ADRES]');
+    return t;
   }
 
   checkPermissionStatus();
